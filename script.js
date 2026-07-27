@@ -1,11 +1,14 @@
+// Replace this string with your Google Apps Script Web App Deployment URL
+const GOOGLE_SHEETS_URL = "https://script.google.com/macros/s/AKfycbzHkbJ6XI5zNhgNfkiyQgeJb9N2X9cLbNf77qpFW_jTCFGSmZwaiKZsJXcuKuD39lkKOg/exec";
+
 const SURVEY_DATA = [
   // --- ETHICS ---
   { code: "ETH1", question: "ETH1: There is a set of moral values that are universally valid", scores: { "Strongly Disagree": {ETH: -1}, "Disagree": {ETH: -0.5}, "Neutral": {ETH: 0}, "Agree": {ETH: 0.5}, "Strongly Agree": {ETH: 1} } },
   { code: "ETH2", question: "ETH2: No set of moral values is superior to any other", scores: { "Strongly Disagree": {ETH: -1}, "Disagree": {ETH: -0.5}, "Neutral": {ETH: 0}, "Agree": {ETH: 0.5}, "Strongly Agree": {ETH: 1} } },
-  { code: "ETH3", question: "ETH3: Good and evil are real, objective categories", scores: { "Strongly Disagree": {ETH: -1, HN: -1}, "Disagree": {ETH: -0.5, HN: -0.5}, "Neutral": {ETH: 0, HN: 0}, "Agree": {ETH: 0.5, HN: 0.5}, "Strongly Agree": {ETH: 1, HN: 1} } },
+  { code: "ETH3", question: "ETH3: People can be inherently good or bad", scores: { "Strongly Disagree": {ETH: -1, HN: -1}, "Disagree": {ETH: -0.5, HN: -0.5}, "Neutral": {ETH: 0, HN: 0}, "Agree": {ETH: 0.5, HN: 0.5}, "Strongly Agree": {ETH: 1, HN: 1} } },
   { code: "ETH4", question: "ETH4: Some cultures are more ethically advanced than others", scores: { "Strongly Disagree": {ETH: -1, TRB: -1}, "Disagree": {ETH: -0.5, TRB: -0.5}, "Neutral": {ETH: 0, TRB: 0}, "Agree": {ETH: 0.5, TRB: 0.5}, "Strongly Agree": {ETH: 1, TRB: 1} } },
   { code: "ETH5", question: "ETH5: Some of my moral beliefs may be false", scores: { "Strongly Disagree": {ETH: -1}, "Disagree": {ETH: -0.5}, "Neutral": {ETH: 0}, "Agree": {ETH: 0.5}, "Strongly Agree": {ETH: 1} } },
-  { code: "ETH6", question: "ETH6: No moral standard is permanently valid across all times and societies", scores: { "Strongly Disagree": {ETH: -1}, "Disagree": {ETH: -0.5}, "Neutral": {ETH: 0}, "Agree": {ETH: 0.5}, "Strongly Agree": {ETH: 1} } },
+  { code: "ETH6", question: "ETH6: All moral standards are subject to change over time", scores: { "Strongly Disagree": {ETH: -1}, "Disagree": {ETH: -0.5}, "Neutral": {ETH: 0}, "Agree": {ETH: 0.5}, "Strongly Agree": {ETH: 1} } },
   { code: "ETH7", question: "ETH7: Moral truths are accessible through common sense, or reason", scores: { "Strongly Disagree": {ETH: -1}, "Disagree": {ETH: -0.5}, "Neutral": {ETH: 0}, "Agree": {ETH: 0.5}, "Strongly Agree": {ETH: 1} } },
 
   // --- HUMAN NATURE ---
@@ -49,7 +52,6 @@ const SURVEY_DATA = [
 
 const OPTIONS = ["Strongly Disagree", "Disagree", "Neutral", "Agree", "Strongly Agree"];
 
-// Axis Polarity Definitions
 const AXIS_LABELS = {
   ETH: { pos: "Objectivism", neg: "Subjectivism" },
   HN:  { pos: "Realism", neg: "Constructivism" },
@@ -61,9 +63,8 @@ const AXIS_LABELS = {
 let currentIndex = 0;
 let rawScores = {};
 let maxPossibleScores = {};
-let userAnswers = []; // History stack for Previous functionality
+let userAnswers = [];
 
-// 1. Calculate Theoretical Bounds for Normalization
 function calculateBounds() {
   SURVEY_DATA.forEach(q => {
     let qMaxPerAxis = {};
@@ -82,22 +83,16 @@ function calculateBounds() {
   });
 }
 
-// 2. Load Question to UI
 function loadQuestion() {
   const qData = SURVEY_DATA[currentIndex];
   
-  // Update Progress
   document.getElementById("progress-text").innerText = `Question ${currentIndex + 1} of ${SURVEY_DATA.length}`;
   const progressPercent = (currentIndex / SURVEY_DATA.length) * 100;
   document.getElementById("progress-fill").style.width = `${progressPercent}%`;
 
-  // Enable/Disable Previous Button
   document.getElementById("btn-prev").disabled = (currentIndex === 0);
-
-  // Update Text
   document.getElementById("question-text").innerText = qData.question;
 
-  // Render Option Buttons
   const container = document.getElementById("options-container");
   container.innerHTML = "";
 
@@ -110,19 +105,16 @@ function loadQuestion() {
   });
 }
 
-// 3. Handle Option Click
 function handleChoice(selectedOption) {
   const qData = SURVEY_DATA[currentIndex];
   const weights = qData.scores[selectedOption] || {};
 
-  // Track answer history
   userAnswers.push({
     questionIndex: currentIndex,
     selectedOption: selectedOption,
     weights: weights
   });
 
-  // Apply weights
   Object.entries(weights).forEach(([axis, weight]) => {
     if (axis in rawScores) {
       rawScores[axis] += weight;
@@ -137,13 +129,11 @@ function handleChoice(selectedOption) {
   }
 }
 
-// 4. Handle Previous Button Click
 function handlePrevious() {
   if (currentIndex <= 0 || userAnswers.length === 0) return;
 
   const lastAnswer = userAnswers.pop();
 
-  // Revert weights
   Object.entries(lastAnswer.weights).forEach(([axis, weight]) => {
     if (axis in rawScores) {
       rawScores[axis] -= weight;
@@ -154,7 +144,6 @@ function handlePrevious() {
   loadQuestion();
 }
 
-// 5. Show Normalized Results
 function showResults() {
   document.getElementById("survey-view").classList.add("hidden");
   document.getElementById("result-view").classList.remove("hidden");
@@ -170,7 +159,6 @@ function showResults() {
     const scaled = max > 0 ? (raw / max) * 10 : 0;
     const formatted = scaled.toFixed(1);
 
-    // Determine Polarity Tag based on score sign
     const labels = AXIS_LABELS[axis] || { pos: "Positive", neg: "Negative" };
     const stanceTag = scaled >= 0 ? labels.pos : labels.neg;
 
@@ -186,6 +174,89 @@ function showResults() {
   });
 
   document.getElementById("vector-text").innerText = `[${vectorParts.join("|")}]`;
+}
+
+// 3-Tab Navigation Controller
+function switchTab(tabName) {
+  const pageTest = document.getElementById("page-test");
+  const pageAbout = document.getElementById("page-about");
+  const pageComment = document.getElementById("page-comment");
+
+  const navTest = document.getElementById("nav-test");
+  const navAbout = document.getElementById("nav-about");
+  const navComment = document.getElementById("nav-comment");
+
+  // Hide all pages & deactivate all tabs
+  pageTest.classList.add("hidden");
+  pageAbout.classList.add("hidden");
+  pageComment.classList.add("hidden");
+
+  navTest.classList.remove("active");
+  navAbout.classList.remove("active");
+  navComment.classList.remove("active");
+
+  // Activate selected tab
+  if (tabName === "test") {
+    pageTest.classList.remove("hidden");
+    navTest.classList.add("active");
+  } else if (tabName === "about") {
+    pageAbout.classList.remove("hidden");
+    navAbout.classList.add("active");
+  } else if (tabName === "comment") {
+    pageComment.classList.remove("hidden");
+    navComment.classList.add("active");
+  }
+}
+
+// Comment Submission to Google Sheets
+async function submitCommentToSheets(event) {
+  event.preventDefault();
+
+  const nicknameInput = document.getElementById("comment-nickname");
+  const commentInput = document.getElementById("comment-text");
+  const btnSubmit = document.getElementById("btn-submit-comment");
+  const statusText = document.getElementById("comment-status");
+
+  const nickname = nicknameInput.value.trim();
+  const comment = commentInput.value.trim();
+
+  const vectorElement = document.getElementById("vector-text");
+  const currentVector = (vectorElement && vectorElement.innerText) ? vectorElement.innerText : "Not Taken Yet";
+
+  if (!nickname || !comment) return;
+
+  btnSubmit.disabled = true;
+  btnSubmit.innerText = "Sending...";
+  statusText.style.display = "block";
+  statusText.style.color = "#94a3b8";
+  statusText.innerText = "Submitting your comment...";
+
+  const payload = {
+    nickname: nickname,
+    comment: comment,
+    vector: currentVector
+  };
+
+  try {
+    await fetch(GOOGLE_SHEETS_URL, {
+      method: "POST",
+      mode: "no-cors",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload)
+    });
+
+    statusText.style.color = "#4ade80";
+    statusText.innerText = "Thank you! Your comment has been recorded.";
+    
+    nicknameInput.value = "";
+    commentInput.value = "";
+  } catch (error) {
+    statusText.style.color = "#ef4444";
+    statusText.innerText = "An error occurred while sending. Please try again.";
+  } finally {
+    btnSubmit.disabled = false;
+    btnSubmit.innerText = "Submit Comment";
+  }
 }
 
 // Initialize
