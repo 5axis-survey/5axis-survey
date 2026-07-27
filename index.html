@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>5-Axis Assessment Tool</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Subtle Credit in Top Left -->
+  <div class="credits">Produced by: Hüseyin Baştuğ & Arda Toby Özdemir</div>
+
+  <div class="card" id="app-card">
+    <!-- Progress Header -->
+    <div class="progress-container">
+      <div class="progress-header">
+        <span id="progress-text">Question 1 of 37</span>
+        <!-- Previous Button placed at the top -->
+        <button id="btn-prev" class="btn-prev" onclick="handlePrevious()" disabled>← Previous</button>
+      </div>
+      <div class="progress-bar-bg">
+        <div class="progress-bar-fill" id="progress-fill"></div>
+      </div>
+    </div>
+
+    <!-- Question View -->
+    <div id="survey-view">
+      <h2 id="question-text">Loading question...</h2>
+      <div class="options-group" id="options-container">
+        <!-- Option buttons dynamically inserted here -->
+      </div>
+    </div>
+
+    <!-- Result View -->
+    <div id="result-view" class="hidden">
+      <h2>Evaluation Complete</h2>
+      <div class="results-list" id="results-list"></div>
+      <div class="vector-box">
+        <strong>Analytic Space Vector:</strong>
+        <p id="vector-text"></p>
+      </div>
+      <button class="btn-restart" onclick="location.reload()">Restart Survey</button>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
