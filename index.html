@@ -8,41 +8,97 @@
 </head>
 <body>
 
-  <!-- Subtle Credit in Top Left -->
-  <div class="credits">Produced by: Hüseyin Baştuğ & Arda Toby Özdemir</div>
+  <!-- Top Navigation Bar -->
+  <header class="navbar">
+    <div class="credits">Produced by: Hüseyin Baştuğ & Arda Toby Özdemir</div>
+    <nav class="nav-links">
+      <button id="nav-test" class="nav-btn active" onclick="switchTab('test')">Test Screen</button>
+      <button id="nav-about" class="nav-btn" onclick="switchTab('about')">About Us</button>
+      <button id="nav-comment" class="nav-btn" onclick="switchTab('comment')">Leave a Comment</button>
+    </nav>
+  </header>
 
-  <div class="card" id="app-card">
-    <!-- Progress Header -->
-    <div class="progress-container">
-      <div class="progress-header">
-        <span id="progress-text">Question 1 of 37</span>
-        <!-- Previous Button placed at the top -->
-        <button id="btn-prev" class="btn-prev" onclick="handlePrevious()" disabled>← Previous</button>
-      </div>
-      <div class="progress-bar-bg">
-        <div class="progress-bar-fill" id="progress-fill"></div>
-      </div>
-    </div>
+  <!-- Main Content Container -->
+  <main class="container">
 
-    <!-- Question View -->
-    <div id="survey-view">
-      <h2 id="question-text">Loading question...</h2>
-      <div class="options-group" id="options-container">
-        <!-- Option buttons dynamically inserted here -->
-      </div>
-    </div>
+    <!-- PAGE 1: TEST SCREEN (Default View) -->
+    <section id="page-test" class="page-content">
+      <div class="card" id="app-card">
+        <!-- Progress Header -->
+        <div class="progress-container">
+          <div class="progress-header">
+            <span id="progress-text">Question 1 of 37</span>
+            <button id="btn-prev" class="btn-prev" onclick="handlePrevious()" disabled>← Previous</button>
+          </div>
+          <div class="progress-bar-bg">
+            <div class="progress-bar-fill" id="progress-fill"></div>
+          </div>
+        </div>
 
-    <!-- Result View -->
-    <div id="result-view" class="hidden">
-      <h2>Evaluation Complete</h2>
-      <div class="results-list" id="results-list"></div>
-      <div class="vector-box">
-        <strong>Analytic Space Vector:</strong>
-        <p id="vector-text"></p>
+        <!-- Question View -->
+        <div id="survey-view">
+          <h2 id="question-text">Loading question...</h2>
+          <div class="options-group" id="options-container"></div>
+        </div>
+
+        <!-- Result View -->
+        <div id="result-view" class="hidden">
+          <h2>Evaluation Complete</h2>
+          <div class="results-list" id="results-list"></div>
+          <div class="vector-box">
+            <strong>Analytic Space Vector:</strong>
+            <p id="vector-text"></p>
+          </div>
+          <button class="btn-restart" onclick="location.reload()">Restart Survey</button>
+        </div>
       </div>
-      <button class="btn-restart" onclick="location.reload()">Restart Survey</button>
-    </div>
-  </div>
+    </section>
+
+    <!-- PAGE 2: ABOUT US -->
+    <section id="page-about" class="page-content hidden">
+      <div class="card about-card">
+        <h2>About The Project</h2>
+        <p class="about-description">
+          The <strong>5-Axis Assessment Tool</strong> is an analytical framework designed to map individual philosophical, moral, and social tendencies across five core political-philosophical dimensions. Each question dynamically contributes to a multi-dimensional vector representing your position on a scale from -10.0 to +10.0.
+        </p>
+
+        <h3>Dimensions & Polarities</h3>
+        <ul class="axes-guide">
+          <li><strong>ETH (Ethics):</strong> Objectivism (+) vs. Subjectivism (-)</li>
+          <li><strong>HN (Human Nature):</strong> Realism (+) vs. Constructivism (-)</li>
+          <li><strong>TRB (Tribalism):</strong> Tribalism (+) vs. Universalism (-)</li>
+          <li><strong>JST (Justice):</strong> Justice (+) vs. Equality (-)</li>
+          <li><strong>REL (Religion):</strong> Spiritual (+) vs. Laic (-)</li>
+        </ul>
+
+        <hr class="divider">
+
+        <h3>Authors & Methodology</h3>
+        <p class="about-authors">
+          Developed collaboratively by <strong>Hüseyin Baştuğ</strong> and <strong>Arda Toby Özdemir</strong> to combine computational survey logic with political-philosophical axis scoring.
+        </p>
+      </div>
+    </section>
+
+    <!-- PAGE 3: LEAVE A COMMENT -->
+    <section id="page-comment" class="page-content hidden">
+      <div class="card comments-card">
+        <h2>Leave a Comment</h2>
+        <p class="about-description" style="margin-bottom: 20px;">
+          Share your feedback, thoughts on the test items, or general ideas about the project. Your comments will be recorded directly into our project database.
+        </p>
+        
+        <form id="comment-form" onsubmit="submitCommentToSheets(event)">
+          <input type="text" id="comment-nickname" placeholder="Your Nickname" required maxlength="30" class="input-field">
+          <textarea id="comment-text" placeholder="Share your thoughts on the assessment..." required maxlength="500" class="input-field textarea-field"></textarea>
+          <button type="submit" id="btn-submit-comment" class="btn-option" style="background-color: #38bdf8; color: #0f172a; border: none; margin-top: 8px;">Submit Comment</button>
+        </form>
+        
+        <p id="comment-status" style="margin-top: 14px; font-size: 0.85rem; display: none;"></p>
+      </div>
+    </section>
+
+  </main>
 
   <script src="script.js"></script>
 </body>
