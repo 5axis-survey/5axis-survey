@@ -1,5 +1,5 @@
-// Replace this string with your Google Apps Script Web App Deployment URL
-const GOOGLE_SHEETS_URL = "https://script.google.com/macros/s/AKfycbzHkbJ6XI5zNhgNfkiyQgeJb9N2X9cLbNf77qpFW_jTCFGSmZwaiKZsJXcuKuD39lkKOg/exec";
+// Google Apps Script Web App URL (Varsa tırnak içine yapıştırın)
+const GOOGLE_SHEETS_URL = "";
 
 const SURVEY_DATA = [
   // --- ETHICS ---
@@ -86,23 +86,29 @@ function calculateBounds() {
 function loadQuestion() {
   const qData = SURVEY_DATA[currentIndex];
   
-  document.getElementById("progress-text").innerText = `Question ${currentIndex + 1} of ${SURVEY_DATA.length}`;
-  const progressPercent = (currentIndex / SURVEY_DATA.length) * 100;
-  document.getElementById("progress-fill").style.width = `${progressPercent}%`;
+  const progText = document.getElementById("progress-text");
+  if (progText) progText.innerText = `Question ${currentIndex + 1} of ${SURVEY_DATA.length}`;
+  
+  const progFill = document.getElementById("progress-fill");
+  if (progFill) progFill.style.width = `${(currentIndex / SURVEY_DATA.length) * 100}%`;
 
-  document.getElementById("btn-prev").disabled = (currentIndex === 0);
-  document.getElementById("question-text").innerText = qData.question;
+  const btnPrev = document.getElementById("btn-prev");
+  if (btnPrev) btnPrev.disabled = (currentIndex === 0);
+
+  const qText = document.getElementById("question-text");
+  if (qText) qText.innerText = qData.question;
 
   const container = document.getElementById("options-container");
-  container.innerHTML = "";
-
-  OPTIONS.forEach(optText => {
-    const btn = document.createElement("button");
-    btn.className = "btn-option";
-    btn.innerText = optText;
-    btn.onclick = () => handleChoice(optText);
-    container.appendChild(btn);
-  });
+  if (container) {
+    container.innerHTML = "";
+    OPTIONS.forEach(optText => {
+      const btn = document.createElement("button");
+      btn.className = "btn-option";
+      btn.innerText = optText;
+      btn.onclick = () => handleChoice(optText);
+      container.appendChild(btn);
+    });
+  }
 }
 
 function handleChoice(selectedOption) {
@@ -145,11 +151,13 @@ function handlePrevious() {
 }
 
 function showResults() {
-  document.getElementById("survey-view").classList.add("hidden");
-  document.getElementById("result-view").classList.remove("hidden");
+  const surveyView = document.getElementById("survey-view");
+  const resultView = document.getElementById("result-view");
+  if (surveyView) surveyView.classList.add("hidden");
+  if (resultView) resultView.classList.remove("hidden");
   
   const resultsContainer = document.getElementById("results-list");
-  resultsContainer.innerHTML = "";
+  if (resultsContainer) resultsContainer.innerHTML = "";
 
   let vectorParts = [];
 
@@ -164,19 +172,22 @@ function showResults() {
 
     vectorParts.push(`${axis}:${formatted}`);
 
-    const row = document.createElement("div");
-    row.className = "result-row";
-    row.innerHTML = `
-      <span><strong>${axis}</strong> <small style="color: #94a3b8; margin-left: 6px;">(${stanceTag})</small></span>
-      <span>${scaled >= 0 ? '+' : ''}${formatted}</span>
-    `;
-    resultsContainer.appendChild(row);
+    if (resultsContainer) {
+      const row = document.createElement("div");
+      row.className = "result-row";
+      row.innerHTML = `
+        <span><strong>${axis}</strong> <small style="color: #94a3b8; margin-left: 6px;">(${stanceTag})</small></span>
+        <span>${scaled >= 0 ? '+' : ''}${formatted}</span>
+      `;
+      resultsContainer.appendChild(row);
+    }
   });
 
-  document.getElementById("vector-text").innerText = `[${vectorParts.join("|")}]`;
+  const vecText = document.getElementById("vector-text");
+  if (vecText) vecText.innerText = `[${vectorParts.join("|")}]`;
 }
 
-// 3-Tab Navigation Controller
+// Tab Switcher Function
 function switchTab(tabName) {
   const pageTest = document.getElementById("page-test");
   const pageAbout = document.getElementById("page-about");
@@ -186,31 +197,34 @@ function switchTab(tabName) {
   const navAbout = document.getElementById("nav-about");
   const navComment = document.getElementById("nav-comment");
 
-  // Hide all pages & deactivate all tabs
-  pageTest.classList.add("hidden");
-  pageAbout.classList.add("hidden");
-  pageComment.classList.add("hidden");
+  if (pageTest) pageTest.classList.add("hidden");
+  if (pageAbout) pageAbout.classList.add("hidden");
+  if (pageComment) pageComment.classList.add("hidden");
 
-  navTest.classList.remove("active");
-  navAbout.classList.remove("active");
-  navComment.classList.remove("active");
+  if (navTest) navTest.classList.remove("active");
+  if (navAbout) navAbout.classList.remove("active");
+  if (navComment) navComment.classList.remove("active");
 
-  // Activate selected tab
-  if (tabName === "test") {
+  if (tabName === "test" && pageTest && navTest) {
     pageTest.classList.remove("hidden");
     navTest.classList.add("active");
-  } else if (tabName === "about") {
+  } else if (tabName === "about" && pageAbout && navAbout) {
     pageAbout.classList.remove("hidden");
     navAbout.classList.add("active");
-  } else if (tabName === "comment") {
+  } else if (tabName === "comment" && pageComment && navComment) {
     pageComment.classList.remove("hidden");
     navComment.classList.add("active");
   }
 }
 
-// Comment Submission to Google Sheets
+// Google Sheets Form Submit
 async function submitCommentToSheets(event) {
   event.preventDefault();
+
+  if (!GOOGLE_SHEETS_URL) {
+    alert("Google Sheets URL is not configured yet.");
+    return;
+  }
 
   const nicknameInput = document.getElementById("comment-nickname");
   const commentInput = document.getElementById("comment-text");
@@ -259,6 +273,22 @@ async function submitCommentToSheets(event) {
   }
 }
 
-// Initialize
-calculateBounds();
-loadQuestion();
+// Sayfa Yüklendiğinde Olay Dinleyicilerini Bağlama (DOM Ready)
+document.addEventListener("DOMContentLoaded", () => {
+  // Navigation Event Listeners
+  const btnNavTest = document.getElementById("nav-test");
+  const btnNavAbout = document.getElementById("nav-about");
+  const btnNavComment = document.getElementById("nav-comment");
+  const btnPrev = document.getElementById("btn-prev");
+  const commentForm = document.getElementById("comment-form");
+
+  if (btnNavTest) btnNavTest.addEventListener("click", () => switchTab("test"));
+  if (btnNavAbout) btnNavAbout.addEventListener("click", () => switchTab("about"));
+  if (btnNavComment) btnNavComment.addEventListener("click", () => switchTab("comment"));
+  if (btnPrev) btnPrev.addEventListener("click", handlePrevious);
+  if (commentForm) commentForm.addEventListener("submit", submitCommentToSheets);
+
+  // App Initialization
+  calculateBounds();
+  loadQuestion();
+});
