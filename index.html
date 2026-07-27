@@ -12,9 +12,9 @@
   <header class="navbar">
     <div class="credits">Produced by: Hüseyin Baştuğ & Arda Toby Özdemir</div>
     <nav class="nav-links">
-      <button id="nav-test" class="nav-btn active" onclick="switchTab('test')">Test Screen</button>
-      <button id="nav-about" class="nav-btn" onclick="switchTab('about')">About Us</button>
-      <button id="nav-comment" class="nav-btn" onclick="switchTab('comment')">Leave a Comment</button>
+      <button id="nav-test" class="nav-btn active">Test Screen</button>
+      <button id="nav-about" class="nav-btn">About Us</button>
+      <button id="nav-comment" class="nav-btn">Leave a Comment</button>
     </nav>
   </header>
 
@@ -28,7 +28,7 @@
         <div class="progress-container">
           <div class="progress-header">
             <span id="progress-text">Question 1 of 37</span>
-            <button id="btn-prev" class="btn-prev" onclick="handlePrevious()" disabled>← Previous</button>
+            <button id="btn-prev" class="btn-prev" disabled>← Previous</button>
           </div>
           <div class="progress-bar-bg">
             <div class="progress-bar-fill" id="progress-fill"></div>
@@ -88,7 +88,7 @@
           Share your feedback, thoughts on the test items, or general ideas about the project. Your comments will be recorded directly into our project database.
         </p>
         
-        <form id="comment-form" onsubmit="submitCommentToSheets(event)">
+        <form id="comment-form">
           <input type="text" id="comment-nickname" placeholder="Your Nickname" required maxlength="30" class="input-field">
           <textarea id="comment-text" placeholder="Share your thoughts on the assessment..." required maxlength="500" class="input-field textarea-field"></textarea>
           <button type="submit" id="btn-submit-comment" class="btn-option" style="background-color: #38bdf8; color: #0f172a; border: none; margin-top: 8px;">Submit Comment</button>
