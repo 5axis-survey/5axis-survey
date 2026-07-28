@@ -1,6 +1,3 @@
-// Google Apps Script Web App URL
-const GOOGLE_SHEETS_URL = "https://script.google.com/macros/s/AKfycbyjNOiABYgb6giv2CFF62hgVXf6r2vv6GCi1vD22Q_XGMadI8yPVZOz3kPZLWJD8-cnhw/exec";
-
 const SURVEY_DATA = [
   // --- ETHICS ---
   { code: "ETH1", question: "There is a set of moral values that are universally valid", scores: { "Strongly Disagree": {ETH: -1}, "Disagree": {ETH: -0.5}, "Neutral": {ETH: 0}, "Agree": {ETH: 0.5}, "Strongly Agree": {ETH: 1} } },
@@ -217,17 +214,12 @@ function switchTab(tabName) {
   }
 }
 
+// Yorum ve Vektör verisini doğrudan .csv dosyası olarak indiren fonksiyon
 function submitCommentToSheets(event) {
   event.preventDefault();
 
-  if (!GOOGLE_SHEETS_URL) {
-    alert("Google Sheets URL is not configured yet.");
-    return;
-  }
-
   const nicknameInput = document.getElementById("comment-nickname");
   const commentInput = document.getElementById("comment-text");
-  const btnSubmit = document.getElementById("btn-submit-comment");
   const statusText = document.getElementById("comment-status");
 
   const nickname = nicknameInput.value.trim();
@@ -238,57 +230,33 @@ function submitCommentToSheets(event) {
 
   if (!nickname || !comment) return;
 
-  btnSubmit.disabled = true;
-  btnSubmit.innerText = "Sending...";
-  statusText.style.display = "block";
-  statusText.style.color = "#94a3b8";
-  statusText.innerText = "Submitting your comment...";
+  const timestamp = new Date().toISOString().replace('T', ' ').substring(0, 19);
 
-  // Arka planda gizli iframe ve form ile veri gönderimi
-  let iframe = document.getElementById("hidden-script-iframe");
-  if (!iframe) {
-    iframe = document.createElement("iframe");
-    iframe.id = "hidden-script-iframe";
-    iframe.name = "hidden-script-iframe";
-    iframe.style.display = "none";
-    document.body.appendChild(iframe);
-  }
+  // CSV içeriğini oluşturma (Virgüller ve yeni satırlar için tırnak koruması eklendi)
+  const csvHeaders = "Date,Nickname,Comment,Vector\n";
+  const csvRow = `"${timestamp}","${nickname.replace(/"/g, '""')}","${comment.replace(/"/g, '""')}","${currentVector}"\n`;
+  const csvContent = "\uFEFF" + csvHeaders + csvRow; // \uFEFF UTF-8 BOM karakteri ekleyerek Türkçe karakter desteğini sağlar
 
-  const form = document.createElement("form");
-  form.method = "POST";
-  form.action = GOOGLE_SHEETS_URL;
-  form.target = "hidden-script-iframe";
+  // Blob nesnesi oluşturup indirme bağlantısını tetikleme
+  const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+  const url = URL.createObjectURL(blob);
+  
+  const link = document.createElement("a");
+  link.setAttribute("href", url);
+  link.setAttribute("download", `survey_comment_${Date.now()}.csv`);
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
 
-  const fields = {
-    nickname: nickname,
-    comment: comment,
-    vector: currentVector
-  };
-
-  for (let key in fields) {
-    const input = document.createElement("input");
-    input.type = "hidden";
-    input.name = key;
-    input.value = fields[key];
-    form.appendChild(input);
-  }
-
-  document.body.appendChild(form);
-  form.submit();
-
-  setTimeout(() => {
+  // Form temizleme ve bildirim
+  if (statusText) {
+    statusText.style.display = "block";
     statusText.style.color = "#4ade80";
-    statusText.innerText = "Thank you! Your comment has been recorded.";
-    
-    nicknameInput.value = "";
-    commentInput.value = "";
-    btnSubmit.disabled = false;
-    btnSubmit.innerText = "Submit Comment";
-    
-    if (form.parentNode) {
-      form.parentNode.removeChild(form);
-    }
-  }, 1000);
+    statusText.innerText = "Comment downloaded as CSV successfully!";
+  }
+
+  nicknameInput.value = "";
+  commentInput.value = "";
 }
 
 document.addEventListener("DOMContentLoaded", () => {
