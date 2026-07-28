@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>5-Axis Political & Philosophical Test</title>
+  <title>5-Axis Political & Philosophical Compass</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -11,10 +11,13 @@
   <!-- Navigation Bar -->
   <header class="navbar">
     <div class="nav-container">
-      <h1 class="logo">5-Axis Compass</h1>
+      <div class="brand-box">
+        <h1 class="logo">5-Axis Compass</h1>
+        <span class="credits">produced by: Hüseyin Baştuğ & Arda Toby Özdemir</span>
+      </div>
       <nav class="nav-links">
         <button id="nav-test" class="nav-btn active">Test</button>
-        <button id="nav-about" class="nav-btn">About</button>
+        <button id="nav-about" class="nav-btn">About Us</button>
         <button id="nav-comment" class="nav-btn">Comment</button>
       </nav>
     </div>
@@ -42,7 +45,7 @@
           <!-- Options dynamically rendered by script.js -->
         </div>
 
-        <!-- Controls: Previous button alignment fixed -->
+        <!-- Controls -->
         <div class="controls">
           <button id="btn-prev" class="btn-secondary" disabled>← Previous Question</button>
         </div>
@@ -70,39 +73,55 @@
 
     </section>
 
-    <!-- PAGE 2: ABOUT PAGE (Eksiksiz Tam İçerik) -->
+    <!-- PAGE 2: ABOUT US PAGE (Kapsamlı ve Detaylı Eski Metin) -->
     <section id="page-about" class="page-section hidden">
       <div class="card">
-        <h2>About This Test</h2>
+        <h2>About Us & Methodology</h2>
         <p class="about-intro">
-          The 5-Axis Compass is a philosophical and political assessment tool designed to map an individual's worldview across five fundamental dimensions of thought. Unlike traditional single or dual-axis political spectrums, this test separates distinct ontological, ethical, and societal stances into independent measurements.
+          The 5-Axis Philosophical Compass is a multi-dimensional analytical tool engineered to evaluate and map an individual's worldview across five core philosophical and political dimensions. Conventional political spectrums often reduce complex worldviews to a single Left-Right paradigm or a simple two-axis grid, collapsing distinct ethical, ontological, and social stances into ambiguous categories.
+        </p>
+        <p class="about-intro">
+          This test isolates five distinct intellectual axes to provide a high-resolution vector representation of your foundational beliefs and social philosophy.
         </p>
 
         <hr class="divider">
 
-        <h3>The Five Axes Explained</h3>
-        <ul class="about-list">
-          <li>
-            <strong>Ethics (ETH):</strong> <em>Objectivism vs. Subjectivism</em><br>
-            Measures whether you view moral values as universal, objective truths or as culturally constructed, subjective norms.
-          </li>
-          <li>
-            <strong>Human Nature (HN):</strong> <em>Realism vs. Constructivism</em><br>
-            Examines whether human behavior is governed by fixed biological and psychological boundaries, or primarily shaped by environment and socialization.
-          </li>
-          <li>
-            <strong>Tribalism (TRB):</strong> <em>Tribalism vs. Universalism</em><br>
-            Gauges whether primary moral duty is owed to one's own immediate group/society, or equally to humanity as a whole.
-          </li>
-          <li>
-            <strong>Justice (JST):</strong> <em>Justice vs. Equality</em><br>
-            Evaluates preference for meritocracy and natural hierarchy versus egalitarian social structures and wealth redistribution.
-          </li>
-          <li>
-            <strong>Religion & Transcendence (RLG):</strong> <em>Spiritual vs. Secular (Laic)</em><br>
-            Measures the degree to which non-material, spiritual, or religious frameworks inform your understanding of existence and truth.
-          </li>
-        </ul>
+        <h3>The Five Philosophical Axes Explained</h3>
+        
+        <div class="axis-explanation">
+          <h4>1. Ethics (ETH): Objectivism vs. Subjectivism</h4>
+          <p>
+            This axis measures your stance on moral ontology. <strong>Objectivism</strong> posilates that moral truths exist independently of human perception, culture, or consensus, holding that good and evil are objective features of reality accessible through reason or divine law. Conversely, <strong>Subjectivism</strong> views morality as a social construct, evolving cultural agreement, or emotional expression that carries no permanent or universal validity.
+          </p>
+        </div>
+
+        <div class="axis-explanation">
+          <h4>2. Human Nature (HN): Realism vs. Constructivism</h4>
+          <p>
+            This dimension evaluates your worldview regarding human potential and social engineering. <strong>Realism</strong> asserts that human beings possess fixed biological, psychological, and moral traits that fundamentally constrain what is achievable in politics and social organization. <strong>Constructivism</strong>, on the other hand, holds that human nature is almost infinitely malleable and shaped by environment, education, and institutional arrangements.
+          </p>
+        </div>
+
+        <div class="axis-explanation">
+          <h4>3. Tribalism (TRB): Tribalism vs. Universalism</h4>
+          <p>
+            This axis examines the boundary of your moral obligations and community duty. <strong>Tribalism</strong> emphasizes distinct social identity, group exclusivity, and primary responsibility toward one's own immediate community or nation. <strong>Universalism</strong> advocates for global interconnectedness, cosmopolitan responsibility, and equal moral consideration for all human beings regardless of citizenship or group identity.
+          </p>
+        </div>
+
+        <div class="axis-explanation">
+          <h4>4. Justice (JST): Justice vs. Equality</h4>
+          <p>
+            This scale measures your preference regarding social hierarchy and economic distribution. <strong>Justice</strong> favors meritocracy, proportional reward based on effort/contribution, and acceptance of natural inequality as a stabilizing force. <strong>Equality</strong> prioritizes egalitarianism, social safety nets, systemic redistribution, and the reduction of socioeconomic disparities.
+          </p>
+        </div>
+
+        <div class="axis-explanation">
+          <h4>5. Religion & Transcendence (RLG): Spiritual vs. Secular (Laic)</h4>
+          <p>
+            This axis assesses the role of metaphysical frameworks in your understanding of existence. <strong>Spiritual</strong> stances acknowledge innate purpose, non-material forces, and the value of faith or prayer in human history. <strong>Secular (Laic)</strong> positions maintain a strictly materialist framework, viewing empirical science as the sole source of valid knowledge and regarding religious structures as historical artifacts.
+          </p>
+        </div>
       </div>
     </section>
 
@@ -131,6 +150,6 @@
 
   </main>
 
-  <script src="script.js?v=3.0"></script>
+  <script src="script.js?v=4.0"></script>
 </body>
 </html>
