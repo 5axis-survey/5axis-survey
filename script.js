@@ -65,6 +65,8 @@ let currentIndex = 0;
 let rawScores = {};
 let maxPossibleScores = {};
 let userAnswers = [];
+let lastResults = [];      // paylasim gorseli icin sonuc anlik goruntusu
+let shareBlob = null;     // uretilen PNG
 
 function calculateBounds() {
   SURVEY_DATA.forEach(q => {
@@ -174,6 +176,7 @@ function showResults() {
   const vectorParts = [];
   const codeParts = [];
   const pendingFills = [];
+  lastResults = [];
 
   if (resultsContainer) {
     const legend = document.createElement("div");
@@ -205,6 +208,15 @@ function showResults() {
       side: isPos ? "pos" : "neg",
       pole: isPos ? labels.pos : labels.neg,
       tip: `${axis}: ${isPos ? labels.pos : labels.neg}`
+    });
+
+    lastResults.push({
+      axis: axis,
+      scaled: scaled,
+      formatted: formatted,
+      isPos: isPos,
+      neg: labels.neg, negKey: labels.negKey,
+      pos: labels.pos, posKey: labels.posKey
     });
 
     if (!resultsContainer) return;
@@ -262,6 +274,12 @@ function showResults() {
 
   const poles = document.getElementById("profile-poles");
   if (poles) poles.innerText = codeParts.map(c => c.pole).join(" \u00b7 ");
+
+  wireShareLinks();
+  prepareShareImage();
+
+  const btnNative = document.getElementById("btn-share-native");
+  if (btnNative) btnNative.classList.toggle("hidden", !canShareFiles());
 }
 
 async function handleCopyCode() {
@@ -378,6 +396,253 @@ async function handleCommentSubmit(event) {
   }
 }
 
+
+/* =========================================================
+   PAYLASIM
+   Gorsel: canvas -> PNG. navigator.share() varsa cihazin
+   paylas menusune dosya olarak gider (Instagram, WhatsApp...).
+   Link butonlari sadece metin tasir; bu bir tarayici kisiti.
+   ========================================================= */
+
+function getProfileCode() {
+  const box = document.getElementById("vector-code");
+  return (box && box.dataset.code) ? box.dataset.code : "";
+}
+
+function getVectorString() {
+  const el = document.getElementById("vector-text");
+  return el ? el.innerText : "";
+}
+
+function getPageUrl() {
+  return location.origin + location.pathname;
+}
+
+function getShareText() {
+  return `My 5-Axis Compass profile: ${getProfileCode()} ${getVectorString()}`.trim();
+}
+
+function wireShareLinks() {
+  const text = getShareText();
+  const url = getPageUrl();
+  const t = encodeURIComponent(text);
+  const u = encodeURIComponent(url);
+  const both = encodeURIComponent(`${text}\n${url}`);
+
+  const links = {
+    "share-wa":   `https://wa.me/?text=${both}`,
+    "share-x":    `https://twitter.com/intent/tweet?text=${t}&url=${u}`,
+    "share-tg":   `https://t.me/share/url?url=${u}&text=${t}`,
+    "share-mail": `https://mail.google.com/mail/?view=cm&fs=1&su=${encodeURIComponent("My 5-Axis Compass result")}&body=${both}`
+  };
+
+  Object.entries(links).forEach(([id, href]) => {
+    const el = document.getElementById(id);
+    if (el) el.href = href;
+  });
+}
+
+function roundRectPath(ctx, x, y, w, h, r) {
+  const rr = Math.max(0, Math.min(r, w / 2, h / 2));
+  ctx.beginPath();
+  ctx.moveTo(x + rr, y);
+  ctx.arcTo(x + w, y, x + w, y + h, rr);
+  ctx.arcTo(x + w, y + h, x, y + h, rr);
+  ctx.arcTo(x, y + h, x, y, rr);
+  ctx.arcTo(x, y, x + w, y, rr);
+  ctx.closePath();
+}
+
+function drawShareCanvas() {
+  const W = 1080, H = 1350;
+  const SANS = "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif";
+  const MONO = "'Courier New', Courier, monospace";
+  const PAD = 90;
+  const CW = W - PAD * 2;
+
+  const canvas = document.createElement("canvas");
+  canvas.width = W;
+  canvas.height = H;
+  const ctx = canvas.getContext("2d");
+
+  ctx.fillStyle = "#0f172a";
+  ctx.fillRect(0, 0, W, H);
+
+  roundRectPath(ctx, 36, 36, W - 72, H - 72, 30);
+  ctx.fillStyle = "#1e293b";
+  ctx.fill();
+  ctx.strokeStyle = "#334155";
+  ctx.lineWidth = 2;
+  ctx.stroke();
+
+  ctx.textBaseline = "alphabetic";
+  ctx.textAlign = "left";
+
+  ctx.fillStyle = "#38bdf8";
+  ctx.font = `700 46px ${SANS}`;
+  ctx.fillText("5-Axis Compass", PAD, 132);
+
+  ctx.fillStyle = "#94a3b8";
+  ctx.font = `italic 23px ${SANS}`;
+  ctx.fillText("created by H\u00fcseyin Ba\u015ftu\u011f & Arda Toby \u00d6zdemir", PAD, 170);
+
+  ctx.fillStyle = "#94a3b8";
+  ctx.font = `600 24px ${SANS}`;
+  ctx.fillText("YOUR PROFILE", PAD, 244);
+
+  // --- Harf kutulari ---
+  const TS = 140, GAP = 22;
+  const tilesW = lastResults.length * TS + (lastResults.length - 1) * GAP;
+  let tx = PAD + (CW - tilesW) / 2;
+  const ty = 268;
+
+  lastResults.forEach(r => {
+    roundRectPath(ctx, tx, ty, TS, TS, 18);
+    ctx.fillStyle = r.isPos ? "#38bdf8" : "#a78bfa";
+    ctx.fill();
+
+    ctx.fillStyle = "#0f172a";
+    ctx.font = `700 76px ${MONO}`;
+    ctx.textAlign = "center";
+    ctx.fillText(r.isPos ? r.posKey : r.negKey, tx + TS / 2, ty + TS / 2 + 27);
+    tx += TS + GAP;
+  });
+
+  // --- Kutup isimleri ---
+  const poles = lastResults.map(r => (r.isPos ? r.pos : r.neg)).join("  \u00b7  ");
+  ctx.textAlign = "center";
+  ctx.fillStyle = "#94a3b8";
+  let poleSize = 24;
+  ctx.font = `${poleSize}px ${SANS}`;
+  while (ctx.measureText(poles).width > CW && poleSize > 15) {
+    poleSize -= 1;
+    ctx.font = `${poleSize}px ${SANS}`;
+  }
+  ctx.fillText(poles, W / 2, ty + TS + 52);
+
+  // --- Barlar ---
+  const cx = PAD + CW / 2;
+  let by = 540;
+
+  lastResults.forEach(r => {
+    ctx.font = `22px ${SANS}`;
+
+    ctx.textAlign = "left";
+    ctx.fillStyle = r.isPos ? "#64748b" : "#f8fafc";
+    ctx.fillText(`${r.negKey}  ${r.neg}`, PAD, by);
+
+    ctx.textAlign = "right";
+    ctx.fillStyle = r.isPos ? "#f8fafc" : "#64748b";
+    ctx.fillText(`${r.pos}  ${r.posKey}`, PAD + CW, by);
+
+    ctx.textAlign = "center";
+    ctx.fillStyle = "#cbd5e1";
+    ctx.font = `700 22px ${MONO}`;
+    ctx.fillText(`${r.axis} ${r.scaled >= 0 ? "+" : ""}${r.formatted}`, cx, by);
+
+    const trackY = by + 18;
+    const trackH = 24;
+
+    roundRectPath(ctx, PAD, trackY, CW, trackH, 12);
+    ctx.fillStyle = "#0f172a";
+    ctx.fill();
+    ctx.strokeStyle = "#334155";
+    ctx.lineWidth = 2;
+    ctx.stroke();
+
+    const halfW = (Math.abs(r.scaled) / 10) * (CW / 2);
+    if (halfW > 1) {
+      roundRectPath(ctx, r.isPos ? cx : cx - halfW, trackY, halfW, trackH, 12);
+      ctx.fillStyle = r.isPos ? "#38bdf8" : "#a78bfa";
+      ctx.fill();
+    }
+
+    ctx.strokeStyle = "#64748b";
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.moveTo(cx, trackY);
+    ctx.lineTo(cx, trackY + trackH);
+    ctx.stroke();
+
+    by += 108;
+  });
+
+  // --- Vektor ---
+  ctx.strokeStyle = "#334155";
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+  ctx.moveTo(PAD, by + 6);
+  ctx.lineTo(PAD + CW, by + 6);
+  ctx.stroke();
+
+  ctx.textAlign = "center";
+  ctx.fillStyle = "#94a3b8";
+  ctx.font = `21px ${SANS}`;
+  ctx.fillText("Result Vector", W / 2, by + 52);
+
+  ctx.fillStyle = "#f8fafc";
+  let vecSize = 26;
+  const vec = getVectorString();
+  ctx.font = `${vecSize}px ${MONO}`;
+  while (ctx.measureText(vec).width > CW && vecSize > 14) {
+    vecSize -= 1;
+    ctx.font = `${vecSize}px ${MONO}`;
+  }
+  ctx.fillText(vec, W / 2, by + 92);
+
+  const host = location.host;
+  if (host) {
+    ctx.fillStyle = "#64748b";
+    ctx.font = `20px ${SANS}`;
+    ctx.fillText(host, W / 2, H - 82);
+  }
+
+  return canvas;
+}
+
+/* Gorseli sonuclar ekrana gelir gelmez hazirla.
+   navigator.share() iOS Safari'de kullanici hareketiyle ayni anda
+   cagrilmak zorunda; blob'u onceden uretmezsek paylasim engelleniyor. */
+function prepareShareImage() {
+  shareBlob = null;
+  try {
+    drawShareCanvas().toBlob(blob => { shareBlob = blob; }, "image/png");
+  } catch (err) {
+    shareBlob = null;
+  }
+}
+
+function canShareFiles() {
+  try {
+    const probe = new File([new Blob()], "probe.png", { type: "image/png" });
+    return !!(navigator.canShare && navigator.canShare({ files: [probe] }));
+  } catch (err) {
+    return false;
+  }
+}
+
+function shareImageNative() {
+  if (!shareBlob) return;
+  const file = new File([shareBlob], "5-axis-compass.png", { type: "image/png" });
+  navigator.share({
+    files: [file],
+    title: "5-Axis Compass",
+    text: getShareText()
+  }).catch(() => { /* kullanici iptal etti */ });
+}
+
+function downloadShareImage() {
+  if (!shareBlob) return;
+  const url = URL.createObjectURL(shareBlob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = `5-axis-compass-${getProfileCode() || "result"}.png`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  setTimeout(() => URL.revokeObjectURL(url), 2000);
+}
+
 document.addEventListener("DOMContentLoaded", () => {
   const btnNavTest = document.getElementById("nav-test");
   const btnNavAbout = document.getElementById("nav-about");
@@ -392,6 +657,12 @@ document.addEventListener("DOMContentLoaded", () => {
   if (btnPrev) btnPrev.onclick = handlePrevious;
   if (commentForm) commentForm.onsubmit = handleCommentSubmit;
   if (btnCopyCode) btnCopyCode.onclick = handleCopyCode;
+
+  const btnDownloadImg = document.getElementById("btn-download-img");
+  const btnShareNative = document.getElementById("btn-share-native");
+
+  if (btnDownloadImg) btnDownloadImg.onclick = downloadShareImage;
+  if (btnShareNative) btnShareNative.onclick = shareImageNative;
 
   calculateBounds();
   loadQuestion();
