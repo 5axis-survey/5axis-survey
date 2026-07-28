@@ -17,8 +17,7 @@ const SURVEY_DATA = [
   { code: "HN3", question: "HN3: Rehabilitation is possible regardless of past actions", scores: { "Strongly Disagree": {HN: -1}, "Disagree": {HN: -0.5}, "Neutral": {HN: 0}, "Agree": {HN: 0.5}, "Strongly Agree": {HN: 1} } },
   { code: "HN4", question: "HN4: Some people are predisposed to violent behavior", scores: { "Strongly Disagree": {HN: -1}, "Disagree": {HN: -0.5}, "Neutral": {HN: 0}, "Agree": {HN: 0.5}, "Strongly Agree": {HN: 1} } },
   { code: "HN5", question: "HN5: A perfect society is achievable", scores: { "Strongly Disagree": {HN: -1}, "Disagree": {HN: -0.5}, "Neutral": {HN: 0}, "Agree": {HN: 0.5}, "Strongly Agree": {HN: 1} } },
-  { code: "HN6", question: "HN6:  People are born with a fixed underlying human nature
-", scores: { "Strongly Disagree": {HN: -1}, "Disagree": {HN: -0.5}, "Neutral": {HN: 0}, "Agree": {HN: 0.5}, "Strongly Agree": {HN: 1} } },
+  { code: "HN6", question: "HN6: People are born with a fixed underlying human nature", scores: { "Strongly Disagree": {HN: -1}, "Disagree": {HN: -0.5}, "Neutral": {HN: 0}, "Agree": {HN: 0.5}, "Strongly Agree": {HN: 1} } },
   { code: "HN7", question: "HN7: We are shaped more by our experiences than by our genetics", scores: { "Strongly Disagree": {HN: -1}, "Disagree": {HN: -0.5}, "Neutral": {HN: 0}, "Agree": {HN: 0.5}, "Strongly Agree": {HN: 1} } },
 
   // --- TRIBALISM ---
@@ -41,15 +40,14 @@ const SURVEY_DATA = [
   { code: "JST7", question: "JST7: It is better to be middle class in an equal society than it is to be wealthy in an unequal society", scores: { "Strongly Disagree": {JST: -1}, "Disagree": {JST: -0.5}, "Neutral": {JST: 0}, "Agree": {JST: 0.5}, "Strongly Agree": {JST: 1} } },
 
   // --- RELIGION ---
-  { code: "RLG1", question: "RLG1: Science is the only universally valid source of knowledge about the world
-, scores: { "Strongly Disagree": {REL: -1}, "Disagree": {REL: -0.5}, "Neutral": {REL: 0}, "Agree": {REL: 0.5}, "Strongly Agree": {REL: 1} } },
-  { code: "RLG2", question: "RLG2: There is an innate meaning to life", scores: { "Strongly Disagree": {REL: -1}, "Disagree": {REL: -0.5}, "Neutral": {REL: 0}, "Agree": {REL: 0.5}, "Strongly Agree": {REL: 1} } },
-  { code: "RLG3", question: "RLG3: Science is the only universally valid source to understand the world", scores: { "Strongly Disagree": {REL: -1}, "Disagree": {REL: -0.5}, "Neutral": {REL: 0}, "Agree": {REL: 0.5}, "Strongly Agree": {REL: 1} } },
-  { code: "RLG4", question: "RLG4: Prayer can have a real effect on our lives", scores: { "Strongly Disagree": {REL: -1}, "Disagree": {REL: -0.5}, "Neutral": {REL: 0}, "Agree": {REL: 0.5}, "Strongly Agree": {REL: 1} } },
-  { code: "RLG5", question: "RLG5: Supernatural forces have played a major role in human history", scores: { "Strongly Disagree": {REL: -1}, "Disagree": {REL: -0.5}, "Neutral": {REL: 0}, "Agree": {REL: 0.5}, "Strongly Agree": {REL: 1} } },
-  { code: "RLG6", question: "RLG6: Morality cannot be explained in purely materialistic terms", scores: { "Strongly Disagree": {REL: -1, ETH: -1}, "Disagree": {REL: -0.5, ETH: -0.5}, "Neutral": {REL: 0, ETH: 0}, "Agree": {REL: 0.5, ETH: 0.5}, "Strongly Agree": {REL: 1, ETH: 1} } },
-  { code: "RLG7", question: "RLG7: Religion is an outdated concept", scores: { "Strongly Disagree": {REL: -1}, "Disagree": {REL: -0.5}, "Neutral": {REL: 0}, "Agree": {REL: 0.5}, "Strongly Agree": {REL: 1} } },
-  { code: "RLG8", question: "RLG8: Human life does not end with physical death", scores: { "Strongly Disagree": {REL: -1}, "Disagree": {REL: -0.5}, "Neutral": {REL: 0}, "Agree": {REL: 0.5}, "Strongly Agree": {REL: 1} } }
+  { code: "RLG1", question: "RLG1: Science is the only universally valid source of knowledge about the world", scores: { "Strongly Disagree": {RLG: -1}, "Disagree": {RLG: -0.5}, "Neutral": {RLG: 0}, "Agree": {RLG: 0.5}, "Strongly Agree": {RLG: 1} } },
+  { code: "RLG2", question: "RLG2: There is an innate meaning to life", scores: { "Strongly Disagree": {RLG: -1}, "Disagree": {RLG: -0.5}, "Neutral": {RLG: 0}, "Agree": {RLG: 0.5}, "Strongly Agree": {RLG: 1} } },
+  { code: "RLG3", question: "RLG3: Science is the only universally valid source to understand the world", scores: { "Strongly Disagree": {RLG: -1}, "Disagree": {RLG: -0.5}, "Neutral": {RLG: 0}, "Agree": {RLG: 0.5}, "Strongly Agree": {RLG: 1} } },
+  { code: "RLG4", question: "RLG4: Prayer can have a real effect on our lives", scores: { "Strongly Disagree": {RLG: -1}, "Disagree": {RLG: -0.5}, "Neutral": {RLG: 0}, "Agree": {RLG: 0.5}, "Strongly Agree": {RLG: 1} } },
+  { code: "RLG5", question: "RLG5: Supernatural forces have played a major role in human history", scores: { "Strongly Disagree": {RLG: -1}, "Disagree": {RLG: -0.5}, "Neutral": {RLG: 0}, "Agree": {RLG: 0.5}, "Strongly Agree": {RLG: 1} } },
+  { code: "RLG6", question: "RLG6: Morality cannot be explained in purely materialistic terms", scores: { "Strongly Disagree": {RLG: -1, ETH: -1}, "Disagree": {RLG: -0.5, ETH: -0.5}, "Neutral": {RLG: 0, ETH: 0}, "Agree": {RLG: 0.5, ETH: 0.5}, "Strongly Agree": {RLG: 1, ETH: 1} } },
+  { code: "RLG7", question: "RLG7: Religion is an outdated concept", scores: { "Strongly Disagree": {RLG: -1}, "Disagree": {RLG: -0.5}, "Neutral": {RLG: 0}, "Agree": {RLG: 0.5}, "Strongly Agree": {RLG: 1} } },
+  { code: "RLG8", question: "RLG8: Human life does not end with physical death", scores: { "Strongly Disagree": {RLG: -1}, "Disagree": {RLG: -0.5}, "Neutral": {RLG: 0}, "Agree": {RLG: 0.5}, "Strongly Agree": {RLG: 1} } }
 ];
 
 const OPTIONS = ["Strongly Disagree", "Disagree", "Neutral", "Agree", "Strongly Agree"];
@@ -275,22 +273,20 @@ async function submitCommentToSheets(event) {
   }
 }
 
-// Sayfa Yüklendiğinde Olay Dinleyicilerini Bağlama (DOM Ready)
+// Event Listeners
 document.addEventListener("DOMContentLoaded", () => {
-  // Navigation Event Listeners
   const btnNavTest = document.getElementById("nav-test");
   const btnNavAbout = document.getElementById("nav-about");
   const btnNavComment = document.getElementById("nav-comment");
   const btnPrev = document.getElementById("btn-prev");
   const commentForm = document.getElementById("comment-form");
 
-  if (btnNavTest) btnNavTest.addEventListener("click", () => switchTab("test"));
-  if (btnNavAbout) btnNavAbout.addEventListener("click", () => switchTab("about"));
-  if (btnNavComment) btnNavComment.addEventListener("click", () => switchTab("comment"));
-  if (btnPrev) btnPrev.addEventListener("click", handlePrevious);
-  if (commentForm) commentForm.addEventListener("submit", submitCommentToSheets);
+  if (btnNavTest) btnNavTest.onclick = () => switchTab("test");
+  if (btnNavAbout) btnNavAbout.onclick = () => switchTab("about");
+  if (btnNavComment) btnNavComment.onclick = () => switchTab("comment");
+  if (btnPrev) btnPrev.onclick = handlePrevious;
+  if (commentForm) commentForm.onsubmit = submitCommentToSheets;
 
-  // App Initialization
   calculateBounds();
   loadQuestion();
 });
