@@ -30,11 +30,14 @@
       
       <!-- Survey Active View -->
       <div id="survey-view" class="card">
-        <div class="progress-bar-container">
-          <div id="progress-fill" class="progress-fill"></div>
-        </div>
         <div class="progress-info">
           <span id="progress-text">Question 1 of 37</span>
+          <!-- Previous Butonu Sağ Üst Köşeye Taşındı -->
+          <button id="btn-prev" class="btn-prev" disabled>← Previous</button>
+        </div>
+
+        <div class="progress-bar-container">
+          <div id="progress-fill" class="progress-fill"></div>
         </div>
 
         <div class="question-box">
@@ -43,11 +46,6 @@
 
         <div id="options-container" class="options-grid">
           <!-- Options dynamically rendered by script.js -->
-        </div>
-
-        <!-- Controls -->
-        <div class="controls">
-          <button id="btn-prev" class="btn-secondary" disabled>← Previous Question</button>
         </div>
       </div>
 
@@ -73,7 +71,7 @@
 
     </section>
 
-    <!-- PAGE 2: ABOUT US PAGE (Kapsamlı ve Detaylı Eski Metin) -->
+    <!-- PAGE 2: ABOUT US PAGE -->
     <section id="page-about" class="page-section hidden">
       <div class="card">
         <h2>About Us & Methodology</h2>
@@ -91,7 +89,7 @@
         <div class="axis-explanation">
           <h4>1. Ethics (ETH): Objectivism vs. Subjectivism</h4>
           <p>
-            This axis measures your stance on moral ontology. <strong>Objectivism</strong> posilates that moral truths exist independently of human perception, culture, or consensus, holding that good and evil are objective features of reality accessible through reason or divine law. Conversely, <strong>Subjectivism</strong> views morality as a social construct, evolving cultural agreement, or emotional expression that carries no permanent or universal validity.
+            This axis measures your stance on moral ontology. <strong>Objectivism</strong> postulates that moral truths exist independently of human perception, culture, or consensus, holding that good and evil are objective features of reality accessible through reason or divine law. Conversely, <strong>Subjectivism</strong> views morality as a social construct, evolving cultural agreement, or emotional expression that carries no permanent or universal validity.
           </p>
         </div>
 
