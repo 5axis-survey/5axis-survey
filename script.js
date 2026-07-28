@@ -10,7 +10,7 @@ const SURVEY_DATA = [
 
   // --- HUMAN NATURE ---
   { code: "HN1", question: "All humans share a common moral foundation at birth", scores: { "Strongly Disagree": {HN: -1}, "Disagree": {HN: -0.5}, "Neutral": {HN: 0}, "Agree": {HN: 0.5}, "Strongly Agree": {HN: 1} } },
-  { code: "HN2", question: "Some political systems go against human nature", scores: { "Strongly Disagree": {HN: -1}, "Disagree": {HN: -0.5}, "Neutral": {HN: 0}, "Agree": {HN: 0.5}, "Strongly Agree": {HN: 1} } },
+  { code: "HN2", question: "Human nature sets clear limits on what is feasible in politics", scores: { "Strongly Disagree": {HN: -1}, "Disagree": {HN: -0.5}, "Neutral": {HN: 0}, "Agree": {HN: 0.5}, "Strongly Agree": {HN: 1} } },
   { code: "HN3", question: "Rehabilitation is possible regardless of past actions", scores: { "Strongly Disagree": {HN: 1}, "Disagree": {HN: 0.5}, "Neutral": {HN: 0}, "Agree": {HN: -0.5}, "Strongly Agree": {HN: -1} } },
   { code: "HN4", question: "Some people are predisposed to violent behavior", scores: { "Strongly Disagree": {HN: -1}, "Disagree": {HN: -0.5}, "Neutral": {HN: 0}, "Agree": {HN: 0.5}, "Strongly Agree": {HN: 1} } },
   { code: "HN5", question: "A perfect society is achievable", scores: { "Strongly Disagree": {HN: 1}, "Disagree": {HN: 0.5}, "Neutral": {HN: 0}, "Agree": {HN: -0.5}, "Strongly Agree": {HN: -1} } },
@@ -18,7 +18,7 @@ const SURVEY_DATA = [
   { code: "HN7", question: "We are shaped more by our experiences than by our genetics", scores: { "Strongly Disagree": {HN: 1}, "Disagree": {HN: 0.5}, "Neutral": {HN: 0}, "Agree": {HN: -0.5}, "Strongly Agree": {HN: -1} } },
 
   // --- TRIBALISM ---
-  { code: "TRB1", question: "Strangers deserve as much of our help as members of our community", scores: { "Strongly Disagree": {TRB: 1}, "Disagree": {TRB: 0.5}, "Neutral": {TRB: 0}, "Agree": {TRB: -0.5}, "Strongly Agree": {TRB: -1} } },
+  { code: "TRB1", question: "It is our duty go out of our way to care for strangers", scores: { "Strongly Disagree": {TRB: 1}, "Disagree": {TRB: 0.5}, "Neutral": {TRB: 0}, "Agree": {TRB: -0.5}, "Strongly Agree": {TRB: -1} } },
   { code: "TRB2", question: "Our most important responsibility is towards our own society", scores: { "Strongly Disagree": {TRB: -1}, "Disagree": {TRB: -0.5}, "Neutral": {TRB: 0}, "Agree": {TRB: 0.5}, "Strongly Agree": {TRB: 1} } },
   { code: "TRB3", question: "There are things to be learned from every culture", scores: { "Strongly Disagree": {TRB: 1}, "Disagree": {TRB: 0.5}, "Neutral": {TRB: 0}, "Agree": {TRB: -0.5}, "Strongly Agree": {TRB: -1} } },
   { code: "TRB4", question: "It is our duty to preserve our own social identity", scores: { "Strongly Disagree": {TRB: -1}, "Disagree": {TRB: -0.5}, "Neutral": {TRB: 0}, "Agree": {TRB: 0.5}, "Strongly Agree": {TRB: 1} } },
@@ -490,33 +490,27 @@ function drawShareCanvas() {
   ctx.font = `600 24px ${SANS}`;
   ctx.fillText("YOUR PROFILE", PAD, 244);
 
-  // --- Profil kodu: tek parca govde ---
-  const LS = 92;
+  // --- Profil kodu: tek parca, tek renk ---
+  const LS = 88;
+  const codeStr = lastResults.map(r => (r.isPos ? r.posKey : r.negKey)).join("");
   ctx.font = `700 ${LS}px ${MONO}`;
-  const letters = lastResults.map(r => (r.isPos ? r.posKey : r.negKey));
-  const widths = letters.map(l => ctx.measureText(l).width);
-  const LGAP = 18, BOXPX = 46, BOXPY = 30;
 
-  const inner = widths.reduce((a, b) => a + b, 0) + LGAP * (letters.length - 1);
-  const boxW = inner + BOXPX * 2;
+  const BOXPX = 46, BOXPY = 28;
+  const boxW = ctx.measureText(codeStr).width + BOXPX * 2;
   const boxH = LS + BOXPY * 2;
   const boxX = (W - boxW) / 2;
   const boxY = 268;
 
-  roundRectPath(ctx, boxX, boxY, boxW, boxH, 20);
+  roundRectPath(ctx, boxX, boxY, boxW, boxH, 16);
   ctx.fillStyle = "#0f172a";
   ctx.fill();
   ctx.strokeStyle = "#334155";
   ctx.lineWidth = 2;
   ctx.stroke();
 
-  ctx.textAlign = "left";
-  let lx = boxX + BOXPX;
-  letters.forEach((letter, i) => {
-    ctx.fillStyle = lastResults[i].isPos ? "#38bdf8" : "#a78bfa";
-    ctx.fillText(letter, lx, boxY + BOXPY + LS * 0.78);
-    lx += widths[i] + LGAP;
-  });
+  ctx.textAlign = "center";
+  ctx.fillStyle = "#f8fafc";
+  ctx.fillText(codeStr, W / 2, boxY + BOXPY + LS * 0.78);
 
   // --- Kutup isimleri ---
   const poles = lastResults.map(r => (r.isPos ? r.pos : r.neg)).join("  \u00b7  ");
