@@ -204,3 +204,222 @@ body { background-color: #0f172a; color: #f8fafc; min-height: 100vh; display: fl
 }
 .input-field:focus { border-color: #38bdf8; }
 .textarea-field { resize: vertical; min-height: 120px; }
+
+/* ============================================================
+   SONUÇ EKRANI — ÇİFT UÇLU EKSEN BARLARI  (-10 ... +10)
+   Sol uç: S / C / U / E / L     Sağ uç: O / R / T / J / P
+   ============================================================ */
+
+.results-container {
+  display: flex;
+  flex-direction: column;
+  gap: 26px;
+  margin-top: 24px;
+}
+
+/* Üstteki ölçek şeridi */
+.axis-legend {
+  display: flex;
+  justify-content: space-between;
+  font-family: monospace;
+  font-size: 0.75rem;
+  color: #64748b;
+  letter-spacing: 0.05em;
+  padding-bottom: 6px;
+  border-bottom: 1px dashed #334155;
+}
+
+.axis-result {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+}
+
+/* Etiket satırı: sol uç — skor — sağ uç */
+.axis-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  font-size: 0.9rem;
+  color: #64748b;
+  transition: color 0.2s ease;
+}
+
+.axis-side { flex: 1 1 0; min-width: 0; }
+.axis-side.right { text-align: right; }
+
+/* Kullanıcının eğildiği taraf öne çıkar */
+.axis-side.dominant { color: #f8fafc; font-weight: 600; }
+
+.axis-key {
+  display: inline-block;
+  background-color: #334155;
+  color: #94a3b8;
+  border-radius: 4px;
+  padding: 1px 7px;
+  font-family: monospace;
+  font-size: 0.8rem;
+  font-weight: 700;
+  line-height: 1.4;
+}
+.axis-side.dominant .axis-key { background-color: #38bdf8; color: #0f172a; }
+.axis-side.left.dominant  .axis-key { background-color: #a78bfa; }
+
+.axis-score {
+  flex: 0 0 auto;
+  font-family: monospace;
+  font-size: 0.78rem;
+  color: #64748b;
+  letter-spacing: 0.06em;
+}
+.axis-score strong {
+  color: #f8fafc;
+  font-size: 1.05rem;
+  margin-left: 5px;
+}
+
+/* Barın kendisi */
+.axis-track {
+  position: relative;
+  height: 14px;
+  background-color: #0f172a;
+  border: 1px solid #334155;
+  border-radius: 7px;
+  overflow: hidden;
+}
+
+/* Ortadaki sıfır çizgisi */
+.axis-midline {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: 1px;
+  background-color: #64748b;
+  transform: translateX(-0.5px);
+  z-index: 2;
+  pointer-events: none;
+}
+
+/* Merkezden dışarı doğru büyüyen dolgu */
+.axis-fill {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  border-radius: 7px;
+  z-index: 1;
+  transition: width 0.75s cubic-bezier(0.22, 1, 0.36, 1),
+              left  0.75s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.axis-fill.pos { background-color: #38bdf8; }  /* sağ taraf: O R T J P */
+.axis-fill.neg { background-color: #a78bfa; }  /* sol taraf:  S C U E L */
+
+@media (prefers-reduced-motion: reduce) {
+  .axis-fill { transition: none; }
+}
+
+/* Dar ekranlarda skoru alt satıra al */
+@media (max-width: 540px) {
+  .axis-head { flex-wrap: wrap; gap: 6px 10px; font-size: 0.82rem; }
+  .axis-side { flex: 1 1 40%; }
+  .axis-score { order: 3; flex: 1 0 100%; text-align: center; }
+}
+
+/* ---- Sonuç ekranı yardımcı stilleri ---- */
+.subtitle {
+  color: #94a3b8;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  margin-bottom: 4px;
+}
+
+.vector-label {
+  color: #94a3b8;
+  font-size: 0.85rem;
+  margin: 0;
+  flex: 0 0 auto;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* ---- Beş harflik tip kodu ---- */
+.vector-code-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  padding-bottom: 16px;
+  margin-bottom: 16px;
+  border-bottom: 1px dashed #334155;
+}
+
+.vector-code { display: flex; gap: 6px; }
+
+.code-letter {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 34px;
+  height: 34px;
+  border-radius: 8px;
+  font-family: monospace;
+  font-size: 1.15rem;
+  font-weight: 700;
+  border: 1px solid transparent;
+  cursor: default;
+}
+.code-letter.pos     { background-color: #38bdf8; color: #0f172a; }
+.code-letter.neg     { background-color: #a78bfa; color: #0f172a; }
+.code-letter.neutral { background-color: #334155; color: #94a3b8; border-color: #475569; }
+
+.btn-copy {
+  margin-left: auto;
+  background-color: transparent;
+  border: 1px solid #475569;
+  color: #94a3b8;
+  padding: 6px 14px;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.btn-copy:hover { border-color: #38bdf8; color: #f8fafc; background-color: #334155; }
+
+.vector-line {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+@media (max-width: 480px) {
+  .btn-copy { margin-left: 0; }
+}
+
+/* Sonuçtaki iki buton yan yana (.btn-secondary daha önce tanımsızdı) */
+.result-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 28px;
+  flex-wrap: wrap;
+}
+.result-actions .btn-primary,
+.result-actions .btn-secondary {
+  flex: 1 1 200px;
+  margin-top: 0;
+  width: auto;
+}
+
+.btn-secondary {
+  background-color: transparent;
+  color: #38bdf8;
+  border: 1px solid #38bdf8;
+  font-size: 1.05rem;
+  font-weight: bold;
+  padding: 14px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.btn-secondary:hover { background-color: #38bdf8; color: #0f172a; }
