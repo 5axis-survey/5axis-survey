@@ -213,7 +213,7 @@ body { background-color: #0f172a; color: #f8fafc; min-height: 100vh; display: fl
 .results-container {
   display: flex;
   flex-direction: column;
-  gap: 26px;
+  gap: 22px;
   margin-top: 24px;
 }
 
@@ -516,5 +516,119 @@ body { background-color: #0f172a; color: #f8fafc; min-height: 100vh; display: fl
   color: #64748b;
   font-size: 0.8rem;
   line-height: 1.55;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+
+/* ============================================================
+   CLUSTER BLOKLARI
+   ============================================================ */
+
+.cluster {
+  background-color: #0f172a;
+  border: 1px solid #334155;
+  border-radius: 12px;
+  padding: 18px 20px;
+}
+
+.cluster-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 16px;
+}
+
+.cluster-name {
+  margin: 0;
+  font-size: 1rem;
+  color: #f8fafc;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  font-weight: 700;
+}
+
+.cluster-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background-color: #1e293b;
+  border: 1px solid #334155;
+  border-radius: 999px;
+  padding: 5px 14px 5px 8px;
+  font-family: monospace;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #f8fafc;
+}
+
+.cluster-swatch {
+  width: 16px;
+  height: 16px;
+  border-radius: 4px;
+  flex: 0 0 auto;
+}
+
+.cluster-body {
+  display: flex;
+  align-items: flex-start;
+  gap: 22px;
+}
+.cluster-body.single { display: block; }
+
+.cluster-grid { flex: 0 0 230px; }
+.cluster-bars { flex: 1 1 0; min-width: 0; display: flex; flex-direction: column; gap: 20px; }
+
+.cluster-svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.grid-label {
+  fill: #94a3b8;
+  font-family: monospace;
+  font-size: 15px;
+  font-weight: 700;
+}
+
+@media (max-width: 700px) {
+  .cluster-body { flex-direction: column; }
+  .cluster-grid { flex: 0 0 auto; width: 100%; max-width: 280px; margin: 0 auto 4px auto; }
+}
+
+/* ---- Profil kodunun yanindaki cluster renkleri ---- */
+.profile-code-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+.profile-colors {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.color-pill {
+  display: flex;
+  overflow: hidden;
+  border-radius: 8px;
+  border: 1px solid #334155;
+  height: 44px;
+}
+
+.color-half {
+  display: block;
+  width: 26px;
+  height: 100%;
+}
+
+.color-names {
+  color: #cbd5e1;
+  font-size: 0.85rem;
+  font-weight: 600;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
