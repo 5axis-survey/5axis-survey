@@ -17,7 +17,7 @@ const SURVEY_DATA = [
   { code: "HN3", question: "HN3: Rehabilitation is possible regardless of past actions", scores: { "Strongly Disagree": {HN: 1}, "Disagree": {HN: 0.5}, "Neutral": {HN: 0}, "Agree": {HN: -0.5}, "Strongly Agree": {HN: -1} } },
   { code: "HN4", question: "HN4: Some people are predisposed to violent behavior", scores: { "Strongly Disagree": {HN: -1}, "Disagree": {HN: -0.5}, "Neutral": {HN: 0}, "Agree": {HN: 0.5}, "Strongly Agree": {HN: 1} } },
   { code: "HN5", question: "HN5: A perfect society is achievable", scores: { "Strongly Disagree": {HN: 1}, "Disagree": {HN: 0.5}, "Neutral": {HN: 0}, "Agree": {HN: -0.5}, "Strongly Agree": {HN: -1} } },
-  { code: "HN6", question: "HN6: People are born with a fixed underlying human nature", scores: { "Strongly Disagree": {HN: -1}, "Disagree": {HN: -0.5}, "Neutral": {HN: 0}, "Agree": {HN: 0.5}, "Strongly Agree": {HN: 1} } },
+  { code: "HN6", question: "HN6: People are born with a fixed underlying human nature", scores: { "Strongly Disagree": {HN: -1.5}, "Disagree": {HN: -0.75}, "Neutral": {HN: 0}, "Agree": {HN: 0.75}, "Strongly Agree": {HN: 1.5} } },
   { code: "HN7", question: "HN7: We are shaped more by our experiences than by our genetics", scores: { "Strongly Disagree": {HN: 1}, "Disagree": {HN: 0.5}, "Neutral": {HN: 0}, "Agree": {HN: -0.5}, "Strongly Agree": {HN: -1} } },
 
   // --- TRIBALISM ---
