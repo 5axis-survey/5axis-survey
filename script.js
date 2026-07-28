@@ -1,5 +1,5 @@
 // Google Apps Script Web App URL
-const GOOGLE_SHEETS_URL = "https://script.google.com/macros/s/AKfycbztAWVuW1pFij_txy0GyxIEaLMH4J2GhiG0dkDfMQGuFl0_vBAnmnO9zlZEvvVHuDqxtw/exec";
+const GOOGLE_SHEETS_URL = "https://script.google.com/macros/s/AKfycbyjNOiABYgb6giv2CFF62hgVXf6r2vv6GCi1vD22Q_XGMadI8yPVZOz3kPZLWJD8-cnhw/exec";
 
 const SURVEY_DATA = [
   // --- ETHICS ---
@@ -217,7 +217,7 @@ function switchTab(tabName) {
   }
 }
 
-async function submitCommentToSheets(event) {
+function submitCommentToSheets(event) {
   event.preventDefault();
 
   if (!GOOGLE_SHEETS_URL) {
@@ -244,34 +244,51 @@ async function submitCommentToSheets(event) {
   statusText.style.color = "#94a3b8";
   statusText.innerText = "Submitting your comment...";
 
-  // Google Apps Script için en güvenli veri paketleme yöntemi
-  const formData = new URLSearchParams();
-  formData.append("nickname", nickname);
-  formData.append("comment", comment);
-  formData.append("vector", currentVector);
+  // Arka planda gizli iframe ve form ile veri gönderimi
+  let iframe = document.getElementById("hidden-script-iframe");
+  if (!iframe) {
+    iframe = document.createElement("iframe");
+    iframe.id = "hidden-script-iframe";
+    iframe.name = "hidden-script-iframe";
+    iframe.style.display = "none";
+    document.body.appendChild(iframe);
+  }
 
-  try {
-    await fetch(GOOGLE_SHEETS_URL, {
-      method: "POST",
-      mode: "no-cors",
-      headers: {
-        "Content-Type": "application/x-www-form-urlencoded"
-      },
-      body: formData.toString()
-    });
+  const form = document.createElement("form");
+  form.method = "POST";
+  form.action = GOOGLE_SHEETS_URL;
+  form.target = "hidden-script-iframe";
 
+  const fields = {
+    nickname: nickname,
+    comment: comment,
+    vector: currentVector
+  };
+
+  for (let key in fields) {
+    const input = document.createElement("input");
+    input.type = "hidden";
+    input.name = key;
+    input.value = fields[key];
+    form.appendChild(input);
+  }
+
+  document.body.appendChild(form);
+  form.submit();
+
+  setTimeout(() => {
     statusText.style.color = "#4ade80";
     statusText.innerText = "Thank you! Your comment has been recorded.";
     
     nicknameInput.value = "";
     commentInput.value = "";
-  } catch (error) {
-    statusText.style.color = "#ef4444";
-    statusText.innerText = "An error occurred while sending. Please try again.";
-  } finally {
     btnSubmit.disabled = false;
     btnSubmit.innerText = "Submit Comment";
-  }
+    
+    if (form.parentNode) {
+      form.parentNode.removeChild(form);
+    }
+  }, 1000);
 }
 
 document.addEventListener("DOMContentLoaded", () => {
