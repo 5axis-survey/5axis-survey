@@ -1,5 +1,5 @@
 // Google Apps Script Web App URL (Varsa tırnak içine yapıştırın)
-const GOOGLE_SHEETS_URL = "https://script.google.com/macros/s/AKfycbzJyRKkId1vNuamI15UQiLaXy-GzxBR4oOVGYitB8reOUtt3azNDH08Zkob2jzRYUwE/exec";
+const GOOGLE_SHEETS_URL = "";
 
 const SURVEY_DATA = [
   // --- ETHICS ---
@@ -85,6 +85,7 @@ function calculateBounds() {
 
 function loadQuestion() {
   const qData = SURVEY_DATA[currentIndex];
+  if (!qData) return;
   
   const progText = document.getElementById("progress-text");
   if (progText) progText.innerText = `Question ${currentIndex + 1} of ${SURVEY_DATA.length}`;
@@ -187,7 +188,6 @@ function showResults() {
   if (vecText) vecText.innerText = `[${vectorParts.join("|")}]`;
 }
 
-// Tab Switcher Function
 function switchTab(tabName) {
   const pageTest = document.getElementById("page-test");
   const pageAbout = document.getElementById("page-about");
@@ -217,7 +217,6 @@ function switchTab(tabName) {
   }
 }
 
-// Google Sheets Form Submit
 async function submitCommentToSheets(event) {
   event.preventDefault();
 
@@ -273,7 +272,6 @@ async function submitCommentToSheets(event) {
   }
 }
 
-// Event Listeners
 document.addEventListener("DOMContentLoaded", () => {
   const btnNavTest = document.getElementById("nav-test");
   const btnNavAbout = document.getElementById("nav-about");
