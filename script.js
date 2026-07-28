@@ -10,7 +10,7 @@ const SURVEY_DATA = [
 
   // --- HUMAN NATURE ---
   { code: "HN1", question: "All humans share a common moral foundation at birth", scores: { "Strongly Disagree": {HN: -1}, "Disagree": {HN: -0.5}, "Neutral": {HN: 0}, "Agree": {HN: 0.5}, "Strongly Agree": {HN: 1} } },
-  { code: "HN2", question: "Human nature sets clear limits on what is feasible in politics", scores: { "Strongly Disagree": {HN: -1}, "Disagree": {HN: -0.5}, "Neutral": {HN: 0}, "Agree": {HN: 0.5}, "Strongly Agree": {HN: 1} } },
+  { code: "HN2", question: "Some political systems go against human nature", scores: { "Strongly Disagree": {HN: -1}, "Disagree": {HN: -0.5}, "Neutral": {HN: 0}, "Agree": {HN: 0.5}, "Strongly Agree": {HN: 1} } },
   { code: "HN3", question: "Rehabilitation is possible regardless of past actions", scores: { "Strongly Disagree": {HN: 1}, "Disagree": {HN: 0.5}, "Neutral": {HN: 0}, "Agree": {HN: -0.5}, "Strongly Agree": {HN: -1} } },
   { code: "HN4", question: "Some people are predisposed to violent behavior", scores: { "Strongly Disagree": {HN: -1}, "Disagree": {HN: -0.5}, "Neutral": {HN: 0}, "Agree": {HN: 0.5}, "Strongly Agree": {HN: 1} } },
   { code: "HN5", question: "A perfect society is achievable", scores: { "Strongly Disagree": {HN: 1}, "Disagree": {HN: 0.5}, "Neutral": {HN: 0}, "Agree": {HN: -0.5}, "Strongly Agree": {HN: -1} } },
@@ -18,7 +18,8 @@ const SURVEY_DATA = [
   { code: "HN7", question: "We are shaped more by our experiences than by our genetics", scores: { "Strongly Disagree": {HN: 1}, "Disagree": {HN: 0.5}, "Neutral": {HN: 0}, "Agree": {HN: -0.5}, "Strongly Agree": {HN: -1} } },
 
   // --- TRIBALISM ---
-  { code: "TRB1", question: "It is our duty go out of our way to care for strangers", scores: { "Strongly Disagree": {TRB: 1}, "Disagree": {TRB: 0.5}, "Neutral": {TRB: 0}, "Agree": {TRB: -0.5}, "Strongly Agree": {TRB: -1} } },
+  { code: "TRB1", question: "Strangers deserve as much of our help as members of our community
+", scores: { "Strongly Disagree": {TRB: 1}, "Disagree": {TRB: 0.5}, "Neutral": {TRB: 0}, "Agree": {TRB: -0.5}, "Strongly Agree": {TRB: -1} } },
   { code: "TRB2", question: "Our most important responsibility is towards our own society", scores: { "Strongly Disagree": {TRB: -1}, "Disagree": {TRB: -0.5}, "Neutral": {TRB: 0}, "Agree": {TRB: 0.5}, "Strongly Agree": {TRB: 1} } },
   { code: "TRB3", question: "There are things to be learned from every culture", scores: { "Strongly Disagree": {TRB: 1}, "Disagree": {TRB: 0.5}, "Neutral": {TRB: 0}, "Agree": {TRB: -0.5}, "Strongly Agree": {TRB: -1} } },
   { code: "TRB4", question: "It is our duty to preserve our own social identity", scores: { "Strongly Disagree": {TRB: -1}, "Disagree": {TRB: -0.5}, "Neutral": {TRB: 0}, "Agree": {TRB: 0.5}, "Strongly Agree": {TRB: 1} } },
@@ -60,6 +61,42 @@ const AXIS_LABELS = {
 // Sonuclarin ekranda gorunecegi sabit sira.
 // (RLG6 hem RLG hem ETH'yi etkiledigi icin Object.keys sirasina guvenmiyoruz.)
 const AXIS_ORDER = ["ETH", "HN", "TRB", "JST", "RLG"];
+
+/* Bes eksen uc cluster altinda toplaniyor.
+   Iki boyutlu cluster'larda kombinasyon anahtari = yatayHarf + dikeyHarf. */
+const CLUSTERS = [
+  {
+    id: "PHI",
+    name: "Philosophical Cluster",
+    x: "ETH",              // yatay: S <-> O
+    y: "HN",               // dikey:  C <-> R
+    combos: {
+      OR: { name: "Yellow", hex: "#eab308" },
+      SR: { name: "Red",    hex: "#ef4444" },
+      SC: { name: "Green",  hex: "#22c55e" },
+      OC: { name: "Blue",   hex: "#3b82f6" }
+    }
+  },
+  {
+    id: "POL",
+    name: "Political Cluster",
+    x: "TRB",              // yatay: U <-> T
+    y: "JST",              // dikey:  E <-> J
+    combos: {
+      TJ: { name: "Orange", hex: "#f97316" },
+      UJ: { name: "Purple", hex: "#a855f7" },
+      UE: { name: "Brown",  hex: "#9a6b4f" },
+      TE: { name: "Gray",   hex: "#94a3b8" }
+    }
+  },
+  {
+    id: "RLG",
+    name: "Religion Cluster",
+    single: "RLG"
+  }
+];
+
+let lastClusters = [];   // paylasim gorseli icin cluster anlik goruntusu
 
 let currentIndex = 0;
 let rawScores = {};
@@ -164,116 +201,185 @@ function handlePrevious() {
   loadQuestion();
 }
 
+function computeAxis(axis) {
+  const raw = rawScores[axis] || 0;
+  const max = maxPossibleScores[axis] || 0;
+
+  let scaled = max > 0 ? (raw / max) * 10 : 0;
+  scaled = Math.max(-10, Math.min(10, scaled));
+
+  const labels = AXIS_LABELS[axis];
+  const isPos = scaled >= 0;
+
+  return {
+    axis: axis,
+    scaled: scaled,
+    formatted: scaled.toFixed(1),
+    isPos: isPos,
+    isNeutral: Math.abs(scaled) < 0.05,
+    neg: labels.neg, negKey: labels.negKey,
+    pos: labels.pos, posKey: labels.posKey,
+    letter: isPos ? labels.posKey : labels.negKey,
+    pole: isPos ? labels.pos : labels.neg
+  };
+}
+
+function buildBarHTML(r) {
+  const half = (Math.abs(r.scaled) / 10) * 50;
+  const left = r.isPos ? 50 : 50 - half;
+  const ld = (!r.isNeutral && !r.isPos) ? " dominant" : "";
+  const rd = (!r.isNeutral && r.isPos) ? " dominant" : "";
+  const sign = (r.isPos && !r.isNeutral) ? "+" : "";
+
+  return `
+    <div class="axis-result">
+      <div class="axis-head">
+        <span class="axis-side left${ld}"><span class="axis-key">${r.negKey}</span> ${r.neg}</span>
+        <span class="axis-score">${r.axis} <strong>${sign}${r.formatted}</strong></span>
+        <span class="axis-side right${rd}">${r.pos} <span class="axis-key">${r.posKey}</span></span>
+      </div>
+      <div class="axis-track" role="img"
+           aria-label="${r.axis}: ${r.formatted} towards ${r.isNeutral ? "neither pole" : r.pole}">
+        <div class="axis-fill ${r.isPos ? "pos" : "neg"}"
+             data-left="${left}" data-width="${half}" style="left:50%; width:0%;"></div>
+        <div class="axis-midline"></div>
+      </div>
+    </div>`;
+}
+
+/* Iki boyutlu cluster karesi. viewBox 240x240; kare 20,20 -> 220,220 */
+function buildGridSVG(cluster, xr, yr) {
+  const activeKey = xr.letter + yr.letter;
+  const dx = 120 + (xr.scaled / 10) * 90;
+  const dy = 120 - (yr.scaled / 10) * 90;
+
+  const quads = [
+    { x: 120, y: 20,  key: xr.posKey + yr.posKey },
+    { x: 20,  y: 20,  key: xr.negKey + yr.posKey },
+    { x: 20,  y: 120, key: xr.negKey + yr.negKey },
+    { x: 120, y: 120, key: xr.posKey + yr.negKey }
+  ];
+
+  const rects = quads.map(q => {
+    const combo = cluster.combos[q.key];
+    const active = (q.key === activeKey);
+    return `<rect x="${q.x}" y="${q.y}" width="100" height="100" rx="2"
+              fill="${combo.hex}" opacity="${active ? 0.58 : 0.15}">
+              <title>${q.key} \u2014 ${combo.name}</title>
+            </rect>`;
+  }).join("");
+
+  return `
+    <svg viewBox="0 0 240 240" class="cluster-svg" role="img"
+         aria-label="${cluster.name} position: ${activeKey}">
+      ${rects}
+      <line x1="120" y1="20" x2="120" y2="220" stroke="#64748b" stroke-width="1"></line>
+      <line x1="20" y1="120" x2="220" y2="120" stroke="#64748b" stroke-width="1"></line>
+      <rect x="20" y="20" width="200" height="200" fill="none" stroke="#475569" stroke-width="1.5" rx="3"></rect>
+      <text class="grid-label" x="120" y="13"  text-anchor="middle">${yr.posKey}</text>
+      <text class="grid-label" x="120" y="236" text-anchor="middle">${yr.negKey}</text>
+      <text class="grid-label" x="9"   y="125" text-anchor="middle">${xr.negKey}</text>
+      <text class="grid-label" x="231" y="125" text-anchor="middle">${xr.posKey}</text>
+      <circle cx="${dx}" cy="${dy}" r="8" fill="#f8fafc" stroke="#0f172a" stroke-width="2.5"></circle>
+    </svg>`;
+}
+
+const AXIS_LEGEND = '<div class="axis-legend"><span>-10</span><span>-5</span><span>0</span><span>+5</span><span>+10</span></div>';
+
+function buildClusterBlock(cluster, byAxis) {
+  const block = document.createElement("section");
+  block.className = "cluster";
+
+  if (cluster.single) {
+    const r = byAxis[cluster.single];
+    block.innerHTML = `
+      <div class="cluster-head">
+        <h3 class="cluster-name">${cluster.name}</h3>
+      </div>
+      <div class="cluster-body single">
+        <div class="cluster-bars">${AXIS_LEGEND}${buildBarHTML(r)}</div>
+      </div>`;
+    return block;
+  }
+
+  const xr = byAxis[cluster.x];
+  const yr = byAxis[cluster.y];
+  const key = xr.letter + yr.letter;
+  const combo = cluster.combos[key];
+
+  block.innerHTML = `
+    <div class="cluster-head">
+      <h3 class="cluster-name">${cluster.name}</h3>
+      <span class="cluster-tag">
+        <span class="cluster-swatch" style="background:${combo.hex}"></span>
+        ${key} &middot; ${combo.name}
+      </span>
+    </div>
+    <div class="cluster-body">
+      <div class="cluster-grid">${buildGridSVG(cluster, xr, yr)}</div>
+      <div class="cluster-bars">${AXIS_LEGEND}${buildBarHTML(xr)}${buildBarHTML(yr)}</div>
+    </div>`;
+
+  return block;
+}
+
 function showResults() {
   const surveyView = document.getElementById("survey-view");
   const resultView = document.getElementById("result-view");
   if (surveyView) surveyView.classList.add("hidden");
   if (resultView) resultView.classList.remove("hidden");
 
-  const resultsContainer = document.getElementById("results-list");
-  if (resultsContainer) resultsContainer.innerHTML = "";
+  lastResults = AXIS_ORDER.map(computeAxis);
 
-  const vectorParts = [];
-  const codeParts = [];
-  const pendingFills = [];
-  lastResults = [];
+  const byAxis = {};
+  lastResults.forEach(r => { byAxis[r.axis] = r; });
 
-  if (resultsContainer) {
-    const legend = document.createElement("div");
-    legend.className = "axis-legend";
-    legend.innerHTML = "<span>-10</span><span>-5</span><span>0</span><span>+5</span><span>+10</span>";
-    resultsContainer.appendChild(legend);
-  }
-
-  AXIS_ORDER.forEach(axis => {
-    const raw = rawScores[axis] || 0;
-    const max = maxPossibleScores[axis] || 0;
-
-    // -10 / +10 araligina normalize et ve tasmaya karsi kilitle
-    let scaled = max > 0 ? (raw / max) * 10 : 0;
-    scaled = Math.max(-10, Math.min(10, scaled));
-
-    const formatted = scaled.toFixed(1);
-    const labels = AXIS_LABELS[axis] || { neg: "Negative", negKey: "-", pos: "Positive", posKey: "+" };
-
-    const isNeutral = Math.abs(scaled) < 0.05;
-    const isPos = scaled >= 0;
-    const halfPct = (Math.abs(scaled) / 10) * 50;   // yarim genislik: 0-50%
-    const targetLeft = isPos ? 50 : 50 - halfPct;
-
-    vectorParts.push(`${axis}:${formatted}`);
-    // Her eksen bir tarafa cozulur -> 2^5 = 32 profil. Tam 0.0 pozitif tarafa yuvarlanir.
-    codeParts.push({
-      letter: isPos ? labels.posKey : labels.negKey,
-      side: isPos ? "pos" : "neg",
-      pole: isPos ? labels.pos : labels.neg,
-      tip: `${axis}: ${isPos ? labels.pos : labels.neg}`
-    });
-
-    lastResults.push({
-      axis: axis,
-      scaled: scaled,
-      formatted: formatted,
-      isPos: isPos,
-      neg: labels.neg, negKey: labels.negKey,
-      pos: labels.pos, posKey: labels.posKey
-    });
-
-    if (!resultsContainer) return;
-
-    const leftDominant  = (!isNeutral && !isPos) ? " dominant" : "";
-    const rightDominant = (!isNeutral && isPos)  ? " dominant" : "";
-
-    const row = document.createElement("div");
-    row.className = "axis-result";
-    row.innerHTML = `
-      <div class="axis-head">
-        <span class="axis-side left${leftDominant}">
-          <span class="axis-key">${labels.negKey}</span> ${labels.neg}
-        </span>
-        <span class="axis-score">
-          ${axis} <strong>${isPos && !isNeutral ? "+" : ""}${formatted}</strong>
-        </span>
-        <span class="axis-side right${rightDominant}">
-          ${labels.pos} <span class="axis-key">${labels.posKey}</span>
-        </span>
-      </div>
-      <div class="axis-track" role="img"
-           aria-label="${axis}: ${formatted} (${isNeutral ? "balanced" : (isPos ? labels.pos : labels.neg)})">
-        <div class="axis-fill ${isPos ? "pos" : "neg"}" style="left:50%; width:0%;"></div>
-        <div class="axis-midline"></div>
-      </div>
-    `;
-
-    resultsContainer.appendChild(row);
-    pendingFills.push({ el: row.querySelector(".axis-fill"), left: targetLeft, width: halfPct });
+  // Cluster renkleri (yalnizca iki boyutlu olanlar renk tasir)
+  lastClusters = CLUSTERS.filter(c => c.combos).map(c => {
+    const key = byAxis[c.x].letter + byAxis[c.y].letter;
+    return { cluster: c, key: key, name: c.combos[key].name, hex: c.combos[key].hex };
   });
 
-  // Barlari merkezden disari dogru animasyonla ac
-  requestAnimationFrame(() => {
+  // --- Cluster bloklarini bas ---
+  const container = document.getElementById("results-list");
+  if (container) {
+    container.innerHTML = "";
+    CLUSTERS.forEach(c => container.appendChild(buildClusterBlock(c, byAxis)));
+
+    // Barlari merkezden disari dogru ac
     requestAnimationFrame(() => {
-      pendingFills.forEach(f => {
-        f.el.style.left = f.left + "%";
-        f.el.style.width = f.width + "%";
+      requestAnimationFrame(() => {
+        container.querySelectorAll(".axis-fill").forEach(el => {
+          el.style.left = el.dataset.left + "%";
+          el.style.width = el.dataset.width + "%";
+        });
       });
     });
-  });
+  }
 
-  const vecText = document.getElementById("vector-text");
-  if (vecText) vecText.innerText = `[${vectorParts.join("|")}]`;
-
-  // Bes harflik tip kodu: ETH-HN-TRB-JST-RLG sirasiyla baskin kutuplar
-  const codeString = codeParts.map(c => c.letter).join("");
+  // --- Profil kodu ---
+  const codeString = lastResults.map(r => r.letter).join("");
   const codeBox = document.getElementById("vector-code");
   if (codeBox) {
     codeBox.dataset.code = codeString;
-    codeBox.innerHTML = codeParts
-      .map(c => `<span class="code-letter ${c.side}" title="${c.tip}">${c.letter}</span>`)
-      .join("");
+    codeBox.innerText = codeString;
+  }
+
+  // --- Iki cluster rengi yan yana ---
+  const colorBox = document.getElementById("profile-colors");
+  if (colorBox) {
+    colorBox.innerHTML = `
+      <span class="color-pill">
+        ${lastClusters.map(c => `<span class="color-half" style="background:${c.hex}" title="${c.cluster.name}: ${c.key} \u2014 ${c.name}"></span>`).join("")}
+      </span>
+      <span class="color-names">${lastClusters.map(c => c.name).join(" + ")}</span>`;
   }
 
   const poles = document.getElementById("profile-poles");
-  if (poles) poles.innerText = codeParts.map(c => c.pole).join(" \u00b7 ");
+  if (poles) poles.innerText = lastResults.map(r => r.pole).join(" \u00b7 ");
+
+  const vecText = document.getElementById("vector-text");
+  if (vecText) vecText.innerText = `[${lastResults.map(r => `${r.axis}:${r.formatted}`).join("|")}]`;
 
   wireShareLinks();
   prepareShareImage();
@@ -419,7 +525,8 @@ function getPageUrl() {
 }
 
 function getShareText() {
-  return `My 5-Axis Compass profile: ${getProfileCode()} ${getVectorString()}`.trim();
+  const colors = lastClusters.map(c => c.name).join(" + ");
+  return `My 5-Axis Compass profile: ${getProfileCode()}${colors ? " (" + colors + ")" : ""} ${getVectorString()}`.trim();
 }
 
 function wireShareLinks() {
@@ -453,6 +560,62 @@ function roundRectPath(ctx, x, y, w, h, r) {
   ctx.closePath();
 }
 
+function hexToRgba(hex, alpha) {
+  const n = parseInt(hex.slice(1), 16);
+  return `rgba(${(n >> 16) & 255}, ${(n >> 8) & 255}, ${n & 255}, ${alpha})`;
+}
+
+function drawCanvasGrid(ctx, gx, gy, size, entry, xr, yr, SANS, MONO) {
+  const half = size / 2;
+  const activeKey = xr.letter + yr.letter;
+
+  const quads = [
+    { x: gx + half, y: gy,        key: xr.posKey + yr.posKey },
+    { x: gx,        y: gy,        key: xr.negKey + yr.posKey },
+    { x: gx,        y: gy + half, key: xr.negKey + yr.negKey },
+    { x: gx + half, y: gy + half, key: xr.posKey + yr.negKey }
+  ];
+
+  quads.forEach(q => {
+    const combo = entry.cluster.combos[q.key];
+    ctx.fillStyle = hexToRgba(combo.hex, q.key === activeKey ? 0.58 : 0.15);
+    ctx.fillRect(q.x, q.y, half, half);
+  });
+
+  ctx.strokeStyle = "#64748b";
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+  ctx.moveTo(gx + half, gy); ctx.lineTo(gx + half, gy + size);
+  ctx.moveTo(gx, gy + half); ctx.lineTo(gx + size, gy + half);
+  ctx.stroke();
+
+  ctx.strokeStyle = "#475569";
+  ctx.lineWidth = 3;
+  ctx.strokeRect(gx, gy, size, size);
+
+  // Eksen harfleri kare icinde, kenarlara yakin
+  ctx.fillStyle = "#94a3b8";
+  ctx.font = `700 26px ${MONO}`;
+  ctx.textAlign = "center";
+  ctx.fillText(yr.posKey, gx + half, gy + 34);
+  ctx.fillText(yr.negKey, gx + half, gy + size - 16);
+  ctx.textAlign = "left";
+  ctx.fillText(xr.negKey, gx + 14, gy + half + 10);
+  ctx.textAlign = "right";
+  ctx.fillText(xr.posKey, gx + size - 14, gy + half + 10);
+
+  // Konum noktasi
+  const dx = gx + half + (xr.scaled / 10) * (half * 0.9);
+  const dy = gy + half - (yr.scaled / 10) * (half * 0.9);
+  ctx.beginPath();
+  ctx.arc(dx, dy, 15, 0, Math.PI * 2);
+  ctx.fillStyle = "#f8fafc";
+  ctx.fill();
+  ctx.strokeStyle = "#0f172a";
+  ctx.lineWidth = 4;
+  ctx.stroke();
+}
+
 function drawShareCanvas() {
   const W = 1080, H = 1350;
   const SANS = "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif";
@@ -479,29 +642,27 @@ function drawShareCanvas() {
   ctx.textAlign = "left";
 
   ctx.fillStyle = "#38bdf8";
-  ctx.font = `700 46px ${SANS}`;
-  ctx.fillText("5-Axis Compass", PAD, 132);
+  ctx.font = `700 44px ${SANS}`;
+  ctx.fillText("5-Axis Compass", PAD, 124);
 
   ctx.fillStyle = "#94a3b8";
-  ctx.font = `italic 23px ${SANS}`;
-  ctx.fillText("created by H\u00fcseyin Ba\u015ftu\u011f & Arda Toby \u00d6zdemir", PAD, 170);
+  ctx.font = `italic 22px ${SANS}`;
+  ctx.fillText("created by H\u00fcseyin Ba\u015ftu\u011f & Arda Toby \u00d6zdemir", PAD, 160);
 
-  ctx.fillStyle = "#94a3b8";
-  ctx.font = `600 24px ${SANS}`;
-  ctx.fillText("YOUR PROFILE", PAD, 244);
-
-  // --- Profil kodu: tek parca, tek renk ---
-  const LS = 88;
-  const codeStr = lastResults.map(r => (r.isPos ? r.posKey : r.negKey)).join("");
+  // --- Profil kodu ---
+  const LS = 78;
+  const codeStr = lastResults.map(r => r.letter).join("");
   ctx.font = `700 ${LS}px ${MONO}`;
 
-  const BOXPX = 46, BOXPY = 28;
-  const boxW = ctx.measureText(codeStr).width + BOXPX * 2;
-  const boxH = LS + BOXPY * 2;
-  const boxX = (W - boxW) / 2;
-  const boxY = 268;
+  const BOXPX = 40, BOXPY = 24;
+  const codeW = ctx.measureText(codeStr).width + BOXPX * 2;
+  const codeH = LS + BOXPY * 2;
+  const swatchW = 34, swatchGap = 16;
+  const groupW = codeW + swatchGap + swatchW;
+  const codeX = (W - groupW) / 2;
+  const codeY = 210;
 
-  roundRectPath(ctx, boxX, boxY, boxW, boxH, 16);
+  roundRectPath(ctx, codeX, codeY, codeW, codeH, 16);
   ctx.fillStyle = "#0f172a";
   ctx.fill();
   ctx.strokeStyle = "#334155";
@@ -510,95 +671,136 @@ function drawShareCanvas() {
 
   ctx.textAlign = "center";
   ctx.fillStyle = "#f8fafc";
-  ctx.fillText(codeStr, W / 2, boxY + BOXPY + LS * 0.78);
+  ctx.fillText(codeStr, codeX + codeW / 2, codeY + BOXPY + LS * 0.78);
+
+  // Iki cluster rengi yan yana, kodun sagina
+  const swX = codeX + codeW + swatchGap;
+  const swH = codeH / Math.max(1, lastClusters.length);
+  roundRectPath(ctx, swX, codeY, swatchW, codeH, 10);
+  ctx.save();
+  ctx.clip();
+  lastClusters.forEach((c, i) => {
+    ctx.fillStyle = c.hex;
+    ctx.fillRect(swX, codeY + i * swH, swatchW, swH);
+  });
+  ctx.restore();
 
   // --- Kutup isimleri ---
-  const poles = lastResults.map(r => (r.isPos ? r.pos : r.neg)).join("  \u00b7  ");
+  const poles = lastResults.map(r => r.pole).join("  \u00b7  ");
   ctx.textAlign = "center";
   ctx.fillStyle = "#94a3b8";
-  let poleSize = 24;
+  let poleSize = 23;
   ctx.font = `${poleSize}px ${SANS}`;
-  while (ctx.measureText(poles).width > CW && poleSize > 15) {
+  while (ctx.measureText(poles).width > CW && poleSize > 14) {
     poleSize -= 1;
     ctx.font = `${poleSize}px ${SANS}`;
   }
-  ctx.fillText(poles, W / 2, boxY + boxH + 52);
+  ctx.fillText(poles, W / 2, codeY + codeH + 46);
 
-  // --- Barlar ---
-  const cx = PAD + CW / 2;
-  let by = 540;
+  // --- Iki boyutlu cluster kareleri ---
+  const byAxis = {};
+  lastResults.forEach(r => { byAxis[r.axis] = r; });
 
-  lastResults.forEach(r => {
-    ctx.font = `22px ${SANS}`;
+  const GS = 360, GGAP = 90;
+  const gTotal = GS * 2 + GGAP;
+  let gx = (W - gTotal) / 2;
+  const gy = 490;
 
-    ctx.textAlign = "left";
-    ctx.fillStyle = r.isPos ? "#64748b" : "#f8fafc";
-    ctx.fillText(`${r.negKey}  ${r.neg}`, PAD, by);
-
-    ctx.textAlign = "right";
-    ctx.fillStyle = r.isPos ? "#f8fafc" : "#64748b";
-    ctx.fillText(`${r.pos}  ${r.posKey}`, PAD + CW, by);
+  lastClusters.forEach(entry => {
+    const xr = byAxis[entry.cluster.x];
+    const yr = byAxis[entry.cluster.y];
 
     ctx.textAlign = "center";
     ctx.fillStyle = "#cbd5e1";
-    ctx.font = `700 22px ${MONO}`;
-    ctx.fillText(`${r.axis} ${r.scaled >= 0 ? "+" : ""}${r.formatted}`, cx, by);
+    ctx.font = `600 24px ${SANS}`;
+    ctx.fillText(entry.cluster.name.replace(" Cluster", ""), gx + GS / 2, gy - 18);
 
-    const trackY = by + 18;
-    const trackH = 24;
+    drawCanvasGrid(ctx, gx, gy, GS, entry, xr, yr, SANS, MONO);
 
-    roundRectPath(ctx, PAD, trackY, CW, trackH, 12);
-    ctx.fillStyle = "#0f172a";
-    ctx.fill();
-    ctx.strokeStyle = "#334155";
-    ctx.lineWidth = 2;
-    ctx.stroke();
+    // Kombinasyon + renk adi
+    const cap = `${entry.key} \u00b7 ${entry.name}`;
+    ctx.font = `600 24px ${MONO}`;
+    const capW = ctx.measureText(cap).width;
+    const dotR = 9;
+    const capX = gx + GS / 2 - (capW + dotR * 2 + 12) / 2;
 
-    const halfW = (Math.abs(r.scaled) / 10) * (CW / 2);
-    if (halfW > 1) {
-      roundRectPath(ctx, r.isPos ? cx : cx - halfW, trackY, halfW, trackH, 12);
-      ctx.fillStyle = r.isPos ? "#38bdf8" : "#a78bfa";
-      ctx.fill();
-    }
-
-    ctx.strokeStyle = "#64748b";
-    ctx.lineWidth = 2;
     ctx.beginPath();
-    ctx.moveTo(cx, trackY);
-    ctx.lineTo(cx, trackY + trackH);
-    ctx.stroke();
+    ctx.arc(capX + dotR, gy + GS + 36, dotR, 0, Math.PI * 2);
+    ctx.fillStyle = entry.hex;
+    ctx.fill();
 
-    by += 108;
+    ctx.textAlign = "left";
+    ctx.fillStyle = "#f8fafc";
+    ctx.fillText(cap, capX + dotR * 2 + 12, gy + GS + 44);
+
+    gx += GS + GGAP;
   });
+
+  // --- Religion cluster: tek boyutlu bar ---
+  const rr = byAxis["RLG"];
+  const cx = PAD + CW / 2;
+  const barY = 1000;
+
+  ctx.font = `22px ${SANS}`;
+  ctx.textAlign = "left";
+  ctx.fillStyle = rr.isPos ? "#64748b" : "#f8fafc";
+  ctx.fillText(`${rr.negKey}  ${rr.neg}`, PAD, barY);
+
+  ctx.textAlign = "right";
+  ctx.fillStyle = rr.isPos ? "#f8fafc" : "#64748b";
+  ctx.fillText(`${rr.pos}  ${rr.posKey}`, PAD + CW, barY);
+
+  ctx.textAlign = "center";
+  ctx.fillStyle = "#cbd5e1";
+  ctx.font = `700 22px ${MONO}`;
+  ctx.fillText(`RLG ${rr.scaled >= 0 ? "+" : ""}${rr.formatted}`, cx, barY);
+
+  const trackY = barY + 18, trackH = 24;
+  roundRectPath(ctx, PAD, trackY, CW, trackH, 12);
+  ctx.fillStyle = "#0f172a";
+  ctx.fill();
+  ctx.strokeStyle = "#334155";
+  ctx.lineWidth = 2;
+  ctx.stroke();
+
+  const halfW = (Math.abs(rr.scaled) / 10) * (CW / 2);
+  if (halfW > 1) {
+    roundRectPath(ctx, rr.isPos ? cx : cx - halfW, trackY, halfW, trackH, 12);
+    ctx.fillStyle = rr.isPos ? "#38bdf8" : "#a78bfa";
+    ctx.fill();
+  }
+  ctx.strokeStyle = "#64748b";
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+  ctx.moveTo(cx, trackY); ctx.lineTo(cx, trackY + trackH);
+  ctx.stroke();
 
   // --- Vektor ---
   ctx.strokeStyle = "#334155";
   ctx.lineWidth = 2;
   ctx.beginPath();
-  ctx.moveTo(PAD, by + 6);
-  ctx.lineTo(PAD + CW, by + 6);
+  ctx.moveTo(PAD, 1120); ctx.lineTo(PAD + CW, 1120);
   ctx.stroke();
 
   ctx.textAlign = "center";
   ctx.fillStyle = "#94a3b8";
-  ctx.font = `21px ${SANS}`;
-  ctx.fillText("Result Vector", W / 2, by + 52);
+  ctx.font = `20px ${SANS}`;
+  ctx.fillText("Result Vector", W / 2, 1164);
 
   ctx.fillStyle = "#f8fafc";
-  let vecSize = 26;
   const vec = getVectorString();
+  let vecSize = 25;
   ctx.font = `${vecSize}px ${MONO}`;
-  while (ctx.measureText(vec).width > CW && vecSize > 14) {
+  while (ctx.measureText(vec).width > CW && vecSize > 13) {
     vecSize -= 1;
     ctx.font = `${vecSize}px ${MONO}`;
   }
-  ctx.fillText(vec, W / 2, by + 92);
+  ctx.fillText(vec, W / 2, 1204);
 
-  const host = location.host;
-  if (host) {
+  if (location.host) {
     ctx.fillStyle = "#64748b";
-    ctx.font = `20px ${SANS}`;
-    ctx.fillText(host, W / 2, H - 82);
+    ctx.font = `19px ${SANS}`;
+    ctx.fillText(location.host, W / 2, 1272);
   }
 
   return canvas;
