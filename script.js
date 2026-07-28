@@ -96,7 +96,6 @@ function loadQuestion() {
   const btnPrev = document.getElementById("btn-prev");
   if (btnPrev) btnPrev.disabled = (currentIndex === 0);
 
-  // Ekrana soru numarası/kodu yansıtılmaz, sadece temiz soru metni basılır
   const qText = document.getElementById("question-text");
   if (qText) qText.innerText = qData.question;
 
@@ -245,18 +244,20 @@ async function submitCommentToSheets(event) {
   statusText.style.color = "#94a3b8";
   statusText.innerText = "Submitting your comment...";
 
-  const payload = {
-    nickname: nickname,
-    comment: comment,
-    vector: currentVector
-  };
+  // Google Apps Script için en güvenli veri paketleme yöntemi
+  const formData = new URLSearchParams();
+  formData.append("nickname", nickname);
+  formData.append("comment", comment);
+  formData.append("vector", currentVector);
 
   try {
     await fetch(GOOGLE_SHEETS_URL, {
       method: "POST",
       mode: "no-cors",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload)
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded"
+      },
+      body: formData.toString()
     });
 
     statusText.style.color = "#4ade80";
