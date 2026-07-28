@@ -214,7 +214,7 @@ function switchTab(tabName) {
   }
 }
 
-// ARKA PLANDA E-POSTA GÖNDERİMİ (AJAX FETCH)
+// ARKA PLANDA E-POSTA GÖNDERME (HİÇBİR DOSYA İNDİRMEZ)
 async function handleCommentSubmit(event) {
   event.preventDefault();
 
@@ -238,40 +238,39 @@ async function handleCommentSubmit(event) {
   if (statusText) {
     statusText.style.display = "block";
     statusText.style.color = "#94a3b8";
-    statusText.innerText = "Submitting your comment...";
+    statusText.innerText = "Sending your message...";
   }
 
-  // Form verisini oluşturma
-  const formData = new FormData();
-  formData.append("Nickname", nickname);
-  formData.append("Comment", comment);
-  formData.append("Vector_Result", currentVector);
-  formData.append("_subject", "New 5-Axis Compass Feedback!");
-  formData.append("_template", "table");
+  const payload = {
+    Nickname: nickname,
+    Comment: comment,
+    Vector_Result: currentVector
+  };
 
   try {
     const response = await fetch(actionUrl, {
       method: "POST",
-      body: formData,
       headers: {
+        'Content-Type': 'application/json',
         'Accept': 'application/json'
-      }
+      },
+      body: JSON.stringify(payload)
     });
 
     if (response.ok) {
       if (statusText) {
         statusText.style.color = "#4ade80";
-        statusText.innerText = "Thank you! Your comment has been sent to the email address.";
+        statusText.innerText = "Thank you! Your comment has been sent successfully.";
       }
       nicknameInput.value = "";
       commentInput.value = "";
     } else {
-      throw new Error("Form submission failed");
+      throw new Error("Server error");
     }
   } catch (error) {
     if (statusText) {
       statusText.style.color = "#ef4444";
-      statusText.innerText = "An error occurred. Please try again.";
+      statusText.innerText = "An error occurred. Please check the endpoint URL or try again.";
     }
   } finally {
     btnSubmit.disabled = false;
