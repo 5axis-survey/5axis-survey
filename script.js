@@ -93,7 +93,7 @@ function loadQuestion() {
   const btnPrev = document.getElementById("btn-prev");
   if (btnPrev) btnPrev.disabled = (currentIndex === 0);
 
-  // Soru kodunu (örneğin ETH1) gizleyerek sadece metni yansıtıyoruz
+  // Soru kodunu (örneğin ETH1) gizleyerek sadece temiz soru metnini basıyoruz
   const qText = document.getElementById("question-text");
   if (qText) qText.innerText = qData.question;
 
