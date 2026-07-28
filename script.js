@@ -1,5 +1,5 @@
 // Google Apps Script Web App URL
-const GOOGLE_SHEETS_URL = "https://script.google.com/macros/s/AKfycbyPvT-b9JLCgzflrpvLzOhuoE0zkTYM5BfFG4UAEFtui71lFcn_VCybgCo5EYpL130pbA/exec";
+const GOOGLE_SHEETS_URL = "https://script.google.com/macros/s/AKfycbztAWVuW1pFij_txy0GyxIEaLMH4J2GhiG0dkDfMQGuFl0_vBAnmnO9zlZEvvVHuDqxtw/exec";
 
 const SURVEY_DATA = [
   // --- ETHICS ---
