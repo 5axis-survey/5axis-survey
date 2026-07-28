@@ -367,27 +367,22 @@ body { background-color: #0f172a; color: #f8fafc; min-height: 100vh; display: fl
   font-weight: 600;
 }
 
-/* Kod tek parça bir gövde; renk ayrımı harflerin kendisinde */
+/* Profil kodu: tek parça, tek renk, sıkı harf aralığı */
 .vector-code {
-  display: inline-flex;
-  align-items: center;
+  display: inline-block;
   background-color: #1e293b;
   border: 1px solid #334155;
-  border-radius: 12px;
-  padding: 16px 26px;
+  border-radius: 10px;
+  padding: 14px 24px;
   font-family: monospace;
-  font-size: 2.6rem;
+  font-size: 2.4rem;
   font-weight: 700;
   line-height: 1;
-  letter-spacing: 0.16em;
+  letter-spacing: 0.03em;
+  color: #f8fafc;
 }
 
 .code-letter { cursor: default; }
-/* letter-spacing son harften sonra da boşluk bırakır; ortalamayı bozmasın */
-.code-letter:last-child { margin-right: -0.16em; }
-
-.code-letter.pos { color: #38bdf8; }
-.code-letter.neg { color: #a78bfa; }
 
 .profile-poles {
   margin: 14px 0 0 0;
@@ -411,8 +406,7 @@ body { background-color: #0f172a; color: #f8fafc; min-height: 100vh; display: fl
 .btn-copy:hover { border-color: #38bdf8; color: #f8fafc; background-color: #334155; }
 
 @media (max-width: 480px) {
-  .vector-code { font-size: 2rem; padding: 14px 20px; letter-spacing: 0.12em; }
-  .code-letter:last-child { margin-right: -0.12em; }
+  .vector-code { font-size: 1.9rem; padding: 12px 18px; }
 }
 
 /* ---- Daha once secilmis cevabin isaretlenmesi ---- */
