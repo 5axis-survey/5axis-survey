@@ -1,3 +1,11 @@
+/* ============================================================
+   5-AXIS COMPASS  —  BUILD 13  (clusters + 2D grids)
+   Konsolda bu satiri gormuyorsaniz tarayici eski dosyayi
+   calistiriyor demektir.
+   ============================================================ */
+window.COMPASS_BUILD = 13;
+console.log("5-Axis Compass build 13 yuklendi \u2014 clusters aktif");
+
 const SURVEY_DATA = [
   // --- ETHICS ---
   { code: "ETH1", question: "There is a set of moral values that are universally valid", scores: { "Strongly Disagree": {ETH: -1}, "Disagree": {ETH: -0.5}, "Neutral": {ETH: 0}, "Agree": {ETH: 0.5}, "Strongly Agree": {ETH: 1} } },
@@ -269,7 +277,8 @@ function buildGridSVG(cluster, xr, yr) {
   }).join("");
 
   return `
-    <svg viewBox="0 0 240 240" class="cluster-svg" role="img"
+    <svg viewBox="0 0 240 240" width="240" height="240"
+         preserveAspectRatio="xMidYMid meet" class="cluster-svg" role="img"
          aria-label="${cluster.name} position: ${activeKey}">
       ${rects}
       <line x1="120" y1="20" x2="120" y2="220" stroke="#64748b" stroke-width="1"></line>
