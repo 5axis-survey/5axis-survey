@@ -50,12 +50,16 @@ const SURVEY_DATA = [
 const OPTIONS = ["Strongly Disagree", "Disagree", "Neutral", "Agree", "Strongly Agree"];
 
 const AXIS_LABELS = {
-  ETH: { pos: "Objectivism", neg: "Subjectivism" },
-  HN:  { pos: "Realism", neg: "Constructivism" },
-  TRB: { pos: "Tribalism", neg: "Universalism" },
-  JST: { pos: "Justice", neg: "Equality" },
-  RLG: { pos: "Spiritual", neg: "Laic" }
+  ETH: { neg: "Subjectivism",   negKey: "S", pos: "Objectivism", posKey: "O" },
+  HN:  { neg: "Constructivism", negKey: "C", pos: "Realism",     posKey: "R" },
+  TRB: { neg: "Universalism",   negKey: "U", pos: "Tribalism",   posKey: "T" },
+  JST: { neg: "Equality",       negKey: "E", pos: "Justice",     posKey: "J" },
+  RLG: { neg: "Laic",           negKey: "L", pos: "Spiritual",   posKey: "P" }
 };
+
+// Sonuclarin ekranda gorunecegi sabit sira.
+// (RLG6 hem RLG hem ETH'yi etkiledigi icin Object.keys sirasina guvenmiyoruz.)
+const AXIS_ORDER = ["ETH", "HN", "TRB", "JST", "RLG"];
 
 let currentIndex = 0;
 let rawScores = {};
@@ -154,36 +158,115 @@ function showResults() {
   const resultView = document.getElementById("result-view");
   if (surveyView) surveyView.classList.add("hidden");
   if (resultView) resultView.classList.remove("hidden");
-  
+
   const resultsContainer = document.getElementById("results-list");
   if (resultsContainer) resultsContainer.innerHTML = "";
 
-  let vectorParts = [];
+  const vectorParts = [];
+  const codeParts = [];
+  const pendingFills = [];
 
-  Object.keys(maxPossibleScores).forEach(axis => {
-    const raw = rawScores[axis];
-    const max = maxPossibleScores[axis];
-    const scaled = max > 0 ? (raw / max) * 10 : 0;
+  if (resultsContainer) {
+    const legend = document.createElement("div");
+    legend.className = "axis-legend";
+    legend.innerHTML = "<span>-10</span><span>-5</span><span>0</span><span>+5</span><span>+10</span>";
+    resultsContainer.appendChild(legend);
+  }
+
+  AXIS_ORDER.forEach(axis => {
+    const raw = rawScores[axis] || 0;
+    const max = maxPossibleScores[axis] || 0;
+
+    // -10 / +10 araligina normalize et ve tasmaya karsi kilitle
+    let scaled = max > 0 ? (raw / max) * 10 : 0;
+    scaled = Math.max(-10, Math.min(10, scaled));
+
     const formatted = scaled.toFixed(1);
+    const labels = AXIS_LABELS[axis] || { neg: "Negative", negKey: "-", pos: "Positive", posKey: "+" };
 
-    const labels = AXIS_LABELS[axis] || { pos: "Positive", neg: "Negative" };
-    const stanceTag = scaled >= 0 ? labels.pos : labels.neg;
+    const isNeutral = Math.abs(scaled) < 0.05;
+    const isPos = scaled >= 0;
+    const halfPct = (Math.abs(scaled) / 10) * 50;   // yarim genislik: 0-50%
+    const targetLeft = isPos ? 50 : 50 - halfPct;
 
     vectorParts.push(`${axis}:${formatted}`);
+    // Tam denge (0.0) durumunda hicbir kutup kazanmadigi icin N kullaniyoruz.
+    codeParts.push({
+      letter: isNeutral ? "N" : (isPos ? labels.posKey : labels.negKey),
+      side: isNeutral ? "neutral" : (isPos ? "pos" : "neg"),
+      pole: isNeutral ? `${axis}: balanced` : `${axis}: ${isPos ? labels.pos : labels.neg}`
+    });
 
-    if (resultsContainer) {
-      const row = document.createElement("div");
-      row.className = "result-row";
-      row.innerHTML = `
-        <span><strong>${axis}</strong> <small style="color: #94a3b8; margin-left: 6px;">(${stanceTag})</small></span>
-        <span>${scaled >= 0 ? '+' : ''}${formatted}</span>
-      `;
-      resultsContainer.appendChild(row);
-    }
+    if (!resultsContainer) return;
+
+    const leftDominant  = (!isNeutral && !isPos) ? " dominant" : "";
+    const rightDominant = (!isNeutral && isPos)  ? " dominant" : "";
+
+    const row = document.createElement("div");
+    row.className = "axis-result";
+    row.innerHTML = `
+      <div class="axis-head">
+        <span class="axis-side left${leftDominant}">
+          <span class="axis-key">${labels.negKey}</span> ${labels.neg}
+        </span>
+        <span class="axis-score">
+          ${axis} <strong>${isPos && !isNeutral ? "+" : ""}${formatted}</strong>
+        </span>
+        <span class="axis-side right${rightDominant}">
+          ${labels.pos} <span class="axis-key">${labels.posKey}</span>
+        </span>
+      </div>
+      <div class="axis-track" role="img"
+           aria-label="${axis}: ${formatted} (${isNeutral ? "balanced" : (isPos ? labels.pos : labels.neg)})">
+        <div class="axis-fill ${isPos ? "pos" : "neg"}" style="left:50%; width:0%;"></div>
+        <div class="axis-midline"></div>
+      </div>
+    `;
+
+    resultsContainer.appendChild(row);
+    pendingFills.push({ el: row.querySelector(".axis-fill"), left: targetLeft, width: halfPct });
+  });
+
+  // Barlari merkezden disari dogru animasyonla ac
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => {
+      pendingFills.forEach(f => {
+        f.el.style.left = f.left + "%";
+        f.el.style.width = f.width + "%";
+      });
+    });
   });
 
   const vecText = document.getElementById("vector-text");
   if (vecText) vecText.innerText = `[${vectorParts.join("|")}]`;
+
+  // Bes harflik tip kodu: ETH-HN-TRB-JST-RLG sirasiyla baskin kutuplar
+  const codeString = codeParts.map(c => c.letter).join("");
+  const codeBox = document.getElementById("vector-code");
+  if (codeBox) {
+    codeBox.dataset.code = codeString;
+    codeBox.innerHTML = codeParts
+      .map(c => `<span class="code-letter ${c.side}" title="${c.pole}">${c.letter}</span>`)
+      .join("");
+  }
+}
+
+async function handleCopyCode() {
+  const codeBox = document.getElementById("vector-code");
+  const vecText = document.getElementById("vector-text");
+  const btn = document.getElementById("btn-copy-code");
+  if (!codeBox || !codeBox.dataset.code || !btn) return;
+
+  const payload = `${codeBox.dataset.code} ${vecText ? vecText.innerText : ""}`.trim();
+  const original = "Copy";
+
+  try {
+    await navigator.clipboard.writeText(payload);
+    btn.innerText = "Copied";
+  } catch (err) {
+    btn.innerText = "Copy failed";
+  }
+  setTimeout(() => { btn.innerText = original; }, 1600);
 }
 
 function switchTab(tabName) {
@@ -227,10 +310,12 @@ async function handleCommentSubmit(event) {
   const nicknameInput = document.getElementById("comment-nickname");
   const commentInput = document.getElementById("comment-text");
   const vectorElement = document.getElementById("vector-text");
+  const codeElement = document.getElementById("vector-code");
 
   const nickname = nicknameInput ? nicknameInput.value.trim() : "";
   const comment = commentInput ? commentInput.value.trim() : "";
   const currentVector = (vectorElement && vectorElement.innerText) ? vectorElement.innerText : "Not Taken Yet";
+  const currentCode = (codeElement && codeElement.dataset.code) ? codeElement.dataset.code : "Not Taken Yet";
 
   if (!nickname || !comment) return;
 
@@ -245,6 +330,7 @@ async function handleCommentSubmit(event) {
   const payload = {
     Nickname: nickname,
     Comment: comment,
+    Type_Code: currentCode,
     Vector_Result: currentVector
   };
 
@@ -285,12 +371,14 @@ document.addEventListener("DOMContentLoaded", () => {
   const btnNavComment = document.getElementById("nav-comment");
   const btnPrev = document.getElementById("btn-prev");
   const commentForm = document.getElementById("comment-form");
+  const btnCopyCode = document.getElementById("btn-copy-code");
 
   if (btnNavTest) btnNavTest.onclick = () => switchTab("test");
   if (btnNavAbout) btnNavAbout.onclick = () => switchTab("about");
   if (btnNavComment) btnNavComment.onclick = () => switchTab("comment");
   if (btnPrev) btnPrev.onclick = handlePrevious;
   if (commentForm) commentForm.onsubmit = handleCommentSubmit;
+  if (btnCopyCode) btnCopyCode.onclick = handleCopyCode;
 
   calculateBounds();
   loadQuestion();
