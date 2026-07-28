@@ -42,8 +42,9 @@
           <!-- Options dynamically rendered by script.js -->
         </div>
 
+        <!-- Controls: Previous button alignment fixed -->
         <div class="controls">
-          <button id="btn-prev" class="btn-secondary" disabled>Previous</button>
+          <button id="btn-prev" class="btn-secondary" disabled>← Previous Question</button>
         </div>
       </div>
 
@@ -69,18 +70,38 @@
 
     </section>
 
-    <!-- PAGE 2: ABOUT PAGE -->
+    <!-- PAGE 2: ABOUT PAGE (Eksiksiz Tam İçerik) -->
     <section id="page-about" class="page-section hidden">
       <div class="card">
         <h2>About This Test</h2>
-        <p>This 5-Axis compass measures philosophical and political tendencies across five distinct spectrums:</p>
-        
+        <p class="about-intro">
+          The 5-Axis Compass is a philosophical and political assessment tool designed to map an individual's worldview across five fundamental dimensions of thought. Unlike traditional single or dual-axis political spectrums, this test separates distinct ontological, ethical, and societal stances into independent measurements.
+        </p>
+
+        <hr class="divider">
+
+        <h3>The Five Axes Explained</h3>
         <ul class="about-list">
-          <li><strong>Ethics (ETH):</strong> Objectivism vs. Subjectivism</li>
-          <li><strong>Human Nature (HN):</strong> Realism vs. Constructivism</li>
-          <li><strong>Tribalism (TRB):</strong> Tribalism vs. Universalism</li>
-          <li><strong>Justice (JST):</strong> Justice vs. Equality</li>
-          <li><strong>Religion (RLG):</strong> Spiritual vs. Laic</li>
+          <li>
+            <strong>Ethics (ETH):</strong> <em>Objectivism vs. Subjectivism</em><br>
+            Measures whether you view moral values as universal, objective truths or as culturally constructed, subjective norms.
+          </li>
+          <li>
+            <strong>Human Nature (HN):</strong> <em>Realism vs. Constructivism</em><br>
+            Examines whether human behavior is governed by fixed biological and psychological boundaries, or primarily shaped by environment and socialization.
+          </li>
+          <li>
+            <strong>Tribalism (TRB):</strong> <em>Tribalism vs. Universalism</em><br>
+            Gauges whether primary moral duty is owed to one's own immediate group/society, or equally to humanity as a whole.
+          </li>
+          <li>
+            <strong>Justice (JST):</strong> <em>Justice vs. Equality</em><br>
+            Evaluates preference for meritocracy and natural hierarchy versus egalitarian social structures and wealth redistribution.
+          </li>
+          <li>
+            <strong>Religion & Transcendence (RLG):</strong> <em>Spiritual vs. Secular (Laic)</em><br>
+            Measures the degree to which non-material, spiritual, or religious frameworks inform your understanding of existence and truth.
+          </li>
         </ul>
       </div>
     </section>
@@ -91,8 +112,7 @@
         <h2>Submit Your Feedback</h2>
         <p class="subtitle">Share your thoughts on the test or your result vector.</p>
 
-        <!-- Form Endpoint -->
-        <form id="comment-form" action="https://formsubmit.co/ajax/huseyinbastug@gmail.com" method="POST" class="comment-form">
+        <form id="comment-form" action="https://formsubmit.co/ajax/sizin_epostaniz@gmail.com" method="POST" class="comment-form">
           <div class="form-group">
             <label for="comment-nickname">Nickname / Identifier</label>
             <input type="text" id="comment-nickname" name="Nickname" required placeholder="Enter your nickname" class="input-field">
@@ -111,7 +131,6 @@
 
   </main>
 
-  <!-- script.js?v=2.0 diyerek tarayıcının eski önbelleği (cache) temizlemesi sağlandı -->
-  <script src="script.js?v=2.0"></script>
+  <script src="script.js?v=3.0"></script>
 </body>
 </html>
