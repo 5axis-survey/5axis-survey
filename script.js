@@ -57,7 +57,7 @@ const AXIS_LABELS = {
   HN:  { pos: "Realism", neg: "Constructivism" },
   TRB: { pos: "Tribalism", neg: "Universalism" },
   JST: { pos: "Justice", neg: "Equality" },
-  REL: { pos: "Spiritual", neg: "Laic" }
+  RLG: { pos: "Spiritual", neg: "Laic" }
 };
 
 let currentIndex = 0;
