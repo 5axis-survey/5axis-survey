@@ -3,98 +3,115 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>5-Axis Assessment Tool</title>
+  <title>5-Axis Political & Philosophical Test</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-  <!-- Top Navigation Bar -->
+  <!-- Navigation Bar -->
   <header class="navbar">
-    <div class="credits">Produced by: Hüseyin Baştuğ & Arda Toby Özdemir</div>
-    <nav class="nav-links">
-      <button id="nav-test" class="nav-btn active">Test Screen</button>
-      <button id="nav-about" class="nav-btn">About Us</button>
-      <button id="nav-comment" class="nav-btn">Leave a Comment</button>
-    </nav>
+    <div class="nav-container">
+      <h1 class="logo">5-Axis Compass</h1>
+      <nav class="nav-links">
+        <button id="nav-test" class="nav-btn active">Test</button>
+        <button id="nav-about" class="nav-btn">About</button>
+        <button id="nav-comment" class="nav-btn">Comment</button>
+      </nav>
+    </div>
   </header>
 
-  <!-- Main Content Container -->
-  <main class="container">
-
-    <!-- PAGE 1: TEST SCREEN (Default View) -->
-    <section id="page-test" class="page-content">
-      <div class="card" id="app-card">
-        <!-- Progress Header -->
-        <div class="progress-container">
-          <div class="progress-header">
-            <span id="progress-text">Question 1 of 37</span>
-            <button id="btn-prev" class="btn-prev" disabled>← Previous</button>
-          </div>
-          <div class="progress-bar-bg">
-            <div class="progress-bar-fill" id="progress-fill"></div>
-          </div>
+  <main class="main-content">
+    
+    <!-- PAGE 1: TEST PAGE -->
+    <section id="page-test" class="page-section">
+      
+      <!-- Survey Active View -->
+      <div id="survey-view" class="card">
+        <div class="progress-bar-container">
+          <div id="progress-fill" class="progress-fill"></div>
+        </div>
+        <div class="progress-info">
+          <span id="progress-text">Question 1 of 37</span>
         </div>
 
-        <!-- Question View -->
-        <div id="survey-view">
+        <div class="question-box">
           <h2 id="question-text">Loading question...</h2>
-          <div class="options-group" id="options-container"></div>
         </div>
 
-        <!-- Result View -->
-        <div id="result-view" class="hidden">
-          <h2>Evaluation Complete</h2>
-          <div class="results-list" id="results-list"></div>
-          <div class="vector-box">
-            <strong>Analytic Space Vector:</strong>
-            <p id="vector-text"></p>
-          </div>
-          <button class="btn-restart" onclick="location.reload()">Restart Survey</button>
+        <div id="options-container" class="options-grid">
+          <!-- Options dynamically rendered by script.js -->
+        </div>
+
+        <div class="controls">
+          <button id="btn-prev" class="btn-secondary" disabled>Previous</button>
         </div>
       </div>
+
+      <!-- Results View (Hidden initially) -->
+      <div id="result-view" class="card hidden">
+        <h2>Your Results</h2>
+        <p class="subtitle">Based on your responses across 5 philosophical axes:</p>
+        
+        <div id="results-list" class="results-container">
+          <!-- Results rendered dynamically -->
+        </div>
+
+        <div class="vector-box">
+          <p class="vector-label">Your Result Vector:</p>
+          <code id="vector-text">[ETH:0|HN:0|TRB:0|JST:0|RLG:0]</code>
+        </div>
+
+        <div class="result-actions">
+          <button onclick="location.reload()" class="btn-primary">Retake Test</button>
+          <button onclick="switchTab('comment')" class="btn-secondary">Leave a Comment</button>
+        </div>
+      </div>
+
     </section>
 
-    <!-- PAGE 2: ABOUT US -->
-    <section id="page-about" class="page-content hidden">
-      <div class="card about-card">
-        <h2>About The Project</h2>
-        <p class="about-description">
-          The <strong>5-Axis Assessment Tool</strong> is an analytical framework designed to map individual philosophical, moral, and social tendencies across five core political-philosophical dimensions. Each question dynamically contributes to a multi-dimensional vector representing your position on a scale from -10.0 to +10.0.
-        </p>
-
-        <h3>Dimensions & Polarities</h3>
-        <ul class="axes-guide">
-          <li><strong>ETH (Ethics):</strong> Objectivism (+) vs. Subjectivism (-)</li>
-          <li><strong>HN (Human Nature):</strong> Realism (+) vs. Constructivism (-)</li>
-          <li><strong>TRB (Tribalism):</strong> Tribalism (+) vs. Universalism (-)</li>
-          <li><strong>JST (Justice):</strong> Justice (+) vs. Equality (-)</li>
-          <li><strong>REL (Religion):</strong> Spiritual (+) vs. Laic (-)</li>
+    <!-- PAGE 2: ABOUT PAGE -->
+    <section id="page-about" class="page-section hidden">
+      <div class="card">
+        <h2>About This Test</h2>
+        <p>This 5-Axis compass measures philosophical and political tendencies across five distinct spectrums:</p>
+        
+        <ul class="about-list">
+          <li><strong>Ethics (ETH):</strong> Objectivism vs. Subjectivism</li>
+          <li><strong>Human Nature (HN):</strong> Realism vs. Constructivism</li>
+          <li><strong>Tribalism (TRB):</strong> Tribalism vs. Universalism</li>
+          <li><strong>Justice (JST):</strong> Justice vs. Equality</li>
+          <li><strong>Religion (RLG):</strong> Spiritual vs. Laic</li>
         </ul>
-
-        <hr class="divider">
-
-        <h3>Authors & Methodology</h3>
-        <p class="about-authors">
-          Developed collaboratively by <strong>Hüseyin Baştuğ</strong> and <strong>Arda Toby Özdemir</strong> to combine computational survey logic with political-philosophical axis scoring.
-        </p>
       </div>
     </section>
 
-    <!-- PAGE 3: LEAVE A COMMENT -->
-    <section id="page-comment" class="page-content hidden">
-      <div class="card comments-card">
-        <h2>Leave a Comment</h2>
-        <p class="about-description" style="margin-bottom: 20px;">
-          Share your feedback, thoughts on the test items, or general ideas about the project. Your comments will be recorded directly into our project database.
-        </p>
-        
-        <form id="comment-form">
-          <input type="text" id="comment-nickname" placeholder="Your Nickname" required maxlength="30" class="input-field">
-          <textarea id="comment-text" placeholder="Share your thoughts on the assessment..." required maxlength="500" class="input-field textarea-field"></textarea>
-          <button type="submit" id="btn-submit-comment" class="btn-option" style="background-color: #38bdf8; color: #0f172a; border: none; margin-top: 8px;">Submit Comment</button>
+    <!-- PAGE 3: COMMENT PAGE -->
+    <section id="page-comment" class="page-section hidden">
+      <div class="card">
+        <h2>Submit Your Feedback</h2>
+        <p class="subtitle">Share your thoughts on the test or your result vector.</p>
+
+        <!-- FormSubmit Integration -->
+        <form id="comment-form" action="https://formsubmit.co/huseyinbastug@gmail.com" method="POST" class="comment-form">
+          
+          <!-- Optional FormSubmit Settings -->
+          <input type="hidden" name="_subject" value="New 5-Axis Compass Feedback!">
+          <input type="hidden" name="_template" value="table">
+          <input type="text" name="_honey" style="display:none">
+
+          <div class="form-group">
+            <label for="comment-nickname">Nickname / Identifier</label>
+            <input type="text" id="comment-nickname" name="Nickname" required placeholder="Enter your nickname" class="input-field">
+          </div>
+
+          <div class="form-group">
+            <label for="comment-text">Your Comment</label>
+            <textarea id="comment-text" name="Comment" rows="5" required placeholder="Type your thoughts here..." class="input-field"></textarea>
+          </div>
+
+          <button type="submit" id="btn-submit-comment" class="btn-primary">Submit Comment</button>
+          <p id="comment-status" class="status-message"></p>
         </form>
-        
-        <p id="comment-status" style="margin-top: 14px; font-size: 0.85rem; display: none;"></p>
       </div>
     </section>
 
