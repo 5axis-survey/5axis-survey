@@ -1,5 +1,5 @@
 // Google Apps Script Web App URL (Varsa tırnak içine yapıştırın)
-const GOOGLE_SHEETS_URL = "";
+const GOOGLE_SHEETS_URL = "https://script.google.com/macros/s/AKfycbzJyRKkId1vNuamI15UQiLaXy-GzxBR4oOVGYitB8reOUtt3azNDH08Zkob2jzRYUwE/exec";
 
 const SURVEY_DATA = [
   // --- ETHICS ---
