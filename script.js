@@ -101,6 +101,9 @@ function loadQuestion() {
   const qText = document.getElementById("question-text");
   if (qText) qText.innerText = qData.question;
 
+  // Bu soru daha once cevaplandiysa secimi geri getir
+  const saved = userAnswers[currentIndex];
+
   const container = document.getElementById("options-container");
   if (container) {
     container.innerHTML = "";
@@ -108,6 +111,13 @@ function loadQuestion() {
       const btn = document.createElement("button");
       btn.className = "btn-option";
       btn.innerText = optText;
+      btn.setAttribute("aria-pressed", "false");
+
+      if (saved && saved.selectedOption === optText) {
+        btn.classList.add("selected");
+        btn.setAttribute("aria-pressed", "true");
+      }
+
       btn.onclick = () => handleChoice(optText);
       container.appendChild(btn);
     });
@@ -118,16 +128,22 @@ function handleChoice(selectedOption) {
   const qData = SURVEY_DATA[currentIndex];
   const weights = qData.scores[selectedOption] || {};
 
-  userAnswers.push({
+  // Kullanici geri donup cevabini degistirdiyse eski agirliklari once geri al
+  const previous = userAnswers[currentIndex];
+  if (previous) {
+    Object.entries(previous.weights).forEach(([axis, weight]) => {
+      if (axis in rawScores) rawScores[axis] -= weight;
+    });
+  }
+
+  userAnswers[currentIndex] = {
     questionIndex: currentIndex,
     selectedOption: selectedOption,
     weights: weights
-  });
+  };
 
   Object.entries(weights).forEach(([axis, weight]) => {
-    if (axis in rawScores) {
-      rawScores[axis] += weight;
-    }
+    if (axis in rawScores) rawScores[axis] += weight;
   });
 
   currentIndex++;
@@ -139,16 +155,9 @@ function handleChoice(selectedOption) {
 }
 
 function handlePrevious() {
-  if (currentIndex <= 0 || userAnswers.length === 0) return;
+  if (currentIndex <= 0) return;
 
-  const lastAnswer = userAnswers.pop();
-
-  Object.entries(lastAnswer.weights).forEach(([axis, weight]) => {
-    if (axis in rawScores) {
-      rawScores[axis] -= weight;
-    }
-  });
-
+  // Cevap silinmiyor; sadece bir soru geri gidiyoruz ki secim gorunur kalsin
   currentIndex--;
   loadQuestion();
 }
@@ -190,11 +199,12 @@ function showResults() {
     const targetLeft = isPos ? 50 : 50 - halfPct;
 
     vectorParts.push(`${axis}:${formatted}`);
-    // Tam denge (0.0) durumunda hicbir kutup kazanmadigi icin N kullaniyoruz.
+    // Her eksen bir tarafa cozulur -> 2^5 = 32 profil. Tam 0.0 pozitif tarafa yuvarlanir.
     codeParts.push({
-      letter: isNeutral ? "N" : (isPos ? labels.posKey : labels.negKey),
-      side: isNeutral ? "neutral" : (isPos ? "pos" : "neg"),
-      pole: isNeutral ? `${axis}: balanced` : `${axis}: ${isPos ? labels.pos : labels.neg}`
+      letter: isPos ? labels.posKey : labels.negKey,
+      side: isPos ? "pos" : "neg",
+      pole: isPos ? labels.pos : labels.neg,
+      tip: `${axis}: ${isPos ? labels.pos : labels.neg}`
     });
 
     if (!resultsContainer) return;
@@ -246,9 +256,12 @@ function showResults() {
   if (codeBox) {
     codeBox.dataset.code = codeString;
     codeBox.innerHTML = codeParts
-      .map(c => `<span class="code-letter ${c.side}" title="${c.pole}">${c.letter}</span>`)
+      .map(c => `<span class="code-letter ${c.side}" title="${c.tip}">${c.letter}</span>`)
       .join("");
   }
+
+  const poles = document.getElementById("profile-poles");
+  if (poles) poles.innerText = codeParts.map(c => c.pole).join(" \u00b7 ");
 }
 
 async function handleCopyCode() {
@@ -257,7 +270,7 @@ async function handleCopyCode() {
   const btn = document.getElementById("btn-copy-code");
   if (!codeBox || !codeBox.dataset.code || !btn) return;
 
-  const payload = `${codeBox.dataset.code} ${vecText ? vecText.innerText : ""}`.trim();
+  const payload = `Your Profile: ${codeBox.dataset.code} ${vecText ? vecText.innerText : ""}`.trim();
   const original = "Copy";
 
   try {
