@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>5-Axis Political & Philosophical Compass</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css?v=6.0">
 </head>
 <body>
 
@@ -24,10 +24,10 @@
   </header>
 
   <main class="main-content">
-    
+
     <!-- PAGE 1: TEST PAGE -->
     <section id="page-test" class="page-section">
-      
+
       <!-- Survey Active View -->
       <div id="survey-view" class="card">
         <div class="progress-info">
@@ -53,14 +53,21 @@
       <div id="result-view" class="card hidden">
         <h2>Your Results</h2>
         <p class="subtitle">Based on your responses across 5 philosophical axes:</p>
-        
+
         <div id="results-list" class="results-container">
           <!-- Results rendered dynamically -->
         </div>
 
         <div class="vector-box">
-          <p class="vector-label">Your Result Vector:</p>
-          <code id="vector-text">[ETH:0|HN:0|TRB:0|JST:0|RLG:0]</code>
+          <div class="vector-code-row">
+            <span class="vector-label">Your Code:</span>
+            <span id="vector-code" class="vector-code" data-code=""></span>
+            <button type="button" id="btn-copy-code" class="btn-copy">Copy</button>
+          </div>
+          <div class="vector-line">
+            <span class="vector-label">Your Result Vector:</span>
+            <code id="vector-text">[ETH:0|HN:0|TRB:0|JST:0|RLG:0]</code>
+          </div>
         </div>
 
         <div class="result-actions">
@@ -85,7 +92,7 @@
         <hr class="divider">
 
         <h3>The Five Philosophical Axes Explained</h3>
-        
+
         <div class="axis-explanation">
           <h4>1. Ethics (ETH): Objectivism vs. Subjectivism</h4>
           <p>
@@ -148,6 +155,6 @@
 
   </main>
 
-  <script src="script.js?v=4.0"></script>
+  <script src="script.js?v=6.0"></script>
 </body>
 </html>
