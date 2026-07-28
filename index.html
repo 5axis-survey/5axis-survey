@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>5-Axis Political & Philosophical Compass</title>
-  <link rel="stylesheet" href="style.css?v=7.0">
+  <link rel="stylesheet" href="style.css?v=9.0">
 </head>
 <body>
 
@@ -13,7 +13,7 @@
     <div class="nav-container">
       <div class="brand-box">
         <h1 class="logo">5-Axis Compass</h1>
-        <span class="credits">created by: Hüseyin Baştuğ & Arda Toby Özdemir</span>
+        <span class="credits">created by Hüseyin Baştuğ & Arda Toby Özdemir</span>
       </div>
       <nav class="nav-links">
         <button id="nav-test" class="nav-btn active">Test</button>
@@ -71,6 +71,25 @@
         <div class="vector-box">
           <span class="vector-label">Your Result Vector:</span>
           <code id="vector-text">[ETH:0|HN:0|TRB:0|JST:0|RLG:0]</code>
+        </div>
+
+        <!-- Paylasim -->
+        <div class="share-box">
+          <span class="profile-label">Share your result</span>
+
+          <div class="share-tools">
+            <button type="button" id="btn-share-native" class="btn-share hidden">Share image</button>
+            <button type="button" id="btn-download-img" class="btn-share">Download image</button>
+          </div>
+
+          <div class="share-links">
+            <a id="share-wa" class="btn-share" target="_blank" rel="noopener noreferrer" href="#">WhatsApp</a>
+            <a id="share-x" class="btn-share" target="_blank" rel="noopener noreferrer" href="#">X</a>
+            <a id="share-tg" class="btn-share" target="_blank" rel="noopener noreferrer" href="#">Telegram</a>
+            <a id="share-mail" class="btn-share" target="_blank" rel="noopener noreferrer" href="#">Gmail</a>
+          </div>
+
+          <p class="share-note">Link buttons send your code and vector as text, not the image.</p>
         </div>
 
         <div class="result-actions">
@@ -158,6 +177,6 @@
 
   </main>
 
-  <script src="script.js?v=7.0"></script>
+  <script src="script.js?v=9.0"></script>
 </body>
 </html>
