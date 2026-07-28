@@ -214,49 +214,69 @@ function switchTab(tabName) {
   }
 }
 
-// Yorum ve Vektör verisini doğrudan .csv dosyası olarak indiren fonksiyon
-function submitCommentToSheets(event) {
+// ARKA PLANDA E-POSTA GÖNDERİMİ (AJAX FETCH)
+async function handleCommentSubmit(event) {
   event.preventDefault();
+
+  const form = event.target;
+  const actionUrl = form.action;
+  const statusText = document.getElementById("comment-status");
+  const btnSubmit = document.getElementById("btn-submit-comment");
 
   const nicknameInput = document.getElementById("comment-nickname");
   const commentInput = document.getElementById("comment-text");
-  const statusText = document.getElementById("comment-status");
-
-  const nickname = nicknameInput.value.trim();
-  const comment = commentInput.value.trim();
-
   const vectorElement = document.getElementById("vector-text");
+
+  const nickname = nicknameInput ? nicknameInput.value.trim() : "";
+  const comment = commentInput ? commentInput.value.trim() : "";
   const currentVector = (vectorElement && vectorElement.innerText) ? vectorElement.innerText : "Not Taken Yet";
 
   if (!nickname || !comment) return;
 
-  const timestamp = new Date().toISOString().replace('T', ' ').substring(0, 19);
-
-  // CSV içeriğini oluşturma (Virgüller ve yeni satırlar için tırnak koruması eklendi)
-  const csvHeaders = "Date,Nickname,Comment,Vector\n";
-  const csvRow = `"${timestamp}","${nickname.replace(/"/g, '""')}","${comment.replace(/"/g, '""')}","${currentVector}"\n`;
-  const csvContent = "\uFEFF" + csvHeaders + csvRow; // \uFEFF UTF-8 BOM karakteri ekleyerek Türkçe karakter desteğini sağlar
-
-  // Blob nesnesi oluşturup indirme bağlantısını tetikleme
-  const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
-  const url = URL.createObjectURL(blob);
-  
-  const link = document.createElement("a");
-  link.setAttribute("href", url);
-  link.setAttribute("download", `survey_comment_${Date.now()}.csv`);
-  document.body.appendChild(link);
-  link.click();
-  document.body.removeChild(link);
-
-  // Form temizleme ve bildirim
+  btnSubmit.disabled = true;
+  btnSubmit.innerText = "Sending...";
   if (statusText) {
     statusText.style.display = "block";
-    statusText.style.color = "#4ade80";
-    statusText.innerText = "Comment downloaded as CSV successfully!";
+    statusText.style.color = "#94a3b8";
+    statusText.innerText = "Submitting your comment...";
   }
 
-  nicknameInput.value = "";
-  commentInput.value = "";
+  // Form verisini oluşturma
+  const formData = new FormData();
+  formData.append("Nickname", nickname);
+  formData.append("Comment", comment);
+  formData.append("Vector_Result", currentVector);
+  formData.append("_subject", "New 5-Axis Compass Feedback!");
+  formData.append("_template", "table");
+
+  try {
+    const response = await fetch(actionUrl, {
+      method: "POST",
+      body: formData,
+      headers: {
+        'Accept': 'application/json'
+      }
+    });
+
+    if (response.ok) {
+      if (statusText) {
+        statusText.style.color = "#4ade80";
+        statusText.innerText = "Thank you! Your comment has been sent to the email address.";
+      }
+      nicknameInput.value = "";
+      commentInput.value = "";
+    } else {
+      throw new Error("Form submission failed");
+    }
+  } catch (error) {
+    if (statusText) {
+      statusText.style.color = "#ef4444";
+      statusText.innerText = "An error occurred. Please try again.";
+    }
+  } finally {
+    btnSubmit.disabled = false;
+    btnSubmit.innerText = "Submit Comment";
+  }
 }
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -270,7 +290,7 @@ document.addEventListener("DOMContentLoaded", () => {
   if (btnNavAbout) btnNavAbout.onclick = () => switchTab("about");
   if (btnNavComment) btnNavComment.onclick = () => switchTab("comment");
   if (btnPrev) btnPrev.onclick = handlePrevious;
-  if (commentForm) commentForm.onsubmit = submitCommentToSheets;
+  if (commentForm) commentForm.onsubmit = handleCommentSubmit;
 
   calculateBounds();
   loadQuestion();
