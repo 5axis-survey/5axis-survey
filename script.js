@@ -5,10 +5,10 @@ const SURVEY_DATA = [
   // --- ETHICS ---
   { code: "ETH1", question: "ETH1: There is a set of moral values that are universally valid", scores: { "Strongly Disagree": {ETH: -1}, "Disagree": {ETH: -0.5}, "Neutral": {ETH: 0}, "Agree": {ETH: 0.5}, "Strongly Agree": {ETH: 1} } },
   { code: "ETH2", question: "ETH2: No set of moral values is superior to any other", scores: { "Strongly Disagree": {ETH: -1}, "Disagree": {ETH: -0.5}, "Neutral": {ETH: 0}, "Agree": {ETH: 0.5}, "Strongly Agree": {ETH: 1} } },
-  { code: "ETH3", question: "ETH3: People can be inherently good or bad", scores: { "Strongly Disagree": {ETH: -1, HN: -1}, "Disagree": {ETH: -0.5, HN: -0.5}, "Neutral": {ETH: 0, HN: 0}, "Agree": {ETH: 0.5, HN: 0.5}, "Strongly Agree": {ETH: 1, HN: 1} } },
+  { code: "ETH3", question: "ETH3: Good and evil are real, objective categories", scores: { "Strongly Disagree": {ETH: -1, HN: -1}, "Disagree": {ETH: -0.5, HN: -0.5}, "Neutral": {ETH: 0, HN: 0}, "Agree": {ETH: 0.5, HN: 0.5}, "Strongly Agree": {ETH: 1, HN: 1} } },
   { code: "ETH4", question: "ETH4: Some cultures are more ethically advanced than others", scores: { "Strongly Disagree": {ETH: -1, TRB: -1}, "Disagree": {ETH: -0.5, TRB: -0.5}, "Neutral": {ETH: 0, TRB: 0}, "Agree": {ETH: 0.5, TRB: 0.5}, "Strongly Agree": {ETH: 1, TRB: 1} } },
   { code: "ETH5", question: "ETH5: Some of my moral beliefs may be false", scores: { "Strongly Disagree": {ETH: -1}, "Disagree": {ETH: -0.5}, "Neutral": {ETH: 0}, "Agree": {ETH: 0.5}, "Strongly Agree": {ETH: 1} } },
-  { code: "ETH6", question: "ETH6: All moral standards are subject to change over time", scores: { "Strongly Disagree": {ETH: -1}, "Disagree": {ETH: -0.5}, "Neutral": {ETH: 0}, "Agree": {ETH: 0.5}, "Strongly Agree": {ETH: 1} } },
+  { code: "ETH6", question: "ETH6: No moral standard is permanently valid across all times and societies", scores: { "Strongly Disagree": {ETH: -1}, "Disagree": {ETH: -0.5}, "Neutral": {ETH: 0}, "Agree": {ETH: 0.5}, "Strongly Agree": {ETH: 1} } },
   { code: "ETH7", question: "ETH7: Moral truths are accessible through common sense, or reason", scores: { "Strongly Disagree": {ETH: -1}, "Disagree": {ETH: -0.5}, "Neutral": {ETH: 0}, "Agree": {ETH: 0.5}, "Strongly Agree": {ETH: 1} } },
 
   // --- HUMAN NATURE ---
@@ -17,7 +17,8 @@ const SURVEY_DATA = [
   { code: "HN3", question: "HN3: Rehabilitation is possible regardless of past actions", scores: { "Strongly Disagree": {HN: -1}, "Disagree": {HN: -0.5}, "Neutral": {HN: 0}, "Agree": {HN: 0.5}, "Strongly Agree": {HN: 1} } },
   { code: "HN4", question: "HN4: Some people are predisposed to violent behavior", scores: { "Strongly Disagree": {HN: -1}, "Disagree": {HN: -0.5}, "Neutral": {HN: 0}, "Agree": {HN: 0.5}, "Strongly Agree": {HN: 1} } },
   { code: "HN5", question: "HN5: A perfect society is achievable", scores: { "Strongly Disagree": {HN: -1}, "Disagree": {HN: -0.5}, "Neutral": {HN: 0}, "Agree": {HN: 0.5}, "Strongly Agree": {HN: 1} } },
-  { code: "HN6", question: "HN6: We are all born with an innate set of ideas and personal characteristics", scores: { "Strongly Disagree": {HN: -1}, "Disagree": {HN: -0.5}, "Neutral": {HN: 0}, "Agree": {HN: 0.5}, "Strongly Agree": {HN: 1} } },
+  { code: "HN6", question: "HN6:  People are born with a fixed underlying human nature
+", scores: { "Strongly Disagree": {HN: -1}, "Disagree": {HN: -0.5}, "Neutral": {HN: 0}, "Agree": {HN: 0.5}, "Strongly Agree": {HN: 1} } },
   { code: "HN7", question: "HN7: We are shaped more by our experiences than by our genetics", scores: { "Strongly Disagree": {HN: -1}, "Disagree": {HN: -0.5}, "Neutral": {HN: 0}, "Agree": {HN: 0.5}, "Strongly Agree": {HN: 1} } },
 
   // --- TRIBALISM ---
@@ -26,7 +27,7 @@ const SURVEY_DATA = [
   { code: "TRB3", question: "TRB3: There are things to be learned from every culture", scores: { "Strongly Disagree": {TRB: -1}, "Disagree": {TRB: -0.5}, "Neutral": {TRB: 0}, "Agree": {TRB: 0.5}, "Strongly Agree": {TRB: 1} } },
   { code: "TRB4", question: "TRB4: It is our duty to preserve our own social identity", scores: { "Strongly Disagree": {TRB: -1}, "Disagree": {TRB: -0.5}, "Neutral": {TRB: 0}, "Agree": {TRB: 0.5}, "Strongly Agree": {TRB: 1} } },
   { code: "TRB5", question: "TRB5: It is regrettable that global interconnectedness is causing ruptures in communities", scores: { "Strongly Disagree": {TRB: -1}, "Disagree": {TRB: -0.5}, "Neutral": {TRB: 0}, "Agree": {TRB: 0.5}, "Strongly Agree": {TRB: 1} } },
-  { code: "TRB6", question: "TRB6: My society has natural enemies", scores: { "Strongly Disagree": {TRB: -1}, "Disagree": {TRB: -0.5}, "Neutral": {TRB: 0}, "Agree": {TRB: 0.5}, "Strongly Agree": {TRB: 1} } },
+  { code: "TRB6", question: "TRB6: A society must maintain a strong distinction between its members and outsiders", scores: { "Strongly Disagree": {TRB: -1}, "Disagree": {TRB: -0.5}, "Neutral": {TRB: 0}, "Agree": {TRB: 0.5}, "Strongly Agree": {TRB: 1} } },
   { code: "TRB7", question: "TRB7: It is important for membership in society to be exclusive", scores: { "Strongly Disagree": {TRB: -1}, "Disagree": {TRB: -0.5}, "Neutral": {TRB: 0}, "Agree": {TRB: 0.5}, "Strongly Agree": {TRB: 1} } },
   { code: "TRB8", question: "TRB8: We should be accountable to our community for our actions", scores: { "Strongly Disagree": {TRB: -1}, "Disagree": {TRB: -0.5}, "Neutral": {TRB: 0}, "Agree": {TRB: 0.5}, "Strongly Agree": {TRB: 1} } },
 
@@ -35,12 +36,13 @@ const SURVEY_DATA = [
   { code: "JST2", question: "JST2: Hierarchies protect society from anarchy", scores: { "Strongly Disagree": {JST: -1}, "Disagree": {JST: -0.5}, "Neutral": {JST: 0}, "Agree": {JST: 0.5}, "Strongly Agree": {JST: 1} } },
   { code: "JST3", question: "JST3: From each according to his ability to each according to his needs", scores: { "Strongly Disagree": {JST: -1}, "Disagree": {JST: -0.5}, "Neutral": {JST: 0}, "Agree": {JST: 0.5}, "Strongly Agree": {JST: 1} } },
   { code: "JST4", question: "JST4: Since humans have unequal abilities, social inequality is inevitable", scores: { "Strongly Disagree": {JST: -1}, "Disagree": {JST: -0.5}, "Neutral": {JST: 0}, "Agree": {JST: 0.5}, "Strongly Agree": {JST: 1} } },
-  { code: "JST5", question: "JST5: Efforts to equalize different groups through affirmative action inevitably fail", scores: { "Strongly Disagree": {JST: -1}, "Disagree": {JST: -0.5}, "Neutral": {JST: 0}, "Agree": {JST: 0.5}, "Strongly Agree": {JST: 1} } },
+  { code: "JST5", question: "JST5: Affirmative action is ineffective at reducing inequality", scores: { "Strongly Disagree": {JST: -1}, "Disagree": {JST: -0.5}, "Neutral": {JST: 0}, "Agree": {JST: 0.5}, "Strongly Agree": {JST: 1} } },
   { code: "JST6", question: "JST6: The more equal a society the more just", scores: { "Strongly Disagree": {JST: -1, ETH: -1}, "Disagree": {JST: -0.5, ETH: -0.5}, "Neutral": {JST: 0, ETH: 0}, "Agree": {JST: 0.5, ETH: 0.5}, "Strongly Agree": {JST: 1, ETH: 1} } },
   { code: "JST7", question: "JST7: It is better to be middle class in an equal society than it is to be wealthy in an unequal society", scores: { "Strongly Disagree": {JST: -1}, "Disagree": {JST: -0.5}, "Neutral": {JST: 0}, "Agree": {JST: 0.5}, "Strongly Agree": {JST: 1} } },
 
   // --- RELIGION ---
-  { code: "RLG1", question: "RLG1: There are certain things that can never be explained by science", scores: { "Strongly Disagree": {REL: -1}, "Disagree": {REL: -0.5}, "Neutral": {REL: 0}, "Agree": {REL: 0.5}, "Strongly Agree": {REL: 1} } },
+  { code: "RLG1", question: "RLG1: Science is the only universally valid source of knowledge about the world
+, scores: { "Strongly Disagree": {REL: -1}, "Disagree": {REL: -0.5}, "Neutral": {REL: 0}, "Agree": {REL: 0.5}, "Strongly Agree": {REL: 1} } },
   { code: "RLG2", question: "RLG2: There is an innate meaning to life", scores: { "Strongly Disagree": {REL: -1}, "Disagree": {REL: -0.5}, "Neutral": {REL: 0}, "Agree": {REL: 0.5}, "Strongly Agree": {REL: 1} } },
   { code: "RLG3", question: "RLG3: Science is the only universally valid source to understand the world", scores: { "Strongly Disagree": {REL: -1}, "Disagree": {REL: -0.5}, "Neutral": {REL: 0}, "Agree": {REL: 0.5}, "Strongly Agree": {REL: 1} } },
   { code: "RLG4", question: "RLG4: Prayer can have a real effect on our lives", scores: { "Strongly Disagree": {REL: -1}, "Disagree": {REL: -0.5}, "Neutral": {REL: 0}, "Agree": {REL: 0.5}, "Strongly Agree": {REL: 1} } },
