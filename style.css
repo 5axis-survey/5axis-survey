@@ -7,14 +7,14 @@ body { background-color: #0f172a; color: #f8fafc; min-height: 100vh; display: fl
 }
 
 .logo {
-  font-size: 1.4rem;
+  font-size: 1.5rem;
   font-weight: 700;
   margin: 0;
   padding: 0;
 }
 
 .credits {
-  font-size: 0.75rem;
+  font-size: 0.8rem;
   color: #94a3b8;
   font-style: italic;
   margin-top: 2px;
@@ -29,11 +29,10 @@ body { background-color: #0f172a; color: #f8fafc; min-height: 100vh; display: fl
   color: #38bdf8;
 }
 
-
 /* Navbar Styling */
 .navbar {
   width: 100%;
-  max-width: 640px;
+  max-width: 780px; /* Kart genişliği ile eşitlendi */
   display: flex;
   flex-direction: column;
   gap: 12px;
@@ -50,21 +49,14 @@ body { background-color: #0f172a; color: #f8fafc; min-height: 100vh; display: fl
   }
 }
 
-.credits {
-  font-size: 0.8rem;
-  color: #64748b;
-  font-weight: 500;
-  letter-spacing: 0.5px;
-}
-
-.nav-links { display: flex; gap: 6px; }
+.nav-links { display: flex; gap: 8px; }
 .nav-btn {
   background: transparent;
   border: 1px solid transparent;
   color: #94a3b8;
-  padding: 6px 12px;
-  border-radius: 6px;
-  font-size: 0.85rem;
+  padding: 8px 16px; /* Butonlar büyütüldü */
+  border-radius: 8px;
+  font-size: 0.95rem; /* Font büyütüldü */
   font-weight: 600;
   cursor: pointer;
   transition: all 0.2s ease;
@@ -73,53 +65,130 @@ body { background-color: #0f172a; color: #f8fafc; min-height: 100vh; display: fl
 .nav-btn.active { background-color: #38bdf8; color: #0f172a; }
 
 /* Main Container & Layout */
-.container { width: 100%; max-width: 640px; }
-.page-content { width: 100%; }
+.container { width: 100%; max-width: 780px; }
+.main-content, .page-content, .page-section { width: 100%; max-width: 780px; margin: 0 auto; }
 
-.card { background-color: #1e293b; border-radius: 12px; padding: 32px; width: 100%; box-shadow: 0 10px 25px rgba(0,0,0,0.3); }
+/* Ana Kart Kutusu */
+.card { 
+  background-color: #1e293b; 
+  border-radius: 14px; 
+  padding: 36px 32px; 
+  width: 100%; 
+  max-width: 780px; 
+  box-shadow: 0 10px 25px rgba(0,0,0,0.3); 
+  border: 1px solid #334155;
+}
 
-/* Progress Header */
-.progress-container { margin-bottom: 24px; }
-.progress-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
-#progress-text { font-size: 0.85rem; color: #94a3b8; font-style: italic; }
+/* Progress Header & Sağ Üstteki Previous Butonu */
+.progress-container { margin-bottom: 20px; }
+.progress-header, .progress-info { 
+  display: flex; 
+  justify-content: space-between; 
+  align-items: center; 
+  margin-bottom: 12px; 
+}
 
-.btn-prev {
-  background: transparent;
+#progress-text { font-size: 0.9rem; color: #94a3b8; font-style: italic; font-weight: 500; }
+
+/* Previous Butonu - Büyütüldü ve Sağ Üst İki Köşe Düzeni */
+.btn-prev, #btn-prev {
+  background: #0f172a;
   border: 1px solid #475569;
-  color: #94a3b8;
-  padding: 4px 12px;
+  color: #cbd5e1;
+  padding: 6px 14px;
   border-radius: 6px;
-  font-size: 0.8rem;
+  font-size: 0.85rem;
+  font-weight: 600;
   cursor: pointer;
   transition: all 0.2s ease;
 }
-.btn-prev:hover:not(:disabled) { background-color: #334155; color: #f8fafc; border-color: #38bdf8; }
-.btn-prev:disabled { opacity: 0.3; cursor: not-allowed; }
+.btn-prev:hover:not(:disabled), #btn-prev:hover:not(:disabled) { 
+  background-color: #334155; 
+  color: #f8fafc; 
+  border-color: #38bdf8; 
+}
+.btn-prev:disabled, #btn-prev:disabled { opacity: 0.3; cursor: not-allowed; }
 
-.progress-bar-bg { background-color: #334155; height: 6px; border-radius: 3px; overflow: hidden; }
-.progress-bar-fill { background-color: #38bdf8; height: 100%; width: 0%; transition: width 0.3s ease; }
+.progress-bar-bg, .progress-bar-container { background-color: #334155; height: 8px; border-radius: 4px; overflow: hidden; }
+.progress-bar-fill, .progress-fill { background-color: #38bdf8; height: 100%; width: 0%; transition: width 0.3s ease; }
 
-#question-text { font-size: 1.15rem; margin-bottom: 24px; text-align: center; line-height: 1.5; min-height: 60px; }
+/* BÜYÜTÜLMÜŞ SORU DİKDÖRTGENİ */
+.question-box {
+  background-color: #0f172a;
+  border: 1px solid #334155;
+  border-radius: 12px;
+  padding: 32px 24px;
+  margin: 24px 0 28px 0;
+  min-height: 140px; /* Yükseklik ferahlatıldı */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
 
-.options-group { display: flex; flex-direction: column; gap: 12px; }
-.btn-option { background-color: #334155; color: #f8fafc; border: 1px solid #475569; padding: 14px; border-radius: 8px; font-size: 0.95rem; font-weight: 600; cursor: pointer; transition: all 0.2s ease; width: 100%; }
-.btn-option:hover { background-color: #0284c7; border-color: #38bdf8; transform: translateY(-2px); }
+#question-text { 
+  font-size: 1.35rem; /* Font belirginleştirildi */
+  color: #f8fafc;
+  line-height: 1.5; 
+  font-weight: 500;
+  margin: 0; 
+}
+
+/* Seçenek Butonları - Büyütüldü */
+.options-group, .options-grid { display: flex; flex-direction: column; gap: 14px; }
+.btn-option { 
+  background-color: #334155; 
+  color: #f8fafc; 
+  border: 1px solid #475569; 
+  padding: 16px 20px; /* İç alan genişletildi */
+  border-radius: 10px; 
+  font-size: 1.05rem; /* Punto büyütüldü */
+  font-weight: 600; 
+  cursor: pointer; 
+  transition: all 0.2s ease; 
+  width: 100%; 
+  text-align: center;
+}
+.btn-option:hover { 
+  background-color: #0284c7; 
+  border-color: #38bdf8; 
+  transform: translateY(-2px); 
+}
+
+.controls {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 10px;
+}
 
 .hidden { display: none !important; }
 
 /* Result Styles */
-.result-row { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #334155; }
-.vector-box { margin-top: 20px; background-color: #0f172a; padding: 16px; border-radius: 8px; font-family: monospace; font-size: 0.9rem; word-break: break-all; }
-.btn-restart { margin-top: 20px; width: 100%; background-color: #38bdf8; color: #0f172a; font-weight: bold; border: none; padding: 12px; border-radius: 8px; cursor: pointer; }
+.result-row { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid #334155; font-size: 1rem; }
+.vector-box { margin-top: 24px; background-color: #0f172a; padding: 18px; border-radius: 10px; font-family: monospace; font-size: 1rem; word-break: break-all; border: 1px solid #334155; }
+.btn-restart, .btn-primary { 
+  margin-top: 20px; 
+  width: 100%; 
+  background-color: #38bdf8; 
+  color: #0f172a; 
+  font-size: 1.05rem;
+  font-weight: bold; 
+  border: none; 
+  padding: 14px; 
+  border-radius: 10px; 
+  cursor: pointer; 
+  transition: all 0.2s ease;
+}
+.btn-primary:hover { background-color: #0284c7; color: #ffffff; }
 
 /* About & Comments Styling */
-.card h2 { margin-bottom: 16px; color: #38bdf8; }
-.card h3 { margin: 20px 0 10px 0; font-size: 1.1rem; color: #f8fafc; }
-.about-description { line-height: 1.6; color: #cbd5e1; font-size: 0.95rem; }
-.axes-guide { list-style: none; padding: 0; }
-.axes-guide li { padding: 8px 0; border-bottom: 1px dashed #334155; color: #cbd5e1; font-size: 0.9rem; }
+.card h2 { margin-bottom: 16px; color: #38bdf8; font-size: 1.6rem; }
+.card h3 { margin: 24px 0 12px 0; font-size: 1.2rem; color: #f8fafc; }
+.about-description, .about-intro { line-height: 1.6; color: #cbd5e1; font-size: 1rem; margin-bottom: 12px; }
+.axes-guide, .about-list { list-style: none; padding: 0; }
+.axes-guide li, .about-list li { padding: 10px 0; border-bottom: 1px dashed #334155; color: #cbd5e1; font-size: 0.95rem; line-height: 1.5; }
 .divider { border: 0; height: 1px; background: #334155; margin: 24px 0; }
-.about-authors { line-height: 1.5; color: #94a3b8; font-size: 0.9rem; }
+.about-authors { line-height: 1.5; color: #94a3b8; font-size: 0.95rem; }
 
 /* Form Fields */
 .input-field {
@@ -127,11 +196,11 @@ body { background-color: #0f172a; color: #f8fafc; min-height: 100vh; display: fl
   background-color: #0f172a;
   border: 1px solid #334155;
   color: #f8fafc;
-  padding: 12px;
+  padding: 14px;
   border-radius: 8px;
-  margin-bottom: 12px;
-  font-size: 0.9rem;
+  margin-bottom: 16px;
+  font-size: 1rem;
   outline: none;
 }
 .input-field:focus { border-color: #38bdf8; }
-.textarea-field { resize: vertical; min-height: 100px; }
+.textarea-field { resize: vertical; min-height: 120px; }
