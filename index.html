@@ -903,8 +903,8 @@ body { background-color: #0f172a; color: #f8fafc; min-height: 100vh; display: fl
   </main>
 
   <script>
-window.COMPASS_BUILD = 23;
-console.log("5-Axis Compass build 23 — Local PostgreSQL API Entegrasyonu Yüklendi");
+window.COMPASS_BUILD = 24;
+console.log("5-Axis Compass build 24 — Eksen Takası & Etiket Formatı Güncellendi");
 
 const SURVEY_DATA = [
   // --- ETHICS ---
@@ -967,29 +967,30 @@ const AXIS_LABELS = {
 
 const AXIS_ORDER = ["ETH", "HN", "TRB", "JST", "RLG"];
 
+/* REVIZE EDILDI: Philosophical Cluster için X ve Y takas edildi */
 const CLUSTERS = [
   {
     id: "PHI",
     name: "Philosophical Cluster",
-    x: "ETH",              
-    y: "HN",               
+    x: "HN",               // yatay: C <-> R
+    y: "ETH",              // dikey: S <-> O
     combos: {
-      OR: { name: "Yellow", hex: "#eab308" },
-      SR: { name: "Red",    hex: "#ef4444" },
-      SC: { name: "Green",  hex: "#22c55e" },
-      OC: { name: "Blue",   hex: "#3b82f6" }
+      RO: { hex: "#eab308" }, // Realism + Objectivism
+      SO: { hex: "#ef4444" }, // Constructivism + Objectivism
+      SC: { hex: "#22c55e" }, // Constructivism + Subjectivism
+      RC: { hex: "#3b82f6" }  // Realism + Subjectivism
     }
   },
   {
     id: "POL",
     name: "Political Cluster",
-    x: "JST",              
-    y: "TRB",              
+    x: "JST",              // yatay: E <-> J
+    y: "TRB",              // dikey: U <-> T
     combos: {
-      JT: { name: "Orange", hex: "#f97316" },
-      JU: { name: "Purple", hex: "#a855f7" },
-      EU: { name: "Brown",  hex: "#b07d57" },
-      ET: { name: "Gray",   hex: "#94a3b8" }
+      TJ: { hex: "#f97316" }, // Tribalism + Justice
+      UJ: { hex: "#a855f7" }, // Universalism + Justice
+      UE: { hex: "#b07d57" }, // Universalism + Equality
+      TE: { hex: "#94a3b8" }  // Tribalism + Equality
     }
   },
   {
@@ -1492,7 +1493,7 @@ function handlePrevious() {
 function letterColorFor(axis) {
   const entry = lastClusters.find(c => c.cluster.x === axis || c.cluster.y === axis);
   return entry
-    ? { hex: entry.hex, tip: `${entry.cluster.name}: ${entry.key} \u2014 ${entry.name}` }
+    ? { hex: entry.hex, tip: `${entry.cluster.name}: ${entry.key}` }
     : { hex: "#f8fafc", tip: "Religion Cluster" };
 }
 
@@ -1543,10 +1544,12 @@ function buildBarHTML(r) {
 }
 
 function buildGridSVG(cluster, xr, yr) {
+  // SVG için activeKey: [X_harfi][Y_harfi]
   const activeKey = xr.letter + yr.letter;
   const dx = 120 + (xr.scaled / 10) * 90;
   const dy = 120 - (yr.scaled / 10) * 90;
 
+  // Dört kadranın X ve Y koordinatlarına göre doğru key tanımlaması
   const quads = [
     { x: 120, y: 20,  key: xr.posKey + yr.posKey },
     { x: 20,  y: 20,  key: xr.negKey + yr.posKey },
@@ -1555,18 +1558,20 @@ function buildGridSVG(cluster, xr, yr) {
   ];
 
   const rects = quads.map(q => {
-    const combo = cluster.combos[q.key];
+    // Kombinasyon rengini bulmak için [Y_harfi][X_harfi] formatını eşleştiriyoruz
+    const comboKey = q.key[1] + q.key[0];
+    const combo = cluster.combos[comboKey];
     const active = (q.key === activeKey);
     return `<rect x="${q.x}" y="${q.y}" width="100" height="100" rx="2"
-              fill="${combo.hex}" opacity="${active ? 0.58 : 0.15}">
-              <title>${q.key} \u2014 ${combo.name}</title>
+              fill="${combo ? combo.hex : '#334155'}" opacity="${active ? 0.58 : 0.15}">
+              <title>${comboKey}</title>
             </rect>`;
   }).join("");
 
   return `
     <svg viewBox="0 0 240 240" width="240" height="240"
          preserveAspectRatio="xMidYMid meet" class="cluster-svg" role="img"
-         aria-label="${cluster.name} position: ${activeKey}">
+         aria-label="${cluster.name} position">
       ${rects}
       <line x1="120" y1="20" x2="120" y2="220" stroke="#64748b" stroke-width="1"></line>
       <line x1="20" y1="120" x2="220" y2="120" stroke="#64748b" stroke-width="1"></line>
@@ -1599,15 +1604,17 @@ function buildClusterBlock(cluster, byAxis) {
 
   const xr = byAxis[cluster.x];
   const yr = byAxis[cluster.y];
-  const key = xr.letter + yr.letter;
-  const combo = cluster.combos[key];
+  
+  /* REVIZE EDILDI: Sıralama [Y_harfi][X_harfi] olarak ayarlandı, renk adı kaldırıldı */
+  const displayKey = yr.letter + xr.letter; 
+  const combo = cluster.combos[displayKey];
 
   block.innerHTML = `
     <div class="cluster-head">
       <h3 class="cluster-name">${cluster.name}</h3>
       <span class="cluster-tag">
-        <span class="cluster-swatch" style="background:${combo.hex}"></span>
-        ${key} &middot; ${combo.name}
+        <span class="cluster-swatch" style="background:${combo ? combo.hex : '#38bdf8'}"></span>
+        ${displayKey}
       </span>
     </div>
     <div class="cluster-body">
@@ -1627,8 +1634,9 @@ function showResults() {
   lastResults.forEach(r => { byAxis[r.axis] = r; });
 
   lastClusters = CLUSTERS.filter(c => c.combos).map(c => {
-    const key = byAxis[c.x].letter + byAxis[c.y].letter;
-    return { cluster: c, key: key, name: c.combos[key].name, hex: c.combos[key].hex };
+    // Etiket sıralaması: Önce Y ekseni harfi, sonra X ekseni harfi
+    const key = byAxis[c.y].letter + byAxis[c.x].letter;
+    return { cluster: c, key: key, hex: c.combos[key] ? c.combos[key].hex : "#38bdf8" };
   });
 
   const container = document.getElementById("results-list");
@@ -1798,8 +1806,7 @@ function getPageUrl() {
 }
 
 function getShareText() {
-  const colors = lastClusters.map(c => c.name).join(" + ");
-  return `My 5-Axis Compass profile: ${getProfileCode()}${colors ? " (" + colors + ")" : ""} ${getVectorString()}`.trim();
+  return `My 5-Axis Compass profile: ${getProfileCode()} ${getVectorString()}`.trim();
 }
 
 function wireShareLinks() {
@@ -1850,8 +1857,9 @@ function drawCanvasGrid(ctx, gx, gy, size, entry, xr, yr, SANS, MONO) {
   ];
 
   quads.forEach(q => {
-    const combo = entry.cluster.combos[q.key];
-    ctx.fillStyle = hexToRgba(combo.hex, q.key === activeKey ? 0.58 : 0.15);
+    const comboKey = q.key[1] + q.key[0];
+    const combo = entry.cluster.combos[comboKey];
+    ctx.fillStyle = hexToRgba(combo ? combo.hex : "#334155", q.key === activeKey ? 0.58 : 0.15);
     ctx.fillRect(q.x, q.y, half, half);
   });
 
@@ -1955,7 +1963,7 @@ function drawPanelHead(ctx, x, y, w, title, entry, SANS, MONO) {
 
   if (!entry) return;
 
-  const cap = `${entry.key} \u00b7 ${entry.name}`;
+  const cap = `${entry.key}`;
   ctx.font = `700 22px ${MONO}`;
   const capW = ctx.measureText(cap).width;
   const right = x + w - IP;
