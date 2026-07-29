@@ -605,8 +605,6 @@ body { background-color: #0f172a; color: #f8fafc; min-height: 100vh; display: fl
   .cluster-grid { flex: 0 0 auto; width: 100%; max-width: 280px; margin: 0 auto 4px auto; }
 }
 
-
-
   </style>
 </head>
 <body>
@@ -782,12 +780,10 @@ body { background-color: #0f172a; color: #f8fafc; min-height: 100vh; display: fl
 
   <script>
 /* ============================================================
-   5-AXIS COMPASS  —  BUILD 14  (cluster renkli profil kodu)
-   Konsolda bu satiri gormuyorsaniz tarayici eski dosyayi
-   calistiriyor demektir.
+   5-AXIS COMPASS  —  BUILD 15 (E-J yatay eksene alindi)
    ============================================================ */
-window.COMPASS_BUILD = 14;
-console.log("5-Axis Compass build 14 yuklendi \u2014 clusters aktif");
+window.COMPASS_BUILD = 15;
+console.log("5-Axis Compass build 15 yuklendi — E-J ekseni yatayda");
 
 const SURVEY_DATA = [
   // --- ETHICS ---
@@ -848,12 +844,10 @@ const AXIS_LABELS = {
   RLG: { neg: "Laicity",        negKey: "L", pos: "Spiritualism", posKey: "P" }
 };
 
-// Sonuclarin ekranda gorunecegi sabit sira.
-// (RLG6 hem RLG hem ETH'yi etkiledigi icin Object.keys sirasina guvenmiyoruz.)
 const AXIS_ORDER = ["ETH", "HN", "TRB", "JST", "RLG"];
 
 /* Bes eksen uc cluster altinda toplaniyor.
-   Iki boyutlu cluster'larda kombinasyon anahtari = yatayHarf + dikeyHarf. */
+   Political Cluster'da JST (E-J) yataya, TRB (U-T) dikey eksene alindi. */
 const CLUSTERS = [
   {
     id: "PHI",
@@ -871,12 +865,12 @@ const CLUSTERS = [
     id: "POL",
     name: "Political Cluster",
     x: "JST",              // yatay: E <-> J
-    y: "TRB",              // dikey: U <-> T
+    y: "TRB",              // dikey:  U <-> T
     combos: {
-      JT: { name: "Orange", hex: "#f97316" }, // Justice + Tribalism
-      JU: { name: "Purple", hex: "#a855f7" }, // Justice + Universalism
-      EU: { name: "Brown",  hex: "#b07d57" }, // Equality + Universalism
-      ET: { name: "Gray",   hex: "#94a3b8" }  // Equality + Tribalism
+      JT: { name: "Orange", hex: "#f97316" },
+      JU: { name: "Purple", hex: "#a855f7" },
+      EU: { name: "Brown",  hex: "#b07d57" },
+      ET: { name: "Gray",   hex: "#94a3b8" }
     }
   },
   {
@@ -893,7 +887,7 @@ let rawScores = {};
 let maxPossibleScores = {};
 let userAnswers = [];
 let lastResults = [];      // paylasim gorseli icin sonuc anlik goruntusu
-let shareBlob = null;     // uretilen PNG
+let shareBlob = null;      // uretilen PNG
 
 function calculateBounds() {
   SURVEY_DATA.forEach(q => {
@@ -926,11 +920,9 @@ function loadQuestion() {
   const btnPrev = document.getElementById("btn-prev");
   if (btnPrev) btnPrev.disabled = (currentIndex === 0);
 
-  // Soru kodunu (örneğin ETH1) gizleyerek sadece temiz soru metnini basıyoruz
   const qText = document.getElementById("question-text");
   if (qText) qText.innerText = qData.question;
 
-  // Bu soru daha once cevaplandiysa secimi geri getir
   const saved = userAnswers[currentIndex];
 
   const container = document.getElementById("options-container");
@@ -957,7 +949,6 @@ function handleChoice(selectedOption) {
   const qData = SURVEY_DATA[currentIndex];
   const weights = qData.scores[selectedOption] || {};
 
-  // Kullanici geri donup cevabini degistirdiyse eski agirliklari once geri al
   const previous = userAnswers[currentIndex];
   if (previous) {
     Object.entries(previous.weights).forEach(([axis, weight]) => {
@@ -985,14 +976,10 @@ function handleChoice(selectedOption) {
 
 function handlePrevious() {
   if (currentIndex <= 0) return;
-
-  // Cevap silinmiyor; sadece bir soru geri gidiyoruz ki secim gorunur kalsin
   currentIndex--;
   loadQuestion();
 }
 
-/* Bir eksenin hangi cluster'a ait oldugunu ve o cluster'in rengini bulur.
-   Religion Cluster renk tasimadigi icin duz beyaz doner. */
 function letterColorFor(axis) {
   const entry = lastClusters.find(c => c.cluster.x === axis || c.cluster.y === axis);
   return entry
@@ -1046,7 +1033,6 @@ function buildBarHTML(r) {
     </div>`;
 }
 
-/* Iki boyutlu cluster karesi. viewBox 240x240; kare 20,20 -> 220,220 */
 function buildGridSVG(cluster, xr, yr) {
   const activeKey = xr.letter + yr.letter;
   const dx = 120 + (xr.scaled / 10) * 90;
@@ -1134,19 +1120,16 @@ function showResults() {
   const byAxis = {};
   lastResults.forEach(r => { byAxis[r.axis] = r; });
 
-  // Cluster renkleri (yalnizca iki boyutlu olanlar renk tasir)
   lastClusters = CLUSTERS.filter(c => c.combos).map(c => {
     const key = byAxis[c.x].letter + byAxis[c.y].letter;
     return { cluster: c, key: key, name: c.combos[key].name, hex: c.combos[key].hex };
   });
 
-  // --- Cluster bloklarini bas ---
   const container = document.getElementById("results-list");
   if (container) {
     container.innerHTML = "";
     CLUSTERS.forEach(c => container.appendChild(buildClusterBlock(c, byAxis)));
 
-    // Barlari merkezden disari dogru ac
     requestAnimationFrame(() => {
       requestAnimationFrame(() => {
         container.querySelectorAll(".axis-fill").forEach(el => {
@@ -1157,7 +1140,6 @@ function showResults() {
     });
   }
 
-  // --- Profil kodu ---
   const codeString = lastResults.map(r => r.letter).join("");
   const codeBox = document.getElementById("vector-code");
   if (codeBox) {
@@ -1228,7 +1210,6 @@ function switchTab(tabName) {
   }
 }
 
-// ARKA PLANDA E-POSTA GÖNDERME (HİÇBİR DOSYA İNDİRMEZ)
 async function handleCommentSubmit(event) {
   event.preventDefault();
 
@@ -1294,14 +1275,6 @@ async function handleCommentSubmit(event) {
     btnSubmit.innerText = "Submit Comment";
   }
 }
-
-
-/* =========================================================
-   PAYLASIM
-   Gorsel: canvas -> PNG. navigator.share() varsa cihazin
-   paylas menusune dosya olarak gider (Instagram, WhatsApp...).
-   Link butonlari sadece metin tasir; bu bir tarayici kisiti.
-   ========================================================= */
 
 function getProfileCode() {
   const box = document.getElementById("vector-code");
@@ -1386,7 +1359,6 @@ function drawCanvasGrid(ctx, gx, gy, size, entry, xr, yr, SANS, MONO) {
   ctx.lineWidth = 3;
   ctx.strokeRect(gx, gy, size, size);
 
-  // Eksen harfleri kare icinde, kenarlara yakin
   ctx.fillStyle = "#94a3b8";
   ctx.font = `700 26px ${MONO}`;
   ctx.textAlign = "center";
@@ -1397,7 +1369,6 @@ function drawCanvasGrid(ctx, gx, gy, size, entry, xr, yr, SANS, MONO) {
   ctx.textAlign = "right";
   ctx.fillText(xr.posKey, gx + size - 14, gy + half + 10);
 
-  // Konum noktasi
   const dx = gx + half + (xr.scaled / 10) * (half * 0.9);
   const dy = gy + half - (yr.scaled / 10) * (half * 0.9);
   ctx.beginPath();
@@ -1440,9 +1411,8 @@ function drawShareCanvas() {
 
   ctx.fillStyle = "#94a3b8";
   ctx.font = `italic 22px ${SANS}`;
-  ctx.fillText("created by H\u00fcseyin Ba\u015ftu\u011f & Arda Toby \u00d6zdemir", PAD, 160);
+  ctx.fillText("created by Hüseyin Baştuğ & Arda Toby Özdemir", PAD, 160);
 
-  // --- Profil kodu ---
   const LS = 78;
   const codeStr = lastResults.map(r => r.letter).join("");
   ctx.font = `700 ${LS}px ${MONO}`;
@@ -1461,7 +1431,6 @@ function drawShareCanvas() {
   ctx.lineWidth = 2;
   ctx.stroke();
 
-  // Her harf kendi cluster renginde; RLG harfi beyaz
   ctx.textAlign = "left";
   let lx = codeX + BOXPX;
   lastResults.forEach((r, i) => {
@@ -1470,7 +1439,6 @@ function drawShareCanvas() {
     lx += letterW[i];
   });
 
-  // --- Kutup isimleri ---
   const poles = lastResults.map(r => r.pole).join("  \u00b7  ");
   ctx.textAlign = "center";
   ctx.fillStyle = "#94a3b8";
@@ -1482,7 +1450,6 @@ function drawShareCanvas() {
   }
   ctx.fillText(poles, W / 2, codeY + codeH + 46);
 
-  // --- Iki boyutlu cluster kareleri ---
   const byAxis = {};
   lastResults.forEach(r => { byAxis[r.axis] = r; });
 
@@ -1502,7 +1469,6 @@ function drawShareCanvas() {
 
     drawCanvasGrid(ctx, gx, gy, GS, entry, xr, yr, SANS, MONO);
 
-    // Kombinasyon + renk adi
     const cap = `${entry.key} \u00b7 ${entry.name}`;
     ctx.font = `600 24px ${MONO}`;
     const capW = ctx.measureText(cap).width;
@@ -1521,7 +1487,6 @@ function drawShareCanvas() {
     gx += GS + GGAP;
   });
 
-  // --- Religion cluster: tek boyutlu bar ---
   const rr = byAxis["RLG"];
   const cx = PAD + CW / 2;
   const barY = 1000;
@@ -1560,7 +1525,6 @@ function drawShareCanvas() {
   ctx.moveTo(cx, trackY); ctx.lineTo(cx, trackY + trackH);
   ctx.stroke();
 
-  // --- Vektor ---
   ctx.strokeStyle = "#334155";
   ctx.lineWidth = 2;
   ctx.beginPath();
@@ -1591,9 +1555,6 @@ function drawShareCanvas() {
   return canvas;
 }
 
-/* Gorseli sonuclar ekrana gelir gelmez hazirla.
-   navigator.share() iOS Safari'de kullanici hareketiyle ayni anda
-   cagrilmak zorunda; blob'u onceden uretmezsek paylasim engelleniyor. */
 function prepareShareImage() {
   shareBlob = null;
   try {
@@ -1619,12 +1580,17 @@ function shareImageNative() {
     files: [file],
     title: "5-Axis Compass",
     text: getShareText()
-  }).catch(() => { /* kullanici iptal etti */ });
+  }).catch(() => { });
 }
 
-function downloadShareImage() {
-  if (!shareBlob) return;
-  const url = URL.createObjectURL(shareBlob);
+async function downloadShareImage() {
+  let blob = shareBlob;
+  if (!blob) {
+    blob = await new Promise(resolve => drawShareCanvas().toBlob(resolve, "image/png"));
+  }
+  if (!blob) return;
+
+  const url = URL.createObjectURL(blob);
   const a = document.createElement("a");
   a.href = url;
   a.download = `5-axis-compass-${getProfileCode() || "result"}.png`;
