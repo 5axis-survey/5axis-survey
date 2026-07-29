@@ -742,10 +742,13 @@ body { background-color: #0f172a; color: #f8fafc; min-height: 100vh; display: fl
 
   <script>
 /* ============================================================
-   5-AXIS COMPASS  —  BUILD 18 (2D Kareler + 5 Eksen Barları Birlikte PNG'ye Alındı)
+   5-AXIS COMPASS  —  BUILD 19
+   Paylasim gorseli artik cluster bazli: her 2D kare kendi iki
+   ekseninin tek boyutlu barlariyla birlikte ciziliyor, Religion
+   ise tam genislikte tek bar olarak en altta yer aliyor.
    ============================================================ */
-window.COMPASS_BUILD = 18;
-console.log("5-Axis Compass build 18 yuklendi — 2D kareler ve 5 eksen barı tam entegre");
+window.COMPASS_BUILD = 19;
+console.log("5-Axis Compass build 19 yuklendi — cluster bazli paylasim gorseli (kare + kendi eksen barlari)");
 
 const SURVEY_DATA = [
   // --- ETHICS ---
@@ -1340,8 +1343,130 @@ function drawCanvasGrid(ctx, gx, gy, size, entry, xr, yr, SANS, MONO) {
   ctx.stroke();
 }
 
+/* ---------- PAYLASIM GORSELI: yardimci cizimler ---------- */
+
+function drawCanvasBar(ctx, r, x, y, w, SANS, MONO) {
+  const trackH = 20;
+  const cx = x + w / 2;
+
+  ctx.font = `19px ${SANS}`;
+  ctx.textAlign = "left";
+  ctx.fillStyle = (!r.isNeutral && !r.isPos) ? "#f8fafc" : "#64748b";
+  ctx.fillText(`${r.negKey}  ${r.neg}`, x, y);
+
+  ctx.textAlign = "right";
+  ctx.fillStyle = (!r.isNeutral && r.isPos) ? "#f8fafc" : "#64748b";
+  ctx.fillText(`${r.pos}  ${r.posKey}`, x + w, y);
+
+  ctx.textAlign = "center";
+  ctx.fillStyle = "#cbd5e1";
+  ctx.font = `700 19px ${MONO}`;
+  const sign = (r.isPos && !r.isNeutral) ? "+" : "";
+  ctx.fillText(`${r.axis} ${sign}${r.formatted}`, cx, y);
+
+  const trackY = y + 12;
+  roundRectPath(ctx, x, trackY, w, trackH, 10);
+  ctx.fillStyle = "#0f172a";
+  ctx.fill();
+  ctx.strokeStyle = "#334155";
+  ctx.lineWidth = 1.5;
+  ctx.stroke();
+
+  const halfW = (Math.abs(r.scaled) / 10) * (w / 2);
+  if (halfW > 1) {
+    roundRectPath(ctx, r.isPos ? cx : cx - halfW, trackY, halfW, trackH, 10);
+    ctx.fillStyle = r.isPos ? "#38bdf8" : "#a78bfa";
+    ctx.fill();
+  }
+
+  ctx.strokeStyle = "#64748b";
+  ctx.lineWidth = 1.5;
+  ctx.beginPath();
+  ctx.moveTo(cx, trackY);
+  ctx.lineTo(cx, trackY + trackH);
+  ctx.stroke();
+
+  ctx.font = `15px ${MONO}`;
+  ctx.fillStyle = "#64748b";
+  const legY = trackY + trackH + 22;
+  ctx.textAlign = "left";   ctx.fillText("-10", x, legY);
+  ctx.textAlign = "center"; ctx.fillText("0", cx, legY);
+  ctx.textAlign = "right";  ctx.fillText("+10", x + w, legY);
+}
+
+function drawPanelFrame(ctx, x, y, w, h) {
+  roundRectPath(ctx, x, y, w, h, 18);
+  ctx.fillStyle = "#0f172a";
+  ctx.fill();
+  ctx.strokeStyle = "#334155";
+  ctx.lineWidth = 2;
+  ctx.stroke();
+}
+
+function drawPanelHead(ctx, x, y, w, title, entry, SANS, MONO) {
+  const IP = 26;
+  ctx.textBaseline = "alphabetic";
+  ctx.textAlign = "left";
+  ctx.fillStyle = "#f8fafc";
+  ctx.font = `700 23px ${SANS}`;
+  ctx.fillText(title.toUpperCase(), x + IP, y + 42);
+
+  if (!entry) return;
+
+  const cap = `${entry.key} \u00b7 ${entry.name}`;
+  ctx.font = `700 22px ${MONO}`;
+  const capW = ctx.measureText(cap).width;
+  const right = x + w - IP;
+  const dotR = 9;
+
+  ctx.textAlign = "right";
+  ctx.fillStyle = "#f8fafc";
+  ctx.fillText(cap, right, y + 42);
+
+  ctx.beginPath();
+  ctx.arc(right - capW - 10 - dotR, y + 34, dotR, 0, Math.PI * 2);
+  ctx.fillStyle = entry.hex;
+  ctx.fill();
+}
+
+/* Kare + o kareyi olusturan IKI eksenin tek boyutlu barlari */
+function drawTwoAxisPanel(ctx, entry, byAxis, x, y, w, SANS, MONO) {
+  const IP = 26, GS = 300, HEAD = 62;
+  const panelH = HEAD + GS + 58;
+
+  drawPanelFrame(ctx, x, y, w, panelH);
+  drawPanelHead(ctx, x, y, w, entry.cluster.name, entry, SANS, MONO);
+
+  const xr = byAxis[entry.cluster.x];
+  const yr = byAxis[entry.cluster.y];
+
+  const gx = x + IP, gy = y + HEAD;
+  drawCanvasGrid(ctx, gx, gy, GS, entry, xr, yr, SANS, MONO);
+
+  const bx = gx + GS + 44;
+  const bw = (x + w - IP) - bx;
+  drawCanvasBar(ctx, xr, bx, gy + 86,  bw, SANS, MONO);
+  drawCanvasBar(ctx, yr, bx, gy + 206, bw, SANS, MONO);
+
+  return panelH;
+}
+
+/* Tek eksenli cluster (Religion) */
+function drawSingleAxisPanel(ctx, cluster, r, x, y, w, SANS, MONO) {
+  const IP = 26, HEAD = 62;
+  const panelH = HEAD + 96;
+
+  drawPanelFrame(ctx, x, y, w, panelH);
+  drawPanelHead(ctx, x, y, w, cluster.name, null, SANS, MONO);
+  drawCanvasBar(ctx, r, x + IP, y + HEAD + 24, w - IP * 2, SANS, MONO);
+
+  return panelH;
+}
+
+/* ---------- ANA GORSEL ---------- */
+
 function drawShareCanvas() {
-  const W = 1080, H = 1650;
+  const W = 1080, H = 1740;
   const SANS = "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif";
   const MONO = "'Courier New', Courier, monospace";
   const PAD = 90;
@@ -1373,9 +1498,8 @@ function drawShareCanvas() {
   ctx.font = `italic 22px ${SANS}`;
   ctx.fillText("created by Hüseyin Baştuğ & Arda Toby Özdemir", PAD, 160);
 
-  // --- Profil Kodu ---
+  // --- Profil kodu ---
   const LS = 78;
-  const codeStr = lastResults.map(r => r.letter).join("");
   ctx.font = `700 ${LS}px ${MONO}`;
 
   const BOXPX = 40, BOXPY = 24;
@@ -1383,7 +1507,7 @@ function drawShareCanvas() {
   const codeW = letterW.reduce((a, b) => a + b, 0) + BOXPX * 2;
   const codeH = LS + BOXPY * 2;
   const codeX = (W - codeW) / 2;
-  const codeY = 210;
+  const codeY = 200;
 
   roundRectPath(ctx, codeX, codeY, codeW, codeH, 16);
   ctx.fillStyle = "#0f172a";
@@ -1411,103 +1535,27 @@ function drawShareCanvas() {
   }
   ctx.fillText(poles, W / 2, codeY + codeH + 46);
 
+  // --- Cluster panelleri: kare + kendi eksen barlari ---
   const byAxis = {};
   lastResults.forEach(r => { byAxis[r.axis] = r; });
 
-  // --- 1. SADECE İKİ BOYUTLU CLUSTER KARELERİ (Philosophical & Political) ---
-  const GS = 340, GGAP = 80;
-  const gTotal = GS * 2 + GGAP;
-  let gx = (W - gTotal) / 2;
-  const gy = 480;
-
-  // Sadece combos içeren (2 boyutlu) cluster'lar filtrelenir
-  const twoDClusters = lastClusters.filter(entry => entry.cluster.combos);
-
-  twoDClusters.forEach(entry => {
-    const xr = byAxis[entry.cluster.x];
-    const yr = byAxis[entry.cluster.y];
-
-    ctx.textAlign = "center";
-    ctx.fillStyle = "#cbd5e1";
-    ctx.font = `600 23px ${SANS}`;
-    ctx.fillText(entry.cluster.name.replace(" Cluster", ""), gx + GS / 2, gy - 16);
-
-    drawCanvasGrid(ctx, gx, gy, GS, entry, xr, yr, SANS, MONO);
-
-    const cap = `${entry.key} \u00b7 ${entry.name}`;
-    ctx.font = `600 22px ${MONO}`;
-    const capW = ctx.measureText(cap).width;
-    const dotR = 8;
-    const capX = gx + GS / 2 - (capW + dotR * 2 + 10) / 2;
-
-    ctx.beginPath();
-    ctx.arc(capX + dotR, gy + GS + 32, dotR, 0, Math.PI * 2);
-    ctx.fillStyle = entry.hex;
-    ctx.fill();
-
-    ctx.textAlign = "left";
-    ctx.fillStyle = "#f8fafc";
-    ctx.fillText(cap, capX + dotR * 2 + 10, gy + GS + 39);
-
-    gx += GS + GGAP;
+  let y = 440;
+  lastClusters.forEach(entry => {
+    y += drawTwoAxisPanel(ctx, entry, byAxis, PAD, y, CW, SANS, MONO) + 28;
   });
 
-  // --- 2. 5 EKSENİN TAMAMI İÇİN ÇİFT UÇLU BARLAR (ETH, HN, TRB, JST, RLG) ---
-  let startBarY = 960;
-  const barGap = 72;
-  const trackH = 20;
-  const cx = PAD + CW / 2;
+  const relCluster = CLUSTERS.find(c => c.single);
+  if (relCluster && byAxis[relCluster.single]) {
+    y += drawSingleAxisPanel(ctx, relCluster, byAxis[relCluster.single], PAD, y, CW, SANS, MONO) + 28;
+  }
 
-  ctx.textAlign = "center";
-  ctx.fillStyle = "#38bdf8";
-  ctx.font = `700 24px ${SANS}`;
-  ctx.fillText("Detailed 5-Axis Scores", W / 2, startBarY - 24);
-
-  lastResults.forEach((r, idx) => {
-    const currentY = startBarY + idx * barGap;
-
-    ctx.font = `20px ${SANS}`;
-    ctx.textAlign = "left";
-    ctx.fillStyle = (!r.isNeutral && !r.isPos) ? "#f8fafc" : "#64748b";
-    ctx.fillText(`${r.negKey}  ${r.neg}`, PAD, currentY);
-
-    ctx.textAlign = "right";
-    ctx.fillStyle = (!r.isNeutral && r.isPos) ? "#f8fafc" : "#64748b";
-    ctx.fillText(`${r.pos}  ${r.posKey}`, PAD + CW, currentY);
-
-    ctx.textAlign = "center";
-    ctx.fillStyle = "#cbd5e1";
-    ctx.font = `700 20px ${MONO}`;
-    const sign = (r.isPos && !r.isNeutral) ? "+" : "";
-    ctx.fillText(`${r.axis} ${sign}${r.formatted}`, cx, currentY);
-
-    const trackY = currentY + 10;
-    roundRectPath(ctx, PAD, trackY, CW, trackH, 10);
-    ctx.fillStyle = "#0f172a";
-    ctx.fill();
-    ctx.strokeStyle = "#334155";
-    ctx.lineWidth = 1.5;
-    ctx.stroke();
-
-    const halfW = (Math.abs(r.scaled) / 10) * (CW / 2);
-    if (halfW > 1) {
-      roundRectPath(ctx, r.isPos ? cx : cx - halfW, trackY, halfW, trackH, 10);
-      ctx.fillStyle = r.isPos ? "#38bdf8" : "#a78bfa";
-      ctx.fill();
-    }
-    ctx.strokeStyle = "#64748b";
-    ctx.lineWidth = 1.5;
-    ctx.beginPath();
-    ctx.moveTo(cx, trackY); ctx.lineTo(cx, trackY + trackH);
-    ctx.stroke();
-  });
-
-  // --- Vektör & Footer ---
-  const footerY = 1380;
+  // --- Vektor & footer ---
+  const footerY = y + 20;
   ctx.strokeStyle = "#334155";
   ctx.lineWidth = 2;
   ctx.beginPath();
-  ctx.moveTo(PAD, footerY); ctx.lineTo(PAD + CW, footerY);
+  ctx.moveTo(PAD, footerY);
+  ctx.lineTo(PAD + CW, footerY);
   ctx.stroke();
 
   ctx.textAlign = "center";
