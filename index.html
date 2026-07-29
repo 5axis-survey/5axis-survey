@@ -39,7 +39,7 @@ body { background-color: #0f172a; color: #f8fafc; min-height: 100vh; display: fl
 /* Navbar Styling */
 .navbar {
   width: 100%;
-  max-width: 780px; /* Kart genişliği ile eşitlendi */
+  max-width: 780px;
   display: flex;
   flex-direction: column;
   gap: 12px;
@@ -61,9 +61,9 @@ body { background-color: #0f172a; color: #f8fafc; min-height: 100vh; display: fl
   background: transparent;
   border: 1px solid transparent;
   color: #94a3b8;
-  padding: 8px 16px; /* Butonlar büyütüldü */
+  padding: 8px 16px;
   border-radius: 8px;
-  font-size: 0.95rem; /* Font büyütüldü */
+  font-size: 0.95rem;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.2s ease;
@@ -97,7 +97,6 @@ body { background-color: #0f172a; color: #f8fafc; min-height: 100vh; display: fl
 
 #progress-text { font-size: 0.9rem; color: #94a3b8; font-style: italic; font-weight: 500; }
 
-/* Previous Butonu - Büyütüldü ve Sağ Üst İki Köşe Düzeni */
 .btn-prev, #btn-prev {
   background: #0f172a;
   border: 1px solid #475569;
@@ -119,14 +118,13 @@ body { background-color: #0f172a; color: #f8fafc; min-height: 100vh; display: fl
 .progress-bar-bg, .progress-bar-container { background-color: #334155; height: 8px; border-radius: 4px; overflow: hidden; }
 .progress-bar-fill, .progress-fill { background-color: #38bdf8; height: 100%; width: 0%; transition: width 0.3s ease; }
 
-/* BÜYÜTÜLMÜŞ SORU DİKDÖRTGENİ */
 .question-box {
   background-color: #0f172a;
   border: 1px solid #334155;
   border-radius: 12px;
   padding: 32px 24px;
   margin: 24px 0 28px 0;
-  min-height: 140px; /* Yükseklik ferahlatıldı */
+  min-height: 140px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -134,22 +132,21 @@ body { background-color: #0f172a; color: #f8fafc; min-height: 100vh; display: fl
 }
 
 #question-text { 
-  font-size: 1.35rem; /* Font belirginleştirildi */
+  font-size: 1.35rem;
   color: #f8fafc;
   line-height: 1.5; 
   font-weight: 500;
   margin: 0; 
 }
 
-/* Seçenek Butonları - Büyütüldü */
 .options-group, .options-grid { display: flex; flex-direction: column; gap: 14px; }
 .btn-option { 
   background-color: #334155; 
   color: #f8fafc; 
   border: 1px solid #475569; 
-  padding: 16px 20px; /* İç alan genişletildi */
+  padding: 16px 20px;
   border-radius: 10px; 
-  font-size: 1.05rem; /* Punto büyütüldü */
+  font-size: 1.05rem;
   font-weight: 600; 
   cursor: pointer; 
   transition: all 0.2s ease; 
@@ -212,11 +209,6 @@ body { background-color: #0f172a; color: #f8fafc; min-height: 100vh; display: fl
 .input-field:focus { border-color: #38bdf8; }
 .textarea-field { resize: vertical; min-height: 120px; }
 
-/* ============================================================
-   SONUÇ EKRANI — ÇİFT UÇLU EKSEN BARLARI  (-10 ... +10)
-   Sol uç: S / C / U / E / L     Sağ uç: O / R / T / J / P
-   ============================================================ */
-
 .results-container {
   display: flex;
   flex-direction: column;
@@ -224,7 +216,6 @@ body { background-color: #0f172a; color: #f8fafc; min-height: 100vh; display: fl
   margin-top: 24px;
 }
 
-/* Üstteki ölçek şeridi */
 .axis-legend {
   display: flex;
   justify-content: space-between;
@@ -242,7 +233,6 @@ body { background-color: #0f172a; color: #f8fafc; min-height: 100vh; display: fl
   gap: 9px;
 }
 
-/* Etiket satırı: sol uç — skor — sağ uç */
 .axis-head {
   display: flex;
   align-items: baseline;
@@ -255,8 +245,6 @@ body { background-color: #0f172a; color: #f8fafc; min-height: 100vh; display: fl
 
 .axis-side { flex: 1 1 0; min-width: 0; }
 .axis-side.right { text-align: right; }
-
-/* Kullanıcının eğildiği taraf öne çıkar */
 .axis-side.dominant { color: #f8fafc; font-weight: 600; }
 
 .axis-key {
@@ -286,7 +274,6 @@ body { background-color: #0f172a; color: #f8fafc; min-height: 100vh; display: fl
   margin-left: 5px;
 }
 
-/* Barın kendisi */
 .axis-track {
   position: relative;
   height: 14px;
@@ -296,7 +283,6 @@ body { background-color: #0f172a; color: #f8fafc; min-height: 100vh; display: fl
   overflow: hidden;
 }
 
-/* Ortadaki sıfır çizgisi */
 .axis-midline {
   position: absolute;
   top: 0;
@@ -309,7 +295,6 @@ body { background-color: #0f172a; color: #f8fafc; min-height: 100vh; display: fl
   pointer-events: none;
 }
 
-/* Merkezden dışarı doğru büyüyen dolgu */
 .axis-fill {
   position: absolute;
   top: 0;
@@ -319,21 +304,19 @@ body { background-color: #0f172a; color: #f8fafc; min-height: 100vh; display: fl
   transition: width 0.75s cubic-bezier(0.22, 1, 0.36, 1),
               left  0.75s cubic-bezier(0.22, 1, 0.36, 1);
 }
-.axis-fill.pos { background-color: #38bdf8; }  /* sağ taraf: O R T J P */
-.axis-fill.neg { background-color: #a78bfa; }  /* sol taraf:  S C U E L */
+.axis-fill.pos { background-color: #38bdf8; }
+.axis-fill.neg { background-color: #a78bfa; }
 
 @media (prefers-reduced-motion: reduce) {
   .axis-fill { transition: none; }
 }
 
-/* Dar ekranlarda skoru alt satıra al */
 @media (max-width: 540px) {
   .axis-head { flex-wrap: wrap; gap: 6px 10px; font-size: 0.82rem; }
   .axis-side { flex: 1 1 40%; }
   .axis-score { order: 3; flex: 1 0 100%; text-align: center; }
 }
 
-/* ---- Sonuç ekranı yardımcı stilleri ---- */
 .subtitle {
   color: #94a3b8;
   font-size: 0.95rem;
@@ -349,7 +332,6 @@ body { background-color: #0f172a; color: #f8fafc; min-height: 100vh; display: fl
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-/* ---- YOUR PROFILE KUTUSU (32 kombinasyondan biri) ---- */
 .profile-box {
   background-color: #0f172a;
   border: 1px solid #334155;
@@ -374,7 +356,6 @@ body { background-color: #0f172a; color: #f8fafc; min-height: 100vh; display: fl
   font-weight: 600;
 }
 
-/* Profil kodu: tek parça, tek renk, sıkı harf aralığı */
 .vector-code {
   display: inline-block;
   background-color: #1e293b;
@@ -416,7 +397,6 @@ body { background-color: #0f172a; color: #f8fafc; min-height: 100vh; display: fl
   .vector-code { font-size: 1.9rem; padding: 12px 18px; }
 }
 
-/* ---- Daha once secilmis cevabin isaretlenmesi ---- */
 .btn-option { position: relative; }
 
 .btn-option.selected {
@@ -436,7 +416,6 @@ body { background-color: #0f172a; color: #f8fafc; min-height: 100vh; display: fl
   font-weight: 700;
 }
 
-/* Sonuçtaki iki buton yan yana (.btn-secondary daha önce tanımsızdı) */
 .result-actions {
   display: flex;
   gap: 12px;
@@ -462,11 +441,6 @@ body { background-color: #0f172a; color: #f8fafc; min-height: 100vh; display: fl
   transition: all 0.2s ease;
 }
 .btn-secondary:hover { background-color: #38bdf8; color: #0f172a; }
-
-
-/* ============================================================
-   PAYLAŞIM KUTUSU
-   ============================================================ */
 
 .share-box {
   background-color: #0f172a;
@@ -525,11 +499,6 @@ body { background-color: #0f172a; color: #f8fafc; min-height: 100vh; display: fl
   line-height: 1.55;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
-
-
-/* ============================================================
-   CLUSTER BLOKLARI
-   ============================================================ */
 
 .cluster {
   background-color: #0f172a;
@@ -604,7 +573,6 @@ body { background-color: #0f172a; color: #f8fafc; min-height: 100vh; display: fl
   .cluster-body { flex-direction: column; }
   .cluster-grid { flex: 0 0 auto; width: 100%; max-width: 280px; margin: 0 auto 4px auto; }
 }
-
   </style>
 </head>
 <body>
@@ -633,7 +601,6 @@ body { background-color: #0f172a; color: #f8fafc; min-height: 100vh; display: fl
       <div id="survey-view" class="card">
         <div class="progress-info">
           <span id="progress-text">Question 1 of 37</span>
-          <!-- Previous Butonu Sağ Üst Köşeye Taşındı -->
           <button id="btn-prev" class="btn-prev" disabled>← Previous</button>
         </div>
 
@@ -645,9 +612,7 @@ body { background-color: #0f172a; color: #f8fafc; min-height: 100vh; display: fl
           <h2 id="question-text">Loading question...</h2>
         </div>
 
-        <div id="options-container" class="options-grid">
-          <!-- Options dynamically rendered by script.js -->
-        </div>
+        <div id="options-container" class="options-grid"></div>
       </div>
 
       <!-- Results View (Hidden initially) -->
@@ -655,7 +620,6 @@ body { background-color: #0f172a; color: #f8fafc; min-height: 100vh; display: fl
         <h2>Your Results</h2>
         <p class="subtitle">Based on your responses across 5 philosophical axes:</p>
 
-        <!-- Profil kutusu: 32 olasi kombinasyondan biri -->
         <div class="profile-box">
           <div class="profile-top">
             <span class="profile-label">Your Profile</span>
@@ -665,9 +629,7 @@ body { background-color: #0f172a; color: #f8fafc; min-height: 100vh; display: fl
           <p id="profile-poles" class="profile-poles"></p>
         </div>
 
-        <div id="results-list" class="results-container">
-          <!-- Results rendered dynamically -->
-        </div>
+        <div id="results-list" class="results-container"></div>
 
         <div class="vector-box">
           <span class="vector-label">Your Result Vector:</span>
@@ -780,10 +742,10 @@ body { background-color: #0f172a; color: #f8fafc; min-height: 100vh; display: fl
 
   <script>
 /* ============================================================
-   5-AXIS COMPASS  —  BUILD 15 (E-J yatay eksene alindi)
+   5-AXIS COMPASS  —  BUILD 16 (Dinamik Harf Etiketleri Düzeltildi)
    ============================================================ */
-window.COMPASS_BUILD = 15;
-console.log("5-Axis Compass build 15 yuklendi — E-J ekseni yatayda");
+window.COMPASS_BUILD = 16;
+console.log("5-Axis Compass build 16 yuklendi — Dinamik eksen harfleri aktif");
 
 const SURVEY_DATA = [
   // --- ETHICS ---
@@ -846,8 +808,6 @@ const AXIS_LABELS = {
 
 const AXIS_ORDER = ["ETH", "HN", "TRB", "JST", "RLG"];
 
-/* Bes eksen uc cluster altinda toplaniyor.
-   Political Cluster'da JST (E-J) yataya, TRB (U-T) dikey eksene alindi. */
 const CLUSTERS = [
   {
     id: "PHI",
@@ -880,14 +840,14 @@ const CLUSTERS = [
   }
 ];
 
-let lastClusters = [];   // paylasim gorseli icin cluster anlik goruntusu
+let lastClusters = [];
 
 let currentIndex = 0;
 let rawScores = {};
 let maxPossibleScores = {};
 let userAnswers = [];
-let lastResults = [];      // paylasim gorseli icin sonuc anlik goruntusu
-let shareBlob = null;      // uretilen PNG
+let lastResults = [];
+let shareBlob = null;
 
 function calculateBounds() {
   SURVEY_DATA.forEach(q => {
@@ -1062,7 +1022,7 @@ function buildGridSVG(cluster, xr, yr) {
       <line x1="120" y1="20" x2="120" y2="220" stroke="#64748b" stroke-width="1"></line>
       <line x1="20" y1="120" x2="220" y2="120" stroke="#64748b" stroke-width="1"></line>
       <rect x="20" y="20" width="200" height="200" fill="none" stroke="#475569" stroke-width="1.5" rx="3"></rect>
-      <text class="grid-label" x="120" y="13"  text-anchor="middle">${yr.posKey}</text>
+      <text class="grid-label" x="120" y="14"  text-anchor="middle">${yr.posKey}</text>
       <text class="grid-label" x="120" y="236" text-anchor="middle">${yr.negKey}</text>
       <text class="grid-label" x="9"   y="125" text-anchor="middle">${xr.negKey}</text>
       <text class="grid-label" x="231" y="125" text-anchor="middle">${xr.posKey}</text>
@@ -1624,7 +1584,6 @@ document.addEventListener("DOMContentLoaded", () => {
   calculateBounds();
   loadQuestion();
 });
-
   </script>
 </body>
 </html>
