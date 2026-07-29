@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>5-Axis Political & Philosophical Compass</title>
+  <title>5-Axis Political &amp; Philosophical Compass</title>
   <style>
 * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
 body { background-color: #0f172a; color: #f8fafc; min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 20px; }
@@ -181,7 +181,7 @@ body { background-color: #0f172a; color: #f8fafc; min-height: 100vh; display: fl
   padding: 14px; 
   border-radius: 10px; 
   cursor: pointer; 
-  transition: all 0.2s ease;
+  transition: all 0.2s ease; 
 }
 .btn-primary:hover { background-color: #0284c7; color: #ffffff; }
 
@@ -208,6 +208,116 @@ body { background-color: #0f172a; color: #f8fafc; min-height: 100vh; display: fl
 }
 .input-field:focus { border-color: #38bdf8; }
 .textarea-field { resize: vertical; min-height: 120px; }
+
+/* ============ INTRO & QUESTIONNAIRE ============ */
+.intro-text {
+  color: #cbd5e1;
+  line-height: 1.7;
+  font-size: 1.02rem;
+  margin-bottom: 16px;
+}
+.intro-text strong { color: #f8fafc; }
+
+.demo-field { margin-bottom: 28px; }
+
+.demo-label {
+  display: block;
+  font-size: 0.85rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #94a3b8;
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+
+.chip-row { display: flex; flex-wrap: wrap; gap: 10px; }
+
+.chip {
+  background-color: #334155;
+  border: 1px solid #475569;
+  color: #f8fafc;
+  padding: 11px 20px;
+  border-radius: 999px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.chip:hover { border-color: #38bdf8; background-color: #0284c7; }
+.chip:focus-visible { outline: 2px solid #38bdf8; outline-offset: 2px; }
+.chip.selected { background-color: #38bdf8; border-color: #38bdf8; color: #0f172a; }
+
+.demo-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 32px;
+  flex-wrap: wrap;
+}
+.demo-actions .btn-primary,
+.demo-actions .btn-secondary {
+  flex: 1 1 200px;
+  margin-top: 0;
+  width: auto;
+}
+
+/* Ülke seçici (combobox) */
+.combo { position: relative; }
+
+.combo-input {
+  width: 100%;
+  background-color: #0f172a;
+  border: 1px solid #334155;
+  color: #f8fafc;
+  padding: 14px;
+  border-radius: 8px;
+  font-size: 1rem;
+  outline: none;
+}
+.combo-input:focus { border-color: #38bdf8; }
+.combo-input::placeholder { color: #64748b; }
+
+.combo-list {
+  position: absolute;
+  z-index: 30;
+  top: calc(100% + 6px);
+  left: 0;
+  right: 0;
+  max-height: 260px;
+  overflow-y: auto;
+  background-color: #0f172a;
+  border: 1px solid #475569;
+  border-radius: 10px;
+  padding: 6px;
+  box-shadow: 0 12px 28px rgba(0,0,0,0.45);
+}
+
+.combo-opt {
+  padding: 10px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  color: #cbd5e1;
+  font-size: 0.95rem;
+}
+.combo-opt:hover, .combo-opt.active { background-color: #334155; color: #f8fafc; }
+
+.combo-empty {
+  padding: 10px 12px;
+  color: #64748b;
+  font-size: 0.9rem;
+  font-style: italic;
+}
+
+.combo-list::-webkit-scrollbar { width: 10px; }
+.combo-list::-webkit-scrollbar-track { background: #0f172a; border-radius: 8px; }
+.combo-list::-webkit-scrollbar-thumb { background: #334155; border-radius: 8px; border: 2px solid #0f172a; }
+.combo-list::-webkit-scrollbar-thumb:hover { background: #475569; }
+
+.field-hint {
+  margin-top: 8px;
+  font-size: 0.85rem;
+  color: #f87171;
+  min-height: 1em;
+}
 
 .results-container {
   display: flex;
@@ -582,7 +692,7 @@ body { background-color: #0f172a; color: #f8fafc; min-height: 100vh; display: fl
     <div class="nav-container">
       <div class="brand-box">
         <h1 class="logo">5-Axis Compass</h1>
-        <span class="credits">created by Hüseyin Baştuğ & Arda Toby Özdemir</span>
+        <span class="credits">created by Hüseyin Baştuğ &amp; Arda Toby Özdemir</span>
       </div>
       <nav class="nav-links">
         <button id="nav-test" class="nav-btn active">Test</button>
@@ -597,8 +707,64 @@ body { background-color: #0f172a; color: #f8fafc; min-height: 100vh; display: fl
     <!-- PAGE 1: TEST PAGE -->
     <section id="page-test" class="page-section">
 
+      <!-- Intro View -->
+      <div id="intro-view" class="card">
+        <h2>Welcome</h2>
+        <p class="intro-text">
+          This is a 37-statement survey that places your worldview on five independent axes: ethics,
+          human nature, tribalism, justice, and religion. For each statement you pick how strongly you
+          agree or disagree, and at the end you get a five-letter profile, a score on every axis, and a
+          shareable image. It takes about five minutes, and you can go back and change any answer while
+          the test is running.
+        </p>
+        <p class="intro-text">
+          <strong>We keep your answers, but not your identity.</strong> When you finish, your responses,
+          your five scores, and the optional details on the next page are saved to a private spreadsheet
+          and studied as group statistics. We never collect your name, your email, or your IP address,
+          and there is no account, no login, and no tracking cookie — so a saved row cannot be traced
+          back to the person who filled it in, not even by us. If you leave a comment afterwards, it
+          travels separately, under whatever nickname you choose.
+        </p>
+        <button id="btn-start" class="btn-primary">Start</button>
+      </div>
+
+      <!-- Questionnaire View -->
+      <div id="demo-view" class="card hidden">
+        <h2>Three optional questions</h2>
+        <p class="subtitle">
+          These help us see how results differ between broad groups. Every question is optional — skip
+          any of them, or skip the whole page.
+        </p>
+
+        <div class="demo-field" style="margin-top:28px;">
+          <span class="demo-label" id="label-gender">Gender</span>
+          <div id="gender-options" class="chip-row" role="group" aria-labelledby="label-gender"></div>
+        </div>
+
+        <div class="demo-field">
+          <span class="demo-label" id="label-age">Age</span>
+          <div id="age-options" class="chip-row" role="group" aria-labelledby="label-age"></div>
+        </div>
+
+        <div class="demo-field">
+          <label class="demo-label" for="nat-input">Nationality</label>
+          <div id="nat-combo" class="combo">
+            <input type="text" id="nat-input" class="combo-input" autocomplete="off"
+                   role="combobox" aria-expanded="false" aria-autocomplete="list"
+                   aria-controls="nat-list" placeholder="Type to search, or pick from the list">
+            <div id="nat-list" class="combo-list hidden" role="listbox" aria-label="Countries"></div>
+          </div>
+          <p id="nat-hint" class="field-hint"></p>
+        </div>
+
+        <div class="demo-actions">
+          <button type="button" id="btn-demo-next" class="btn-primary">Next</button>
+          <button type="button" id="btn-demo-skip" class="btn-secondary">Skip</button>
+        </div>
+      </div>
+
       <!-- Survey Active View -->
-      <div id="survey-view" class="card">
+      <div id="survey-view" class="card hidden">
         <div class="progress-info">
           <span id="progress-text">Question 1 of 37</span>
           <button id="btn-prev" class="btn-prev" disabled>← Previous</button>
@@ -666,7 +832,7 @@ body { background-color: #0f172a; color: #f8fafc; min-height: 100vh; display: fl
     <!-- PAGE 2: ABOUT US PAGE -->
     <section id="page-about" class="page-section hidden">
       <div class="card">
-        <h2>About Us & Methodology</h2>
+        <h2>About Us &amp; Methodology</h2>
         <p class="about-intro">
           The 5-Axis Philosophical Compass is a multi-dimensional analytical tool engineered to evaluate and map an individual's worldview across five core philosophical and political dimensions. Conventional political spectrums often reduce complex worldviews to a single Left-Right paradigm or a simple two-axis grid, collapsing distinct ethical, ontological, and social stances into ambiguous categories.
         </p>
@@ -707,7 +873,7 @@ body { background-color: #0f172a; color: #f8fafc; min-height: 100vh; display: fl
         </div>
 
         <div class="axis-explanation">
-          <h4>5. Religion & Transcendence (RLG): Spiritualism vs. Laicity</h4>
+          <h4>5. Religion &amp; Transcendence (RLG): Spiritualism vs. Laicity</h4>
           <p>
             This axis assesses the role of metaphysical frameworks in your understanding of existence. <strong>Spiritualism</strong> acknowledges innate purpose, non-material forces, and the value of faith or prayer in human history. <strong>Laicity</strong> maintains a strictly materialist framework, viewing empirical science as the sole source of valid knowledge and regarding religious structures as historical artifacts.
           </p>
@@ -742,13 +908,13 @@ body { background-color: #0f172a; color: #f8fafc; min-height: 100vh; display: fl
 
   <script>
 /* ============================================================
-   5-AXIS COMPASS  —  BUILD 19
-   Paylasim gorseli artik cluster bazli: her 2D kare kendi iki
-   ekseninin tek boyutlu barlariyla birlikte ciziliyor, Religion
-   ise tam genislikte tek bar olarak en altta yer aliyor.
+   5-AXIS COMPASS  —  BUILD 22
+   Yeni: acilis bilgilendirme ekrani, opsiyonel demografi
+   anketi (gender / age / nationality) ve tamamlanan testlerin
+   Google Sheets'e anonim satir olarak kaydedilmesi.
    ============================================================ */
-window.COMPASS_BUILD = 19;
-console.log("5-Axis Compass build 19 yuklendi — cluster bazli paylasim gorseli (kare + kendi eksen barlari)");
+window.COMPASS_BUILD = 22;
+console.log("5-Axis Compass build 22 yuklendi — Welcome ekrani, demografi anketi, anonim sonuc kaydi");
 
 const SURVEY_DATA = [
   // --- ETHICS ---
@@ -851,6 +1017,416 @@ let maxPossibleScores = {};
 let userAnswers = [];
 let lastResults = [];
 let shareBlob = null;
+
+/* ============================================================
+   AKIS KONTROLU: intro -> demo -> survey -> result
+   ============================================================ */
+
+const STEP_VIEWS = {
+  intro:  "intro-view",
+  demo:   "demo-view",
+  survey: "survey-view",
+  result: "result-view"
+};
+
+function showStep(step) {
+  Object.entries(STEP_VIEWS).forEach(([name, id]) => {
+    const el = document.getElementById(id);
+    if (el) el.classList.toggle("hidden", name !== step);
+  });
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+function startSurvey() {
+  surveyStartedAt = Date.now();
+  showStep("survey");
+  loadQuestion();
+}
+
+/* ============================================================
+   OPSIYONEL DEMOGRAFI ANKETI
+   ============================================================ */
+
+const GENDER_OPTIONS = ["Male", "Female", "Queer", "Prefer not to say"];
+const AGE_OPTIONS = ["Below 18", "18-24", "25-34", "35-44", "45-54", "55-64", "65+", "Prefer not to say"];
+
+const demographics = { gender: "", age: "", nationality: "" };
+
+/* ISO 3166-1 alpha-2 kodlari; isimler Intl.DisplayNames ile uretilir */
+const COUNTRY_CODES = [
+  "AD","AE","AF","AG","AI","AL","AM","AO","AR","AS","AT","AU","AW","AX","AZ",
+  "BA","BB","BD","BE","BF","BG","BH","BI","BJ","BL","BM","BN","BO","BQ","BR","BS","BT","BW","BY","BZ",
+  "CA","CC","CD","CF","CG","CH","CI","CK","CL","CM","CN","CO","CR","CU","CV","CW","CX","CY","CZ",
+  "DE","DJ","DK","DM","DO","DZ",
+  "EC","EE","EG","EH","ER","ES","ET",
+  "FI","FJ","FK","FM","FO","FR",
+  "GA","GB","GD","GE","GF","GG","GH","GI","GL","GM","GN","GP","GQ","GR","GT","GU","GW","GY",
+  "HK","HN","HR","HT","HU",
+  "ID","IE","IL","IM","IN","IO","IQ","IR","IS","IT",
+  "JE","JM","JO","JP",
+  "KE","KG","KH","KI","KM","KN","KP","KR","KW","KY","KZ",
+  "LA","LB","LC","LI","LK","LR","LS","LT","LU","LV","LY",
+  "MA","MC","MD","ME","MF","MG","MH","MK","ML","MM","MN","MO","MP","MQ","MR","MS","MT","MU","MV","MW","MX","MY","MZ",
+  "NA","NC","NE","NF","NG","NI","NL","NO","NP","NR","NU","NZ",
+  "OM",
+  "PA","PE","PF","PG","PH","PK","PL","PM","PN","PR","PS","PT","PW","PY",
+  "QA",
+  "RE","RO","RS","RU","RW",
+  "SA","SB","SC","SD","SE","SG","SH","SI","SJ","SK","SL","SM","SN","SO","SR","SS","ST","SV","SX","SY","SZ",
+  "TC","TD","TG","TH","TJ","TK","TL","TM","TN","TO","TR","TT","TV","TW","TZ",
+  "UA","UG","US","UY","UZ",
+  "VA","VC","VE","VG","VI","VN","VU",
+  "WF","WS",
+  "YE","YT",
+  "ZA","ZM","ZW"
+];
+
+/* Resmi isimle aranmayan yaygin kullanimlar (Turkey -> Türkiye gibi) */
+const COUNTRY_ALIASES = {
+  TR: "turkey",
+  PS: "palestine",
+  CD: "democratic republic of the congo drc zaire",
+  CG: "republic of the congo",
+  KR: "korea republic of korea",
+  KP: "korea dprk",
+  AE: "uae emirates",
+  VA: "holy see",
+  MM: "burma",
+  CZ: "czech republic",
+  CI: "ivory coast cote divoire",
+  SZ: "swaziland",
+  TL: "east timor",
+  CV: "cabo verde",
+  MK: "macedonia",
+  NL: "holland",
+  GB: "uk britain great britain england scotland wales northern ireland",
+  US: "usa united states of america",
+  RU: "russian federation",
+  SY: "syrian arab republic",
+  LA: "lao pdr",
+  IR: "islamic republic of iran persia",
+  VN: "viet nam",
+  BN: "brunei darussalam",
+  MD: "republic of moldova",
+  TW: "republic of china",
+  HK: "hong kong",
+  MO: "macao macau",
+  BO: "plurinational state of bolivia",
+  VE: "bolivarian republic of venezuela",
+  TZ: "united republic of tanzania",
+  FK: "malvinas",
+  GR: "hellas",
+  CH: "helvetia",
+  DE: "deutschland",
+  ES: "espana",
+  JP: "nippon",
+  CN: "prc peoples republic of china",
+  EG: "arab republic of egypt",
+  SA: "ksa kingdom of saudi arabia"
+};
+
+let countryList = [];
+let comboMatches = [];
+let comboActive = -1;
+
+/* Aksan ve buyuk/kucuk harf farkini yok sayan arama anahtari */
+function normalizeText(value) {
+  const text = String(value || "").toLowerCase();
+  try {
+    return text.normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[’']/g, "");
+  } catch (err) {
+    return text;
+  }
+}
+
+function buildChipGroup(containerId, options, field) {
+  const box = document.getElementById(containerId);
+  if (!box) return;
+
+  box.innerHTML = "";
+  options.forEach(optText => {
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "chip";
+    btn.innerText = optText;
+    btn.setAttribute("aria-pressed", "false");
+
+    btn.onclick = () => {
+      // Ayni secenege tekrar basmak secimi kaldirir
+      demographics[field] = (demographics[field] === optText) ? "" : optText;
+      box.querySelectorAll(".chip").forEach(chip => {
+        const on = (chip.innerText === demographics[field]);
+        chip.classList.toggle("selected", on);
+        chip.setAttribute("aria-pressed", on ? "true" : "false");
+      });
+    };
+
+    box.appendChild(btn);
+  });
+}
+
+function buildCountryList() {
+  let display = null;
+  try {
+    display = new Intl.DisplayNames(["en"], { type: "region" });
+  } catch (err) {
+    return null;
+  }
+  if (!display) return null;
+
+  const list = [];
+  COUNTRY_CODES.forEach(code => {
+    let name = null;
+    try { name = display.of(code); } catch (err) { name = null; }
+    if (!name || name === code) return;
+
+    list.push({
+      name: name,
+      search: normalizeText(name + " " + (COUNTRY_ALIASES[code] || ""))
+    });
+  });
+
+  if (!list.length) return null;
+  return list.sort((a, b) => a.name.localeCompare(b.name));
+}
+
+function setNatHint(msg) {
+  const hint = document.getElementById("nat-hint");
+  if (hint) hint.innerText = msg || "";
+}
+
+function openCombo() {
+  const list = document.getElementById("nat-list");
+  const input = document.getElementById("nat-input");
+  if (!list) return;
+  list.classList.remove("hidden");
+  if (input) input.setAttribute("aria-expanded", "true");
+}
+
+function closeCombo() {
+  const list = document.getElementById("nat-list");
+  const input = document.getElementById("nat-input");
+  if (!list) return;
+  list.classList.add("hidden");
+  if (input) input.setAttribute("aria-expanded", "false");
+  comboActive = -1;
+}
+
+function renderCombo(query) {
+  const list = document.getElementById("nat-list");
+  if (!list) return;
+
+  const term = normalizeText(query).trim();
+  comboMatches = term
+    ? countryList.filter(c => c.search.includes(term))
+    : countryList.slice();
+  comboActive = -1;
+
+  if (!comboMatches.length) {
+    list.innerHTML = '<div class="combo-empty">No country matches that.</div>';
+    return;
+  }
+
+  list.innerHTML = comboMatches
+    .map((c, i) => `<div class="combo-opt" role="option" data-index="${i}">${c.name}</div>`)
+    .join("");
+
+  list.querySelectorAll(".combo-opt").forEach(el => {
+    // mousedown, input blur'undan once calissin diye tercih edildi
+    el.addEventListener("mousedown", ev => {
+      ev.preventDefault();
+      const match = comboMatches[Number(el.dataset.index)];
+      if (match) pickCountry(match.name);
+    });
+  });
+}
+
+function highlightCombo(nextIndex) {
+  const list = document.getElementById("nat-list");
+  if (!list || !comboMatches.length) return;
+
+  const opts = list.querySelectorAll(".combo-opt");
+  if (!opts.length) return;
+
+  comboActive = (nextIndex + opts.length) % opts.length;
+  opts.forEach((el, i) => el.classList.toggle("active", i === comboActive));
+  const active = opts[comboActive];
+  if (active) active.scrollIntoView({ block: "nearest" });
+}
+
+function pickCountry(name) {
+  if (!name) return;
+  demographics.nationality = name;
+  const input = document.getElementById("nat-input");
+  if (input) input.value = name;
+  closeCombo();
+  setNatHint("");
+}
+
+function initNationality() {
+  const input = document.getElementById("nat-input");
+  const list = document.getElementById("nat-list");
+  if (!input) return;
+
+  countryList = buildCountryList() || [];
+
+  // Intl.DisplayNames yoksa: sade serbest metin alanina dus
+  if (!countryList.length) {
+    if (list) list.remove();
+    input.placeholder = "Type your nationality";
+    input.removeAttribute("role");
+    input.removeAttribute("aria-controls");
+    input.oninput = () => { demographics.nationality = input.value.trim(); };
+    return;
+  }
+
+  renderCombo("");
+
+  input.addEventListener("focus", () => {
+    renderCombo(input.value === demographics.nationality ? "" : input.value);
+    openCombo();
+  });
+
+  input.addEventListener("input", () => {
+    demographics.nationality = "";
+    setNatHint("");
+    renderCombo(input.value);
+    openCombo();
+  });
+
+  input.addEventListener("keydown", ev => {
+    if (ev.key === "ArrowDown") {
+      ev.preventDefault();
+      openCombo();
+      highlightCombo(comboActive + 1);
+    } else if (ev.key === "ArrowUp") {
+      ev.preventDefault();
+      highlightCombo(comboActive - 1);
+    } else if (ev.key === "Enter") {
+      if (comboActive >= 0 && comboMatches[comboActive]) {
+        ev.preventDefault();
+        pickCountry(comboMatches[comboActive].name);
+      } else if (comboMatches.length === 1) {
+        ev.preventDefault();
+        pickCountry(comboMatches[0].name);
+      }
+    } else if (ev.key === "Escape") {
+      closeCombo();
+    }
+  });
+
+  input.addEventListener("blur", () => {
+    closeCombo();
+    const typed = input.value.trim();
+    if (!typed) { demographics.nationality = ""; return; }
+
+    const hit = resolveCountry(typed);
+    if (hit) pickCountry(hit.name);
+    else input.value = demographics.nationality;
+  });
+
+  document.addEventListener("click", ev => {
+    const combo = document.getElementById("nat-combo");
+    if (combo && !combo.contains(ev.target)) closeCombo();
+  });
+}
+
+/* Yazilan metni listedeki bir ulkeye baglar: once tam isim, sonra takma isim */
+function resolveCountry(typed) {
+  const term = normalizeText(typed).trim();
+  if (!term) return null;
+
+  const exact = countryList.find(c => normalizeText(c.name) === term);
+  if (exact) return exact;
+
+  // Tek bir ulkeye isaret ediyorsa kismi eslesmeyi de kabul et
+  const partial = countryList.filter(c => c.search.includes(term));
+  return (partial.length === 1) ? partial[0] : null;
+}
+
+function handleDemoNext() {
+  const input = document.getElementById("nat-input");
+
+  if (input && countryList.length) {
+    const typed = input.value.trim();
+    if (typed && !demographics.nationality) {
+      const hit = resolveCountry(typed);
+      if (hit) {
+        pickCountry(hit.name);
+      } else {
+        setNatHint("Pick a country from the list, or clear the field to skip it.");
+        input.focus();
+        return;
+      }
+    }
+  }
+
+  startSurvey();
+}
+
+function handleDemoSkip() {
+  demographics.gender = "";
+  demographics.age = "";
+  demographics.nationality = "";
+  startSurvey();
+}
+
+/* ============================================================
+   SONUCLARI KAYDETME  (Google Sheets / Apps Script)
+   ------------------------------------------------------------
+   SAVE_URL bos birakilirsa hicbir sey gonderilmez; test yine
+   normal calisir. Kurulum icin code.gs dosyasina bak.
+   ============================================================ */
+
+const SAVE_URL = "";                    // Apps Script "/exec" adresini buraya yapistir
+const SAVE_SECRET = "compass-2026";     // code.gs icindeki SECRET ile ayni olmali
+
+let saveDone = false;
+let surveyStartedAt = 0;
+
+function buildSavePayload() {
+  const answers = {};
+  SURVEY_DATA.forEach((q, i) => {
+    const entry = userAnswers[i];
+    answers[q.code] = entry ? entry.selectedOption : "";
+  });
+
+  const scores = {};
+  lastResults.forEach(r => { scores[r.axis] = Number(r.formatted); });
+
+  return {
+    secret: SAVE_SECRET,
+    build: window.COMPASS_BUILD,
+    code: getProfileCode(),
+    clusters: lastClusters.map(c => `${c.cluster.id}:${c.key}`).join(" | "),
+    scores: scores,
+    gender: demographics.gender,
+    age: demographics.age,
+    nationality: demographics.nationality,
+    durationSec: surveyStartedAt ? Math.round((Date.now() - surveyStartedAt) / 1000) : 0,
+    answers: answers
+  };
+}
+
+function saveResults() {
+  if (saveDone || !SAVE_URL) return;
+  saveDone = true;
+
+  try {
+    // Ozel header yok: boylece tarayici on-kontrol (preflight) istegi atmaz
+    fetch(SAVE_URL, {
+      method: "POST",
+      body: JSON.stringify(buildSavePayload()),
+      keepalive: true
+    }).catch(() => { /* kayit basarisiz olsa da kullanici sonucunu gorur */ });
+  } catch (err) {
+    /* yoksay */
+  }
+}
+
+/* ============================================================
+   TEST MOTORU
+   ============================================================ */
 
 function calculateBounds() {
   SURVEY_DATA.forEach(q => {
@@ -1073,10 +1649,7 @@ function buildClusterBlock(cluster, byAxis) {
 }
 
 function showResults() {
-  const surveyView = document.getElementById("survey-view");
-  const resultView = document.getElementById("result-view");
-  if (surveyView) surveyView.classList.add("hidden");
-  if (resultView) resultView.classList.remove("hidden");
+  showStep("result");
 
   lastResults = AXIS_ORDER.map(computeAxis);
 
@@ -1119,6 +1692,7 @@ function showResults() {
   const vecText = document.getElementById("vector-text");
   if (vecText) vecText.innerText = `[${lastResults.map(r => `${r.axis}:${r.formatted}`).join("|")}]`;
 
+  saveResults();
   wireShareLinks();
   prepareShareImage();
 
@@ -1201,6 +1775,8 @@ async function handleCommentSubmit(event) {
     statusText.innerText = "Sending your message...";
   }
 
+  // Demografik cevaplar bilerek eklenmedi: yorumdaki takma ad kisiyi ele
+  // verebilir, o yuzden bu veriler yalnizca isimsiz tabloda tutuluyor.
   const payload = {
     Nickname: nickname,
     Comment: comment,
@@ -1648,8 +2224,21 @@ document.addEventListener("DOMContentLoaded", () => {
   if (btnDownloadImg) btnDownloadImg.onclick = downloadShareImage;
   if (btnShareNative) btnShareNative.onclick = shareImageNative;
 
+  // Intro -> anket -> test akisi
+  const btnStart = document.getElementById("btn-start");
+  const btnDemoNext = document.getElementById("btn-demo-next");
+  const btnDemoSkip = document.getElementById("btn-demo-skip");
+
+  if (btnStart) btnStart.onclick = () => showStep("demo");
+  if (btnDemoNext) btnDemoNext.onclick = handleDemoNext;
+  if (btnDemoSkip) btnDemoSkip.onclick = handleDemoSkip;
+
+  buildChipGroup("gender-options", GENDER_OPTIONS, "gender");
+  buildChipGroup("age-options", AGE_OPTIONS, "age");
+  initNationality();
+
   calculateBounds();
-  loadQuestion();
+  showStep("intro");
 });
   </script>
 </body>
