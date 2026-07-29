@@ -742,10 +742,10 @@ body { background-color: #0f172a; color: #f8fafc; min-height: 100vh; display: fl
 
   <script>
 /* ============================================================
-   5-AXIS COMPASS  —  BUILD 17 (2-D Kareler + 5 Eksen Barları Birlikte PNG'ye Alındı)
+   5-AXIS COMPASS  —  BUILD 18 (2D Kareler + 5 Eksen Barları Birlikte PNG'ye Alındı)
    ============================================================ */
-window.COMPASS_BUILD = 17;
-console.log("5-Axis Compass build 17 yuklendi — Canvas gorseline 5 eksen barı eklendi");
+window.COMPASS_BUILD = 18;
+console.log("5-Axis Compass build 18 yuklendi — 2D kareler ve 5 eksen barı tam entegre");
 
 const SURVEY_DATA = [
   // --- ETHICS ---
@@ -1341,7 +1341,7 @@ function drawCanvasGrid(ctx, gx, gy, size, entry, xr, yr, SANS, MONO) {
 }
 
 function drawShareCanvas() {
-  const W = 1080, H = 1650; // Yükseklik 5 eksen barlarını alacak şekilde artırıldı
+  const W = 1080, H = 1650;
   const SANS = "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif";
   const MONO = "'Courier New', Courier, monospace";
   const PAD = 90;
@@ -1414,13 +1414,16 @@ function drawShareCanvas() {
   const byAxis = {};
   lastResults.forEach(r => { byAxis[r.axis] = r; });
 
-  // --- 1. İKİ BOYUTLU CLUSTER KARELERİ (Philosophical & Political) ---
+  // --- 1. SADECE İKİ BOYUTLU CLUSTER KARELERİ (Philosophical & Political) ---
   const GS = 340, GGAP = 80;
   const gTotal = GS * 2 + GGAP;
   let gx = (W - gTotal) / 2;
   const gy = 480;
 
-  lastClusters.forEach(entry => {
+  // Sadece combos içeren (2 boyutlu) cluster'lar filtrelenir
+  const twoDClusters = lastClusters.filter(entry => entry.cluster.combos);
+
+  twoDClusters.forEach(entry => {
     const xr = byAxis[entry.cluster.x];
     const yr = byAxis[entry.cluster.y];
 
@@ -1449,13 +1452,12 @@ function drawShareCanvas() {
     gx += GS + GGAP;
   });
 
-  // --- 2. 5 EKSENİN TAMAMI İÇİN ÇİFT UÇLU BARLAR ---
+  // --- 2. 5 EKSENİN TAMAMI İÇİN ÇİFT UÇLU BARLAR (ETH, HN, TRB, JST, RLG) ---
   let startBarY = 960;
   const barGap = 72;
   const trackH = 20;
   const cx = PAD + CW / 2;
 
-  // Başlık
   ctx.textAlign = "center";
   ctx.fillStyle = "#38bdf8";
   ctx.font = `700 24px ${SANS}`;
