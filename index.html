@@ -742,10 +742,10 @@ body { background-color: #0f172a; color: #f8fafc; min-height: 100vh; display: fl
 
   <script>
 /* ============================================================
-   5-AXIS COMPASS  —  BUILD 16 (Dinamik Harf Etiketleri Düzeltildi)
+   5-AXIS COMPASS  —  BUILD 17 (2-D Kareler + 5 Eksen Barları Birlikte PNG'ye Alındı)
    ============================================================ */
-window.COMPASS_BUILD = 16;
-console.log("5-Axis Compass build 16 yuklendi — Dinamik eksen harfleri aktif");
+window.COMPASS_BUILD = 17;
+console.log("5-Axis Compass build 17 yuklendi — Canvas gorseline 5 eksen barı eklendi");
 
 const SURVEY_DATA = [
   // --- ETHICS ---
@@ -754,8 +754,8 @@ const SURVEY_DATA = [
   { code: "ETH3", question: "Good and evil are real, objective categories", scores: { "Strongly Disagree": {ETH: -1.5}, "Disagree": {ETH: -0.75}, "Neutral": {ETH: 0}, "Agree": {ETH: 0.75}, "Strongly Agree": {ETH: 1.5} } },
   { code: "ETH4", question: "Morality is a social construct", scores: { "Strongly Disagree": {ETH: 2}, "Disagree": {ETH: 1}, "Neutral": {ETH: 0}, "Agree": {ETH: -1}, "Strongly Agree": {ETH: -2} } },
   { code: "ETH5", question: "Some of my moral beliefs may be false", scores: { "Strongly Disagree": {ETH: 1}, "Disagree": {ETH: 0.5}, "Neutral": {ETH: 0}, "Agree": {ETH: -0.5}, "Strongly Agree": {ETH: -1} } },
-  { code: "ETH6", question: "No moral standard is permanently correct across all times and societies", scores: { "Strongly Disagree": {ETH: 1}, "Disagree": {ETH: 0.5}, "Neutral": {ETH: 0}, "Agree": {ETH: -0.5}, "Strongly Agree": {ETH: -1} } },
-  { code: "ETH7", question: "Moral truths are accessible through common sense or reason", scores: { "Strongly Disagree": {ETH: -1}, "Disagree": {ETH: -0.5}, "Neutral": {ETH: 0}, "Agree": {ETH: 0.5}, "Strongly Agree": {ETH: 1} } },
+  { code: "ETH6", question: "No moral standard is permanently valid across all times and societies", scores: { "Strongly Disagree": {ETH: 1}, "Disagree": {ETH: 0.5}, "Neutral": {ETH: 0}, "Agree": {ETH: -0.5}, "Strongly Agree": {ETH: -1} } },
+  { code: "ETH7", question: "Moral truths are accessible through common sense, or reason", scores: { "Strongly Disagree": {ETH: -1}, "Disagree": {ETH: -0.5}, "Neutral": {ETH: 0}, "Agree": {ETH: 0.5}, "Strongly Agree": {ETH: 1} } },
 
   // --- HUMAN NATURE ---
   { code: "HN1", question: "All humans share a common moral foundation at birth", scores: { "Strongly Disagree": {HN: -1}, "Disagree": {HN: -0.5}, "Neutral": {HN: 0}, "Agree": {HN: 0.5}, "Strongly Agree": {HN: 1} } },
@@ -1341,7 +1341,7 @@ function drawCanvasGrid(ctx, gx, gy, size, entry, xr, yr, SANS, MONO) {
 }
 
 function drawShareCanvas() {
-  const W = 1080, H = 1350;
+  const W = 1080, H = 1650; // Yükseklik 5 eksen barlarını alacak şekilde artırıldı
   const SANS = "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif";
   const MONO = "'Courier New', Courier, monospace";
   const PAD = 90;
@@ -1373,6 +1373,7 @@ function drawShareCanvas() {
   ctx.font = `italic 22px ${SANS}`;
   ctx.fillText("created by Hüseyin Baştuğ & Arda Toby Özdemir", PAD, 160);
 
+  // --- Profil Kodu ---
   const LS = 78;
   const codeStr = lastResults.map(r => r.letter).join("");
   ctx.font = `700 ${LS}px ${MONO}`;
@@ -1413,10 +1414,11 @@ function drawShareCanvas() {
   const byAxis = {};
   lastResults.forEach(r => { byAxis[r.axis] = r; });
 
-  const GS = 360, GGAP = 90;
+  // --- 1. İKİ BOYUTLU CLUSTER KARELERİ (Philosophical & Political) ---
+  const GS = 340, GGAP = 80;
   const gTotal = GS * 2 + GGAP;
   let gx = (W - gTotal) / 2;
-  const gy = 490;
+  const gy = 480;
 
   lastClusters.forEach(entry => {
     const xr = byAxis[entry.cluster.x];
@@ -1424,77 +1426,92 @@ function drawShareCanvas() {
 
     ctx.textAlign = "center";
     ctx.fillStyle = "#cbd5e1";
-    ctx.font = `600 24px ${SANS}`;
-    ctx.fillText(entry.cluster.name.replace(" Cluster", ""), gx + GS / 2, gy - 18);
+    ctx.font = `600 23px ${SANS}`;
+    ctx.fillText(entry.cluster.name.replace(" Cluster", ""), gx + GS / 2, gy - 16);
 
     drawCanvasGrid(ctx, gx, gy, GS, entry, xr, yr, SANS, MONO);
 
     const cap = `${entry.key} \u00b7 ${entry.name}`;
-    ctx.font = `600 24px ${MONO}`;
+    ctx.font = `600 22px ${MONO}`;
     const capW = ctx.measureText(cap).width;
-    const dotR = 9;
-    const capX = gx + GS / 2 - (capW + dotR * 2 + 12) / 2;
+    const dotR = 8;
+    const capX = gx + GS / 2 - (capW + dotR * 2 + 10) / 2;
 
     ctx.beginPath();
-    ctx.arc(capX + dotR, gy + GS + 36, dotR, 0, Math.PI * 2);
+    ctx.arc(capX + dotR, gy + GS + 32, dotR, 0, Math.PI * 2);
     ctx.fillStyle = entry.hex;
     ctx.fill();
 
     ctx.textAlign = "left";
     ctx.fillStyle = "#f8fafc";
-    ctx.fillText(cap, capX + dotR * 2 + 12, gy + GS + 44);
+    ctx.fillText(cap, capX + dotR * 2 + 10, gy + GS + 39);
 
     gx += GS + GGAP;
   });
 
-  const rr = byAxis["RLG"];
+  // --- 2. 5 EKSENİN TAMAMI İÇİN ÇİFT UÇLU BARLAR ---
+  let startBarY = 960;
+  const barGap = 72;
+  const trackH = 20;
   const cx = PAD + CW / 2;
-  const barY = 1000;
 
-  ctx.font = `22px ${SANS}`;
-  ctx.textAlign = "left";
-  ctx.fillStyle = rr.isPos ? "#64748b" : "#f8fafc";
-  ctx.fillText(`${rr.negKey}  ${rr.neg}`, PAD, barY);
-
-  ctx.textAlign = "right";
-  ctx.fillStyle = rr.isPos ? "#f8fafc" : "#64748b";
-  ctx.fillText(`${rr.pos}  ${rr.posKey}`, PAD + CW, barY);
-
+  // Başlık
   ctx.textAlign = "center";
-  ctx.fillStyle = "#cbd5e1";
-  ctx.font = `700 22px ${MONO}`;
-  ctx.fillText(`RLG ${rr.scaled >= 0 ? "+" : ""}${rr.formatted}`, cx, barY);
+  ctx.fillStyle = "#38bdf8";
+  ctx.font = `700 24px ${SANS}`;
+  ctx.fillText("Detailed 5-Axis Scores", W / 2, startBarY - 24);
 
-  const trackY = barY + 18, trackH = 24;
-  roundRectPath(ctx, PAD, trackY, CW, trackH, 12);
-  ctx.fillStyle = "#0f172a";
-  ctx.fill();
-  ctx.strokeStyle = "#334155";
-  ctx.lineWidth = 2;
-  ctx.stroke();
+  lastResults.forEach((r, idx) => {
+    const currentY = startBarY + idx * barGap;
 
-  const halfW = (Math.abs(rr.scaled) / 10) * (CW / 2);
-  if (halfW > 1) {
-    roundRectPath(ctx, rr.isPos ? cx : cx - halfW, trackY, halfW, trackH, 12);
-    ctx.fillStyle = rr.isPos ? "#38bdf8" : "#a78bfa";
+    ctx.font = `20px ${SANS}`;
+    ctx.textAlign = "left";
+    ctx.fillStyle = (!r.isNeutral && !r.isPos) ? "#f8fafc" : "#64748b";
+    ctx.fillText(`${r.negKey}  ${r.neg}`, PAD, currentY);
+
+    ctx.textAlign = "right";
+    ctx.fillStyle = (!r.isNeutral && r.isPos) ? "#f8fafc" : "#64748b";
+    ctx.fillText(`${r.pos}  ${r.posKey}`, PAD + CW, currentY);
+
+    ctx.textAlign = "center";
+    ctx.fillStyle = "#cbd5e1";
+    ctx.font = `700 20px ${MONO}`;
+    const sign = (r.isPos && !r.isNeutral) ? "+" : "";
+    ctx.fillText(`${r.axis} ${sign}${r.formatted}`, cx, currentY);
+
+    const trackY = currentY + 10;
+    roundRectPath(ctx, PAD, trackY, CW, trackH, 10);
+    ctx.fillStyle = "#0f172a";
     ctx.fill();
-  }
-  ctx.strokeStyle = "#64748b";
-  ctx.lineWidth = 2;
-  ctx.beginPath();
-  ctx.moveTo(cx, trackY); ctx.lineTo(cx, trackY + trackH);
-  ctx.stroke();
+    ctx.strokeStyle = "#334155";
+    ctx.lineWidth = 1.5;
+    ctx.stroke();
 
+    const halfW = (Math.abs(r.scaled) / 10) * (CW / 2);
+    if (halfW > 1) {
+      roundRectPath(ctx, r.isPos ? cx : cx - halfW, trackY, halfW, trackH, 10);
+      ctx.fillStyle = r.isPos ? "#38bdf8" : "#a78bfa";
+      ctx.fill();
+    }
+    ctx.strokeStyle = "#64748b";
+    ctx.lineWidth = 1.5;
+    ctx.beginPath();
+    ctx.moveTo(cx, trackY); ctx.lineTo(cx, trackY + trackH);
+    ctx.stroke();
+  });
+
+  // --- Vektör & Footer ---
+  const footerY = 1380;
   ctx.strokeStyle = "#334155";
   ctx.lineWidth = 2;
   ctx.beginPath();
-  ctx.moveTo(PAD, 1120); ctx.lineTo(PAD + CW, 1120);
+  ctx.moveTo(PAD, footerY); ctx.lineTo(PAD + CW, footerY);
   ctx.stroke();
 
   ctx.textAlign = "center";
   ctx.fillStyle = "#94a3b8";
   ctx.font = `20px ${SANS}`;
-  ctx.fillText("Result Vector", W / 2, 1164);
+  ctx.fillText("Result Vector", W / 2, footerY + 44);
 
   ctx.fillStyle = "#f8fafc";
   const vec = getVectorString();
@@ -1504,12 +1521,12 @@ function drawShareCanvas() {
     vecSize -= 1;
     ctx.font = `${vecSize}px ${MONO}`;
   }
-  ctx.fillText(vec, W / 2, 1204);
+  ctx.fillText(vec, W / 2, footerY + 84);
 
   if (location.host) {
     ctx.fillStyle = "#64748b";
     ctx.font = `19px ${SANS}`;
-    ctx.fillText(location.host, W / 2, 1272);
+    ctx.fillText(location.host, W / 2, footerY + 140);
   }
 
   return canvas;
