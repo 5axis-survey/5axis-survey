@@ -1,10 +1,10 @@
 /* ============================================================
-   5-AXIS COMPASS  —  BUILD 13  (clusters + 2D grids)
+   5-AXIS COMPASS  —  BUILD 14  (cluster renkli profil kodu)
    Konsolda bu satiri gormuyorsaniz tarayici eski dosyayi
    calistiriyor demektir.
    ============================================================ */
-window.COMPASS_BUILD = 13;
-console.log("5-Axis Compass build 13 yuklendi \u2014 clusters aktif");
+window.COMPASS_BUILD = 14;
+console.log("5-Axis Compass build 14 yuklendi \u2014 clusters aktif");
 
 const SURVEY_DATA = [
   // --- ETHICS ---
@@ -92,7 +92,7 @@ const CLUSTERS = [
     combos: {
       TJ: { name: "Orange", hex: "#f97316" },
       UJ: { name: "Purple", hex: "#a855f7" },
-      UE: { name: "Brown",  hex: "#9a6b4f" },
+      UE: { name: "Brown",  hex: "#b07d57" },
       TE: { name: "Gray",   hex: "#94a3b8" }
     }
   },
@@ -206,6 +206,15 @@ function handlePrevious() {
   // Cevap silinmiyor; sadece bir soru geri gidiyoruz ki secim gorunur kalsin
   currentIndex--;
   loadQuestion();
+}
+
+/* Bir eksenin hangi cluster'a ait oldugunu ve o cluster'in rengini bulur.
+   Religion Cluster renk tasimadigi icin duz beyaz doner. */
+function letterColorFor(axis) {
+  const entry = lastClusters.find(c => c.cluster.x === axis || c.cluster.y === axis);
+  return entry
+    ? { hex: entry.hex, tip: `${entry.cluster.name}: ${entry.key} \u2014 ${entry.name}` }
+    : { hex: "#f8fafc", tip: "Religion Cluster" };
 }
 
 function computeAxis(axis) {
@@ -370,17 +379,10 @@ function showResults() {
   const codeBox = document.getElementById("vector-code");
   if (codeBox) {
     codeBox.dataset.code = codeString;
-    codeBox.innerText = codeString;
-  }
-
-  // --- Iki cluster rengi yan yana ---
-  const colorBox = document.getElementById("profile-colors");
-  if (colorBox) {
-    colorBox.innerHTML = `
-      <span class="color-pill">
-        ${lastClusters.map(c => `<span class="color-half" style="background:${c.hex}" title="${c.cluster.name}: ${c.key} \u2014 ${c.name}"></span>`).join("")}
-      </span>
-      <span class="color-names">${lastClusters.map(c => c.name).join(" + ")}</span>`;
+    codeBox.innerHTML = lastResults.map(r => {
+      const col = letterColorFor(r.axis);
+      return `<span class="code-letter" style="color:${col.hex}" title="${col.tip}">${r.letter}</span>`;
+    }).join("");
   }
 
   const poles = document.getElementById("profile-poles");
@@ -663,11 +665,10 @@ function drawShareCanvas() {
   ctx.font = `700 ${LS}px ${MONO}`;
 
   const BOXPX = 40, BOXPY = 24;
-  const codeW = ctx.measureText(codeStr).width + BOXPX * 2;
+  const letterW = lastResults.map(r => ctx.measureText(r.letter).width);
+  const codeW = letterW.reduce((a, b) => a + b, 0) + BOXPX * 2;
   const codeH = LS + BOXPY * 2;
-  const swatchW = 34, swatchGap = 16;
-  const groupW = codeW + swatchGap + swatchW;
-  const codeX = (W - groupW) / 2;
+  const codeX = (W - codeW) / 2;
   const codeY = 210;
 
   roundRectPath(ctx, codeX, codeY, codeW, codeH, 16);
@@ -677,21 +678,14 @@ function drawShareCanvas() {
   ctx.lineWidth = 2;
   ctx.stroke();
 
-  ctx.textAlign = "center";
-  ctx.fillStyle = "#f8fafc";
-  ctx.fillText(codeStr, codeX + codeW / 2, codeY + BOXPY + LS * 0.78);
-
-  // Iki cluster rengi yan yana, kodun sagina
-  const swX = codeX + codeW + swatchGap;
-  const swH = codeH / Math.max(1, lastClusters.length);
-  roundRectPath(ctx, swX, codeY, swatchW, codeH, 10);
-  ctx.save();
-  ctx.clip();
-  lastClusters.forEach((c, i) => {
-    ctx.fillStyle = c.hex;
-    ctx.fillRect(swX, codeY + i * swH, swatchW, swH);
+  // Her harf kendi cluster renginde; RLG harfi beyaz
+  ctx.textAlign = "left";
+  let lx = codeX + BOXPX;
+  lastResults.forEach((r, i) => {
+    ctx.fillStyle = letterColorFor(r.axis).hex;
+    ctx.fillText(r.letter, lx, codeY + BOXPY + LS * 0.78);
+    lx += letterW[i];
   });
-  ctx.restore();
 
   // --- Kutup isimleri ---
   const poles = lastResults.map(r => r.pole).join("  \u00b7  ");
