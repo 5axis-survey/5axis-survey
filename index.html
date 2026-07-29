@@ -719,11 +719,10 @@ body { background-color: #0f172a; color: #f8fafc; min-height: 100vh; display: fl
         </p>
         <p class="intro-text">
           <strong>We keep your answers, but not your identity.</strong> When you finish, your responses,
-          your five scores, and the optional details on the next page are saved to a private spreadsheet
+          your five scores, and the optional details on the next page are saved to a private database
           and studied as group statistics. We never collect your name, your email, or your IP address,
           and there is no account, no login, and no tracking cookie — so a saved row cannot be traced
-          back to the person who filled it in, not even by us. If you leave a comment afterwards, it
-          travels separately, under whatever nickname you choose.
+          back to the person who filled it in.
         </p>
         <button id="btn-start" class="btn-primary">Start</button>
       </div>
@@ -834,10 +833,7 @@ body { background-color: #0f172a; color: #f8fafc; min-height: 100vh; display: fl
       <div class="card">
         <h2>About Us &amp; Methodology</h2>
         <p class="about-intro">
-          The 5-Axis Philosophical Compass is a multi-dimensional analytical tool engineered to evaluate and map an individual's worldview across five core philosophical and political dimensions. Conventional political spectrums often reduce complex worldviews to a single Left-Right paradigm or a simple two-axis grid, collapsing distinct ethical, ontological, and social stances into ambiguous categories.
-        </p>
-        <p class="about-intro">
-          This test isolates five distinct intellectual axes to provide a high-resolution vector representation of your foundational beliefs and social philosophy.
+          The 5-Axis Philosophical Compass is a multi-dimensional analytical tool engineered to evaluate and map an individual's worldview across five core philosophical and political dimensions.
         </p>
 
         <hr class="divider">
@@ -847,35 +843,35 @@ body { background-color: #0f172a; color: #f8fafc; min-height: 100vh; display: fl
         <div class="axis-explanation">
           <h4>1. Ethics (ETH): Objectivism vs. Subjectivism</h4>
           <p>
-            This axis measures your stance on moral ontology. <strong>Objectivism</strong> postulates that moral truths exist independently of human perception, culture, or consensus, holding that good and evil are objective features of reality accessible through reason or divine law. Conversely, <strong>Subjectivism</strong> views morality as a social construct, evolving cultural agreement, or emotional expression that carries no permanent or universal validity.
+            <strong>Objectivism</strong> holds good and evil as objective categories. <strong>Subjectivism</strong> views morality as a social construct.
           </p>
         </div>
 
         <div class="axis-explanation">
           <h4>2. Human Nature (HN): Realism vs. Constructivism</h4>
           <p>
-            This dimension evaluates your worldview regarding human potential and social engineering. <strong>Realism</strong> asserts that human beings possess fixed biological, psychological, and moral traits that fundamentally constrain what is achievable in politics and social organization. <strong>Constructivism</strong>, on the other hand, holds that human nature is almost infinitely malleable and shaped by environment, education, and institutional arrangements.
+            <strong>Realism</strong> asserts fixed underlying traits. <strong>Constructivism</strong> holds human nature to be malleable.
           </p>
         </div>
 
         <div class="axis-explanation">
           <h4>3. Tribalism (TRB): Tribalism vs. Universalism</h4>
           <p>
-            This axis examines the boundary of your moral obligations and community duty. <strong>Tribalism</strong> emphasizes distinct social identity, group exclusivity, and primary responsibility toward one's own immediate community or nation. <strong>Universalism</strong> advocates for global interconnectedness, cosmopolitan responsibility, and equal moral consideration for all human beings regardless of citizenship or group identity.
+            <strong>Tribalism</strong> prioritizes primary responsibility toward one's own community. <strong>Universalism</strong> advocates global moral consideration.
           </p>
         </div>
 
         <div class="axis-explanation">
           <h4>4. Justice (JST): Justice vs. Equality</h4>
           <p>
-            This scale measures your preference regarding social hierarchy and economic distribution. <strong>Justice</strong> favors meritocracy, proportional reward based on effort/contribution, and acceptance of natural inequality as a stabilizing force. <strong>Equality</strong> prioritizes egalitarianism, social safety nets, systemic redistribution, and the reduction of socioeconomic disparities.
+            <strong>Justice</strong> favors meritocracy and proportional reward. <strong>Equality</strong> prioritizes reduction of socioeconomic disparities.
           </p>
         </div>
 
         <div class="axis-explanation">
           <h4>5. Religion &amp; Transcendence (RLG): Spiritualism vs. Laicity</h4>
           <p>
-            This axis assesses the role of metaphysical frameworks in your understanding of existence. <strong>Spiritualism</strong> acknowledges innate purpose, non-material forces, and the value of faith or prayer in human history. <strong>Laicity</strong> maintains a strictly materialist framework, viewing empirical science as the sole source of valid knowledge and regarding religious structures as historical artifacts.
+            <strong>Spiritualism</strong> acknowledges innate purpose or faith. <strong>Laicity</strong> maintains a strictly materialist framework.
           </p>
         </div>
       </div>
@@ -907,14 +903,8 @@ body { background-color: #0f172a; color: #f8fafc; min-height: 100vh; display: fl
   </main>
 
   <script>
-/* ============================================================
-   5-AXIS COMPASS  —  BUILD 22
-   Yeni: acilis bilgilendirme ekrani, opsiyonel demografi
-   anketi (gender / age / nationality) ve tamamlanan testlerin
-   Google Sheets'e anonim satir olarak kaydedilmesi.
-   ============================================================ */
-window.COMPASS_BUILD = 22;
-console.log("5-Axis Compass build 22 yuklendi — Welcome ekrani, demografi anketi, anonim sonuc kaydi");
+window.COMPASS_BUILD = 23;
+console.log("5-Axis Compass build 23 — Local PostgreSQL API Entegrasyonu Yüklendi");
 
 const SURVEY_DATA = [
   // --- ETHICS ---
@@ -981,8 +971,8 @@ const CLUSTERS = [
   {
     id: "PHI",
     name: "Philosophical Cluster",
-    x: "ETH",              // yatay: S <-> O
-    y: "HN",               // dikey:  C <-> R
+    x: "ETH",              
+    y: "HN",               
     combos: {
       OR: { name: "Yellow", hex: "#eab308" },
       SR: { name: "Red",    hex: "#ef4444" },
@@ -993,8 +983,8 @@ const CLUSTERS = [
   {
     id: "POL",
     name: "Political Cluster",
-    x: "JST",              // yatay: E <-> J
-    y: "TRB",              // dikey:  U <-> T
+    x: "JST",              
+    y: "TRB",              
     combos: {
       JT: { name: "Orange", hex: "#f97316" },
       JU: { name: "Purple", hex: "#a855f7" },
@@ -1017,6 +1007,74 @@ let maxPossibleScores = {};
 let userAnswers = [];
 let lastResults = [];
 let shareBlob = null;
+
+/* ============================================================
+   LOCAL POSTGRESQL API ENTEGRASYONU
+   ============================================================ */
+const LOCAL_API_URL = "http://localhost:3000/api";
+let activeUserId = null;
+let saveDone = false;
+let surveyStartedAt = 0;
+
+async function saveDemographics() {
+  try {
+    const response = await fetch(`${LOCAL_API_URL}/demographics`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        gender: demographics.gender || null,
+        age: demographics.age || null,
+        nationality: demographics.nationality || null
+      })
+    });
+    const data = await response.json();
+    if (data.id) {
+      activeUserId = data.id;
+      console.log("Demografi kaydedildi, Kullanıcı UUID:", activeUserId);
+    }
+  } catch (err) {
+    console.error("Demografi yerel API'ye kaydedilemedi:", err);
+  }
+}
+
+async function saveResults() {
+  if (saveDone) return;
+  saveDone = true;
+
+  if (!activeUserId) {
+    await saveDemographics();
+  }
+
+  const rawAnswers = {};
+  SURVEY_DATA.forEach((q, i) => {
+    const entry = userAnswers[i];
+    rawAnswers[q.code] = entry ? entry.selectedOption : "";
+  });
+
+  const scoresObj = {};
+  lastResults.forEach(r => { scoresObj[r.axis] = Number(r.formatted); });
+
+  const payload = {
+    user_id: activeUserId,
+    profile_code: getProfileCode(),
+    vector_string: getVectorString(),
+    clusters: lastClusters.map(c => `${c.cluster.id}:${c.key}`).join(" | "),
+    duration_sec: surveyStartedAt ? Math.round((Date.now() - surveyStartedAt) / 1000) : 0,
+    scores: scoresObj,
+    raw_answers: rawAnswers
+  };
+
+  try {
+    await fetch(`${LOCAL_API_URL}/test-results`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload)
+    });
+    console.log("Test sonuçları yerel PostgreSQL veritabanına kaydedildi.");
+  } catch (err) {
+    console.error("Test sonucu kaydedilemedi:", err);
+  }
+}
 
 /* ============================================================
    AKIS KONTROLU: intro -> demo -> survey -> result
@@ -1052,7 +1110,6 @@ const AGE_OPTIONS = ["Below 18", "18-24", "25-34", "35-44", "45-54", "55-64", "6
 
 const demographics = { gender: "", age: "", nationality: "" };
 
-/* ISO 3166-1 alpha-2 kodlari; isimler Intl.DisplayNames ile uretilir */
 const COUNTRY_CODES = [
   "AD","AE","AF","AG","AI","AL","AM","AO","AR","AS","AT","AU","AW","AX","AZ",
   "BA","BB","BD","BE","BF","BG","BH","BI","BJ","BL","BM","BN","BO","BQ","BR","BS","BT","BW","BY","BZ",
@@ -1081,55 +1138,23 @@ const COUNTRY_CODES = [
   "ZA","ZM","ZW"
 ];
 
-/* Resmi isimle aranmayan yaygin kullanimlar (Turkey -> Türkiye gibi) */
 const COUNTRY_ALIASES = {
-  TR: "turkey",
-  PS: "palestine",
-  CD: "democratic republic of the congo drc zaire",
-  CG: "republic of the congo",
-  KR: "korea republic of korea",
-  KP: "korea dprk",
-  AE: "uae emirates",
-  VA: "holy see",
-  MM: "burma",
-  CZ: "czech republic",
-  CI: "ivory coast cote divoire",
-  SZ: "swaziland",
-  TL: "east timor",
-  CV: "cabo verde",
-  MK: "macedonia",
-  NL: "holland",
-  GB: "uk britain great britain england scotland wales northern ireland",
-  US: "usa united states of america",
-  RU: "russian federation",
-  SY: "syrian arab republic",
-  LA: "lao pdr",
-  IR: "islamic republic of iran persia",
-  VN: "viet nam",
-  BN: "brunei darussalam",
-  MD: "republic of moldova",
-  TW: "republic of china",
-  HK: "hong kong",
-  MO: "macao macau",
-  BO: "plurinational state of bolivia",
-  VE: "bolivarian republic of venezuela",
-  TZ: "united republic of tanzania",
-  FK: "malvinas",
-  GR: "hellas",
-  CH: "helvetia",
-  DE: "deutschland",
-  ES: "espana",
-  JP: "nippon",
-  CN: "prc peoples republic of china",
-  EG: "arab republic of egypt",
-  SA: "ksa kingdom of saudi arabia"
+  TR: "turkey", PS: "palestine", CD: "democratic republic of the congo drc zaire", CG: "republic of the congo",
+  KR: "korea republic of korea", KP: "korea dprk", AE: "uae emirates", VA: "holy see", MM: "burma",
+  CZ: "czech republic", CI: "ivory coast cote divoire", SZ: "swaziland", TL: "east timor", CV: "cabo verde",
+  MK: "macedonia", NL: "holland", GB: "uk britain great britain england scotland wales northern ireland",
+  US: "usa united states of america", RU: "russian federation", SY: "syrian arab republic", LA: "lao pdr",
+  IR: "islamic republic of iran persia", VN: "viet nam", BN: "brunei darussalam", MD: "republic of moldova",
+  TW: "republic of china", HK: "hong kong", MO: "macao macau", BO: "plurinational state of bolivia",
+  VE: "bolivarian republic of venezuela", TZ: "united republic of tanzania", FK: "malvinas", GR: "hellas",
+  CH: "helvetia", DE: "deutschland", ES: "espana", JP: "nippon", CN: "prc peoples republic of china",
+  EG: "arab republic of egypt", SA: "ksa kingdom of saudi arabia"
 };
 
 let countryList = [];
 let comboMatches = [];
 let comboActive = -1;
 
-/* Aksan ve buyuk/kucuk harf farkini yok sayan arama anahtari */
 function normalizeText(value) {
   const text = String(value || "").toLowerCase();
   try {
@@ -1152,7 +1177,6 @@ function buildChipGroup(containerId, options, field) {
     btn.setAttribute("aria-pressed", "false");
 
     btn.onclick = () => {
-      // Ayni secenege tekrar basmak secimi kaldirir
       demographics[field] = (demographics[field] === optText) ? "" : optText;
       box.querySelectorAll(".chip").forEach(chip => {
         const on = (chip.innerText === demographics[field]);
@@ -1232,7 +1256,6 @@ function renderCombo(query) {
     .join("");
 
   list.querySelectorAll(".combo-opt").forEach(el => {
-    // mousedown, input blur'undan once calissin diye tercih edildi
     el.addEventListener("mousedown", ev => {
       ev.preventDefault();
       const match = comboMatches[Number(el.dataset.index)];
@@ -1270,7 +1293,6 @@ function initNationality() {
 
   countryList = buildCountryList() || [];
 
-  // Intl.DisplayNames yoksa: sade serbest metin alanina dus
   if (!countryList.length) {
     if (list) list.remove();
     input.placeholder = "Type your nationality";
@@ -1331,7 +1353,6 @@ function initNationality() {
   });
 }
 
-/* Yazilan metni listedeki bir ulkeye baglar: once tam isim, sonra takma isim */
 function resolveCountry(typed) {
   const term = normalizeText(typed).trim();
   if (!term) return null;
@@ -1339,12 +1360,11 @@ function resolveCountry(typed) {
   const exact = countryList.find(c => normalizeText(c.name) === term);
   if (exact) return exact;
 
-  // Tek bir ulkeye isaret ediyorsa kismi eslesmeyi de kabul et
   const partial = countryList.filter(c => c.search.includes(term));
   return (partial.length === 1) ? partial[0] : null;
 }
 
-function handleDemoNext() {
+async function handleDemoNext() {
   const input = document.getElementById("nat-input");
 
   if (input && countryList.length) {
@@ -1361,67 +1381,17 @@ function handleDemoNext() {
     }
   }
 
+  await saveDemographics();
   startSurvey();
 }
 
-function handleDemoSkip() {
+async function handleDemoSkip() {
   demographics.gender = "";
   demographics.age = "";
   demographics.nationality = "";
+  
+  await saveDemographics();
   startSurvey();
-}
-
-/* ============================================================
-   SONUCLARI KAYDETME  (Google Sheets / Apps Script)
-   ------------------------------------------------------------
-   SAVE_URL bos birakilirsa hicbir sey gonderilmez; test yine
-   normal calisir. Kurulum icin code.gs dosyasina bak.
-   ============================================================ */
-
-const SAVE_URL = "https://script.google.com/macros/s/AKfycbw4qM-xZEpDw54_G1dRSoiFh5VXQA56HCpqwJNWIhJxGksRkS-e1wlMTlkukmdsilv7/exec";                    // Apps Script "/exec" adresini buraya yapistir
-const SAVE_SECRET = "compass-2026";     // code.gs icindeki SECRET ile ayni olmali
-
-let saveDone = false;
-let surveyStartedAt = 0;
-
-function buildSavePayload() {
-  const answers = {};
-  SURVEY_DATA.forEach((q, i) => {
-    const entry = userAnswers[i];
-    answers[q.code] = entry ? entry.selectedOption : "";
-  });
-
-  const scores = {};
-  lastResults.forEach(r => { scores[r.axis] = Number(r.formatted); });
-
-  return {
-    secret: SAVE_SECRET,
-    build: window.COMPASS_BUILD,
-    code: getProfileCode(),
-    clusters: lastClusters.map(c => `${c.cluster.id}:${c.key}`).join(" | "),
-    scores: scores,
-    gender: demographics.gender,
-    age: demographics.age,
-    nationality: demographics.nationality,
-    durationSec: surveyStartedAt ? Math.round((Date.now() - surveyStartedAt) / 1000) : 0,
-    answers: answers
-  };
-}
-
-function saveResults() {
-  if (saveDone || !SAVE_URL) return;
-  saveDone = true;
-
-  try {
-    // Ozel header yok: boylece tarayici on-kontrol (preflight) istegi atmaz
-    fetch(SAVE_URL, {
-      method: "POST",
-      body: JSON.stringify(buildSavePayload()),
-      keepalive: true
-    }).catch(() => { /* kayit basarisiz olsa da kullanici sonucunu gorur */ });
-  } catch (err) {
-    /* yoksay */
-  }
 }
 
 /* ============================================================
@@ -1775,8 +1745,6 @@ async function handleCommentSubmit(event) {
     statusText.innerText = "Sending your message...";
   }
 
-  // Demografik cevaplar bilerek eklenmedi: yorumdaki takma ad kisiyi ele
-  // verebilir, o yuzden bu veriler yalnizca isimsiz tabloda tutuluyor.
   const payload = {
     Nickname: nickname,
     Comment: comment,
@@ -1919,8 +1887,6 @@ function drawCanvasGrid(ctx, gx, gy, size, entry, xr, yr, SANS, MONO) {
   ctx.stroke();
 }
 
-/* ---------- PAYLASIM GORSELI: yardimci cizimler ---------- */
-
 function drawCanvasBar(ctx, r, x, y, w, SANS, MONO) {
   const trackH = 20;
   const cx = x + w / 2;
@@ -2005,7 +1971,6 @@ function drawPanelHead(ctx, x, y, w, title, entry, SANS, MONO) {
   ctx.fill();
 }
 
-/* Kare + o kareyi olusturan IKI eksenin tek boyutlu barlari */
 function drawTwoAxisPanel(ctx, entry, byAxis, x, y, w, SANS, MONO) {
   const IP = 26, GS = 300, HEAD = 62;
   const panelH = HEAD + GS + 58;
@@ -2027,7 +1992,6 @@ function drawTwoAxisPanel(ctx, entry, byAxis, x, y, w, SANS, MONO) {
   return panelH;
 }
 
-/* Tek eksenli cluster (Religion) */
 function drawSingleAxisPanel(ctx, cluster, r, x, y, w, SANS, MONO) {
   const IP = 26, HEAD = 62;
   const panelH = HEAD + 96;
@@ -2038,8 +2002,6 @@ function drawSingleAxisPanel(ctx, cluster, r, x, y, w, SANS, MONO) {
 
   return panelH;
 }
-
-/* ---------- ANA GORSEL ---------- */
 
 function drawShareCanvas() {
   const W = 1080, H = 1740;
@@ -2074,7 +2036,6 @@ function drawShareCanvas() {
   ctx.font = `italic 22px ${SANS}`;
   ctx.fillText("created by Hüseyin Baştuğ & Arda Toby Özdemir", PAD, 160);
 
-  // --- Profil kodu ---
   const LS = 78;
   ctx.font = `700 ${LS}px ${MONO}`;
 
@@ -2111,7 +2072,6 @@ function drawShareCanvas() {
   }
   ctx.fillText(poles, W / 2, codeY + codeH + 46);
 
-  // --- Cluster panelleri: kare + kendi eksen barlari ---
   const byAxis = {};
   lastResults.forEach(r => { byAxis[r.axis] = r; });
 
@@ -2125,7 +2085,6 @@ function drawShareCanvas() {
     y += drawSingleAxisPanel(ctx, relCluster, byAxis[relCluster.single], PAD, y, CW, SANS, MONO) + 28;
   }
 
-  // --- Vektor & footer ---
   const footerY = y + 20;
   ctx.strokeStyle = "#334155";
   ctx.lineWidth = 2;
@@ -2224,7 +2183,6 @@ document.addEventListener("DOMContentLoaded", () => {
   if (btnDownloadImg) btnDownloadImg.onclick = downloadShareImage;
   if (btnShareNative) btnShareNative.onclick = shareImageNative;
 
-  // Intro -> anket -> test akisi
   const btnStart = document.getElementById("btn-start");
   const btnDemoNext = document.getElementById("btn-demo-next");
   const btnDemoSkip = document.getElementById("btn-demo-skip");
