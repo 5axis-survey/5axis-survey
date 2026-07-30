@@ -867,9 +867,9 @@ body { background-color: #0f172a; color: #f8fafc; min-height: 100vh; display: fl
         </div>
 
         <div class="axis-explanation">
-          <h4>4. Justice (JST): Justice (J) vs. Equality (E)</h4>
+          <h4>4. Justice (JST): Equality (E) vs. Justice (J)</h4>
           <p>
-            <strong>Justice (J)</strong> favors meritocracy and proportional reward based on contribution. <strong>Equality (E)</strong> prioritizes reduction of socioeconomic disparities.
+            <strong>Equality (E)</strong> prioritizes reduction of socioeconomic disparities. <strong>Justice (J)</strong> favors meritocracy and proportional reward based on contribution.
           </p>
         </div>
 
@@ -908,8 +908,8 @@ body { background-color: #0f172a; color: #f8fafc; min-height: 100vh; display: fl
   </main>
 
   <script>
-window.COMPASS_BUILD = 27;
-console.log("5-Axis Compass build 27 — Bar Sıralaması & Intro Metni Tamamen Güncellendi");
+window.COMPASS_BUILD = 28;
+console.log("5-Axis Compass build 28 — JST Ekseni (Equality Sol / Justice Sağ) Düzeltildi");
 
 /* ============================================================
    GÜNCEL 40 SORU VE KAÇAR PUAN ARTIRILMIŞ AĞIRLIKLARI (1.4 Katı)
@@ -970,13 +970,13 @@ const OPTIONS = ["Strongly Disagree", "Disagree", "Neutral", "Agree", "Strongly 
 
 /*
   EKSEN SIRALAMASI VE KUTUP ETİKETLERİ
-  Yukarıdan Aşağıya Tam İstenen Sıra: S-O, C-R, U-T, J-E, L-P
+  DÜZELTME: JST ekseninde Equality (Sol / E) ve Justice (Sağ / J) olarak ayarlandı.
 */
 const AXIS_LABELS = {
   ETH: { neg: "Subjectivism",   negKey: "S", pos: "Objectivism", posKey: "O" },
   HN:  { neg: "Constructivism", negKey: "C", pos: "Realism",     posKey: "R" },
   TRB: { neg: "Universalism",   negKey: "U", pos: "Tribalism",   posKey: "T" },
-  JST: { neg: "Justice",        negKey: "J", pos: "Equality",    posKey: "E" },
+  JST: { neg: "Equality",       negKey: "E", pos: "Justice",     posKey: "J" },
   RLG: { neg: "Laicity",        negKey: "L", pos: "Spiritualism", posKey: "P" }
 };
 
@@ -1023,7 +1023,7 @@ const CLUSTERS = [
   {
     id: "POL",
     name: "Political Cluster",
-    x: "JST",              // yatay: J <-> E
+    x: "JST",              // yatay: E <-> J
     y: "TRB",              // dikey: U <-> T
     combos: {
       TJ: { hex: "#f97316" },
