@@ -76,23 +76,23 @@ body { background-color: #0f172a; color: #f8fafc; min-height: 100vh; display: fl
 .main-content, .page-content, .page-section { width: 100%; max-width: 780px; margin: 0 auto; }
 
 /* Ana Kart Kutusu */
-.card { 
-  background-color: #1e293b; 
-  border-radius: 14px; 
-  padding: 36px 32px; 
-  width: 100%; 
-  max-width: 780px; 
-  box-shadow: 0 10px 25px rgba(0,0,0,0.3); 
+.card {
+  background-color: #1e293b;
+  border-radius: 14px;
+  padding: 36px 32px;
+  width: 100%;
+  max-width: 780px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.3);
   border: 1px solid #334155;
 }
 
 /* Progress Header & Sağ Üstteki Previous Butonu */
 .progress-container { margin-bottom: 20px; }
-.progress-header, .progress-info { 
-  display: flex; 
-  justify-content: space-between; 
-  align-items: center; 
-  margin-bottom: 12px; 
+.progress-header, .progress-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
 }
 
 #progress-text { font-size: 0.9rem; color: #94a3b8; font-style: italic; font-weight: 500; }
@@ -108,10 +108,10 @@ body { background-color: #0f172a; color: #f8fafc; min-height: 100vh; display: fl
   cursor: pointer;
   transition: all 0.2s ease;
 }
-.btn-prev:hover:not(:disabled), #btn-prev:hover:not(:disabled) { 
-  background-color: #334155; 
-  color: #f8fafc; 
-  border-color: #38bdf8; 
+.btn-prev:hover:not(:disabled), #btn-prev:hover:not(:disabled) {
+  background-color: #334155;
+  color: #f8fafc;
+  border-color: #38bdf8;
 }
 .btn-prev:disabled, #btn-prev:disabled { opacity: 0.3; cursor: not-allowed; }
 
@@ -131,32 +131,32 @@ body { background-color: #0f172a; color: #f8fafc; min-height: 100vh; display: fl
   text-align: center;
 }
 
-#question-text { 
+#question-text {
   font-size: 1.35rem;
   color: #f8fafc;
-  line-height: 1.5; 
+  line-height: 1.5;
   font-weight: 500;
-  margin: 0; 
+  margin: 0;
 }
 
 .options-group, .options-grid { display: flex; flex-direction: column; gap: 14px; }
-.btn-option { 
-  background-color: #334155; 
-  color: #f8fafc; 
-  border: 1px solid #475569; 
+.btn-option {
+  background-color: #334155;
+  color: #f8fafc;
+  border: 1px solid #475569;
   padding: 16px 20px;
-  border-radius: 10px; 
+  border-radius: 10px;
   font-size: 1.05rem;
-  font-weight: 600; 
-  cursor: pointer; 
-  transition: all 0.2s ease; 
-  width: 100%; 
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  width: 100%;
   text-align: center;
 }
-.btn-option:hover { 
-  background-color: #0284c7; 
-  border-color: #38bdf8; 
-  transform: translateY(-2px); 
+.btn-option:hover {
+  background-color: #0284c7;
+  border-color: #38bdf8;
+  transform: translateY(-2px);
 }
 
 .controls {
@@ -170,18 +170,18 @@ body { background-color: #0f172a; color: #f8fafc; min-height: 100vh; display: fl
 /* Result Styles */
 .result-row { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid #334155; font-size: 1rem; }
 .vector-box { margin-top: 24px; background-color: #0f172a; padding: 18px; border-radius: 10px; font-family: monospace; font-size: 1rem; word-break: break-all; border: 1px solid #334155; }
-.btn-restart, .btn-primary { 
-  margin-top: 20px; 
-  width: 100%; 
-  background-color: #38bdf8; 
-  color: #0f172a; 
+.btn-restart, .btn-primary {
+  margin-top: 20px;
+  width: 100%;
+  background-color: #38bdf8;
+  color: #0f172a;
   font-size: 1.05rem;
-  font-weight: bold; 
-  border: none; 
-  padding: 14px; 
-  border-radius: 10px; 
-  cursor: pointer; 
-  transition: all 0.2s ease; 
+  font-weight: bold;
+  border: none;
+  padding: 14px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.2s ease;
 }
 .btn-primary:hover { background-color: #0284c7; color: #ffffff; }
 
@@ -968,8 +968,8 @@ const SURVEY_DATA = [
 
 const OPTIONS = ["Strongly Disagree", "Disagree", "Neutral", "Agree", "Strongly Agree"];
 
-/* 
-  EKSEN SIRALAMASI VE KUTUP ETİKETLERİ 
+/*
+  EKSEN SIRALAMASI VE KUTUP ETİKETLERİ
   Yukarıdan Aşağıya Tam İstenen Sıra: S-O, C-R, U-T, J-E, L-P
 */
 const AXIS_LABELS = {
@@ -1017,7 +1017,7 @@ const CLUSTERS = [
       RO: { hex: "#eab308" },
       SO: { hex: "#ef4444" },
       SC: { hex: "#22c55e" },
-      RC: { hex: "#3b82f6" } 
+      RC: { hex: "#3b82f6" }
     }
   },
   {
@@ -1029,7 +1029,7 @@ const CLUSTERS = [
       TJ: { hex: "#f97316" },
       UJ: { hex: "#a855f7" },
       UE: { hex: "#b07d57" },
-      TE: { hex: "#94a3b8" } 
+      TE: { hex: "#94a3b8" }
     }
   },
   {
@@ -1426,7 +1426,7 @@ async function handleDemoSkip() {
   demographics.gender = "";
   demographics.age = "";
   demographics.nationality = "";
-  
+
   await saveDemographics();
   startSurvey();
 }
@@ -1456,10 +1456,10 @@ function calculateBounds() {
 function loadQuestion() {
   const qData = SURVEY_DATA[currentIndex];
   if (!qData) return;
-  
+
   const progText = document.getElementById("progress-text");
   if (progText) progText.innerText = `Question ${currentIndex + 1} of ${SURVEY_DATA.length}`;
-  
+
   const progFill = document.getElementById("progress-fill");
   if (progFill) progFill.style.width = `${(currentIndex / SURVEY_DATA.length) * 100}%`;
 
@@ -1638,8 +1638,8 @@ function buildClusterBlock(cluster, byAxis) {
 
   const xr = byAxis[cluster.x];
   const yr = byAxis[cluster.y];
-  
-  const displayKey = yr.letter + xr.letter; 
+
+  const displayKey = yr.letter + xr.letter;
   const combo = cluster.combos[displayKey];
 
   block.innerHTML = `
@@ -2033,7 +2033,7 @@ function drawTwoAxisPanel(ctx, entry, byAxis, x, y, w, SANS, MONO) {
 
   const bx = gx + GS + 44;
   const bw = (x + w - IP) - bx;
-  
+
   drawCanvasBar(ctx, yr, bx, gy + 86,  bw, SANS, MONO);
   drawCanvasBar(ctx, xr, bx, gy + 206, bw, SANS, MONO);
 
