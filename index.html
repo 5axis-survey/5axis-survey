@@ -466,6 +466,13 @@ body { background-color: #0f172a; color: #f8fafc; min-height: 100vh; display: fl
   font-weight: 600;
 }
 
+.profile-cluster-title {
+  font-size: 1.4rem;
+  color: #38bdf8;
+  font-weight: 700;
+  margin-top: 10px;
+}
+
 .vector-code {
   display: inline-block;
   background-color: #1e293b;
@@ -711,18 +718,15 @@ body { background-color: #0f172a; color: #f8fafc; min-height: 100vh; display: fl
       <div id="intro-view" class="card">
         <h2>Welcome</h2>
         <p class="intro-text">
-          This is a 37-statement survey that places your worldview on five independent axes: ethics,
+          This is a 40-statement survey that places your worldview on five independent axes: ethics,
           human nature, tribalism, justice, and religion. For each statement you pick how strongly you
-          agree or disagree, and at the end you get a five-letter profile, a score on every axis, and a
-          shareable image. It takes about five minutes, and you can go back and change any answer while
-          the test is running.
+          agree or disagree, and at the end you get a five-letter profile, a score on every axis, an ideological cluster, and a
+          shareable image.
         </p>
         <p class="intro-text">
           <strong>We keep your answers, but not your identity.</strong> When you finish, your responses,
           your five scores, and the optional details on the next page are saved to a private database
-          and studied as group statistics. We never collect your name, your email, or your IP address,
-          and there is no account, no login, and no tracking cookie — so a saved row cannot be traced
-          back to the person who filled it in.
+          and studied as group statistics.
         </p>
         <button id="btn-start" class="btn-primary">Start</button>
       </div>
@@ -765,7 +769,7 @@ body { background-color: #0f172a; color: #f8fafc; min-height: 100vh; display: fl
       <!-- Survey Active View -->
       <div id="survey-view" class="card hidden">
         <div class="progress-info">
-          <span id="progress-text">Question 1 of 37</span>
+          <span id="progress-text">Question 1 of 40</span>
           <button id="btn-prev" class="btn-prev" disabled>← Previous</button>
         </div>
 
@@ -791,6 +795,7 @@ body { background-color: #0f172a; color: #f8fafc; min-height: 100vh; display: fl
             <button type="button" id="btn-copy-code" class="btn-copy">Copy</button>
           </div>
           <div id="vector-code" class="vector-code" data-code=""></div>
+          <h3 id="profile-cluster-title" class="profile-cluster-title"></h3>
           <p id="profile-poles" class="profile-poles"></p>
         </div>
 
@@ -841,37 +846,37 @@ body { background-color: #0f172a; color: #f8fafc; min-height: 100vh; display: fl
         <h3>The Five Philosophical Axes Explained</h3>
 
         <div class="axis-explanation">
-          <h4>1. Ethics (ETH): Objectivism vs. Subjectivism</h4>
+          <h4>1. Ethics (ETH): Subjectivism (S) vs. Objectivism (O)</h4>
           <p>
-            <strong>Objectivism</strong> holds good and evil as objective categories. <strong>Subjectivism</strong> views morality as a social construct.
+            <strong>Subjectivism (S)</strong> views morality as a social construct or personal standard. <strong>Objectivism (O)</strong> holds good and evil as real, objective, universal categories.
           </p>
         </div>
 
         <div class="axis-explanation">
-          <h4>2. Human Nature (HN): Realism vs. Constructivism</h4>
+          <h4>2. Human Nature (HN): Constructivism (C) vs. Realism (R)</h4>
           <p>
-            <strong>Realism</strong> asserts fixed underlying traits. <strong>Constructivism</strong> holds human nature to be malleable.
+            <strong>Constructivism (C)</strong> holds human nature to be malleable by experiences. <strong>Realism (R)</strong> asserts fixed underlying biological traits.
           </p>
         </div>
 
         <div class="axis-explanation">
-          <h4>3. Tribalism (TRB): Tribalism vs. Universalism</h4>
+          <h4>3. Tribalism (TRB): Universalism (U) vs. Tribalism (T)</h4>
           <p>
-            <strong>Tribalism</strong> prioritizes primary responsibility toward one's own community. <strong>Universalism</strong> advocates global moral consideration.
+            <strong>Universalism (U)</strong> advocates equal global moral consideration. <strong>Tribalism (T)</strong> prioritizes responsibility toward one's own community.
           </p>
         </div>
 
         <div class="axis-explanation">
-          <h4>4. Justice (JST): Justice vs. Equality</h4>
+          <h4>4. Justice (JST): Justice (J) vs. Equality (E)</h4>
           <p>
-            <strong>Justice</strong> favors meritocracy and proportional reward. <strong>Equality</strong> prioritizes reduction of socioeconomic disparities.
+            <strong>Justice (J)</strong> favors meritocracy and proportional reward based on contribution. <strong>Equality (E)</strong> prioritizes reduction of socioeconomic disparities.
           </p>
         </div>
 
         <div class="axis-explanation">
-          <h4>5. Religion &amp; Transcendence (RLG): Spiritualism vs. Laicity</h4>
+          <h4>5. Religion &amp; Transcendence (RLG): Laicity (L) vs. Spiritualism (P)</h4>
           <p>
-            <strong>Spiritualism</strong> acknowledges innate purpose or faith. <strong>Laicity</strong> maintains a strictly materialist framework.
+            <strong>Laicity (L)</strong> maintains a strictly materialist framework. <strong>Spiritualism (P)</strong> acknowledges innate purpose, faith, or spiritual reality.
           </p>
         </div>
       </div>
@@ -903,71 +908,105 @@ body { background-color: #0f172a; color: #f8fafc; min-height: 100vh; display: fl
   </main>
 
   <script>
-window.COMPASS_BUILD = 24;
-console.log("5-Axis Compass build 24 — Eksen Takası & Etiket Formatı Güncellendi");
+window.COMPASS_BUILD = 26;
+console.log("5-Axis Compass build 26 — Bar Sıralaması Düzeltildi (ETH/HN, TRB/JST)");
 
+/* ============================================================
+   GÜNCEL 40 SORU VE KAÇAR PUAN ARTIRILMIŞ AĞIRLIKLARI (1.4 Katı)
+   ============================================================ */
 const SURVEY_DATA = [
-  // --- ETHICS ---
-  { code: "ETH1", question: "There is a set of moral values that are universally valid", scores: { "Strongly Disagree": {ETH: -1}, "Disagree": {ETH: -0.5}, "Neutral": {ETH: 0}, "Agree": {ETH: 0.5}, "Strongly Agree": {ETH: 1} } },
-  { code: "ETH2", question: "No set of moral values is superior to any other", scores: { "Strongly Disagree": {ETH: 1}, "Disagree": {ETH: 0.5}, "Neutral": {ETH: 0}, "Agree": {ETH: -0.5}, "Strongly Agree": {ETH: -1} } },
-  { code: "ETH3", question: "Good and evil are real, objective categories", scores: { "Strongly Disagree": {ETH: -1.5}, "Disagree": {ETH: -0.75}, "Neutral": {ETH: 0}, "Agree": {ETH: 0.75}, "Strongly Agree": {ETH: 1.5} } },
-  { code: "ETH4", question: "Morality is a social construct", scores: { "Strongly Disagree": {ETH: 2}, "Disagree": {ETH: 1}, "Neutral": {ETH: 0}, "Agree": {ETH: -1}, "Strongly Agree": {ETH: -2} } },
-  { code: "ETH5", question: "Some of my moral beliefs may be false", scores: { "Strongly Disagree": {ETH: 1}, "Disagree": {ETH: 0.5}, "Neutral": {ETH: 0}, "Agree": {ETH: -0.5}, "Strongly Agree": {ETH: -1} } },
-  { code: "ETH6", question: "No moral standard is permanently valid across all times and societies", scores: { "Strongly Disagree": {ETH: 1}, "Disagree": {ETH: 0.5}, "Neutral": {ETH: 0}, "Agree": {ETH: -0.5}, "Strongly Agree": {ETH: -1} } },
-  { code: "ETH7", question: "Moral truths are accessible through common sense, or reason", scores: { "Strongly Disagree": {ETH: -1}, "Disagree": {ETH: -0.5}, "Neutral": {ETH: 0}, "Agree": {ETH: 0.5}, "Strongly Agree": {ETH: 1} } },
+  // --- ETHICS (S-O) ---
+  { code: "ETH1", question: "There is a set of moral values that are universally valid", scores: { "Strongly Disagree": {ETH: -2.0}, "Disagree": {ETH: -1.4}, "Neutral": {ETH: 0}, "Agree": {ETH: 1.4}, "Strongly Agree": {ETH: 2.0} } },
+  { code: "ETH2", question: "No set of moral values is superior to any other", scores: { "Strongly Disagree": {ETH: 2.0}, "Disagree": {ETH: 1.4}, "Neutral": {ETH: 0}, "Agree": {ETH: -1.4}, "Strongly Agree": {ETH: -2.0} } },
+  { code: "ETH3", question: "Good and evil are real, objective categories", scores: { "Strongly Disagree": {ETH: -2.0}, "Disagree": {ETH: -1.4}, "Neutral": {ETH: 0}, "Agree": {ETH: 1.4}, "Strongly Agree": {ETH: 2.0} } },
+  { code: "ETH4", question: "Morality is a social construct", scores: { "Strongly Disagree": {ETH: 2.0}, "Disagree": {ETH: 1.4}, "Neutral": {ETH: 0}, "Agree": {ETH: -1.4}, "Strongly Agree": {ETH: -2.0} } },
+  { code: "ETH5", question: "Some of my moral beliefs may be false", scores: { "Strongly Disagree": {ETH: 2.0}, "Disagree": {ETH: 1.4}, "Neutral": {ETH: 0}, "Agree": {ETH: -1.4}, "Strongly Agree": {ETH: -2.0} } },
+  { code: "ETH6", question: "No moral standard is objectively correct throughout history and across all societies", scores: { "Strongly Disagree": {ETH: 2.0}, "Disagree": {ETH: 1.4}, "Neutral": {ETH: 0}, "Agree": {ETH: -1.4}, "Strongly Agree": {ETH: -2.0} } },
+  { code: "ETH7", question: "Universal moral truths are accessible through common sense or reason", scores: { "Strongly Disagree": {ETH: -2.0}, "Disagree": {ETH: -1.4}, "Neutral": {ETH: 0}, "Agree": {ETH: 1.4}, "Strongly Agree": {ETH: 2.0} } },
+  { code: "ETH8", question: "There are objectively correct answers to moral disagreements", scores: { "Strongly Disagree": {ETH: -2.0}, "Disagree": {ETH: -1.4}, "Neutral": {ETH: 0}, "Agree": {ETH: 1.4}, "Strongly Agree": {ETH: 2.0} } },
 
-  // --- HUMAN NATURE ---
-  { code: "HN1", question: "All humans share a common moral foundation at birth", scores: { "Strongly Disagree": {HN: -1}, "Disagree": {HN: -0.5}, "Neutral": {HN: 0}, "Agree": {HN: 0.5}, "Strongly Agree": {HN: 1} } },
-  { code: "HN2", question: "Some political systems go against human nature", scores: { "Strongly Disagree": {HN: -1}, "Disagree": {HN: -0.5}, "Neutral": {HN: 0}, "Agree": {HN: 0.5}, "Strongly Agree": {HN: 1} } },
-  { code: "HN3", question: "Rehabilitation is possible regardless of past actions", scores: { "Strongly Disagree": {HN: 1}, "Disagree": {HN: 0.5}, "Neutral": {HN: 0}, "Agree": {HN: -0.5}, "Strongly Agree": {HN: -1} } },
-  { code: "HN4", question: "Some people are predisposed to violent behavior", scores: { "Strongly Disagree": {HN: -1}, "Disagree": {HN: -0.5}, "Neutral": {HN: 0}, "Agree": {HN: 0.5}, "Strongly Agree": {HN: 1} } },
-  { code: "HN5", question: "A perfect society is achievable", scores: { "Strongly Disagree": {HN: 1}, "Disagree": {HN: 0.5}, "Neutral": {HN: 0}, "Agree": {HN: -0.5}, "Strongly Agree": {HN: -1} } },
-  { code: "HN6", question: "People are born with a fixed underlying human nature", scores: { "Strongly Disagree": {HN: -1.5}, "Disagree": {HN: -0.75}, "Neutral": {HN: 0}, "Agree": {HN: 0.75}, "Strongly Agree": {HN: 1.5} } },
-  { code: "HN7", question: "We are shaped more by our experiences than by our genetics", scores: { "Strongly Disagree": {HN: 1}, "Disagree": {HN: 0.5}, "Neutral": {HN: 0}, "Agree": {HN: -0.5}, "Strongly Agree": {HN: -1} } },
+  // --- HUMAN NATURE (C-R) ---
+  { code: "HN1", question: "All humans share a common moral foundation at birth", scores: { "Strongly Disagree": {HN: -2.0}, "Disagree": {HN: -1.4}, "Neutral": {HN: 0}, "Agree": {HN: 1.4}, "Strongly Agree": {HN: 2.0} } },
+  { code: "HN2", question: "Some political systems go against human nature", scores: { "Strongly Disagree": {HN: -2.0}, "Disagree": {HN: -1.4}, "Neutral": {HN: 0}, "Agree": {HN: 1.4}, "Strongly Agree": {HN: 2.0} } },
+  { code: "HN3", question: "Human nature limits how much an individual can be shaped by society", scores: { "Strongly Disagree": {HN: -2.0}, "Disagree": {HN: -1.4}, "Neutral": {HN: 0}, "Agree": {HN: 1.4}, "Strongly Agree": {HN: 2.0} } },
+  { code: "HN4", question: "Some people are predisposed to violent behavior", scores: { "Strongly Disagree": {HN: -2.0}, "Disagree": {HN: -1.4}, "Neutral": {HN: 0}, "Agree": {HN: 1.4}, "Strongly Agree": {HN: 2.0} } },
+  { code: "HN5", question: "A perfect society is achievable", scores: { "Strongly Disagree": {HN: 2.0}, "Disagree": {HN: 1.4}, "Neutral": {HN: 0}, "Agree": {HN: -1.4}, "Strongly Agree": {HN: -2.0} } },
+  { code: "HN6", question: "All people possess a fixed underlying human nature", scores: { "Strongly Disagree": {HN: -2.0}, "Disagree": {HN: -1.4}, "Neutral": {HN: 0}, "Agree": {HN: 1.4}, "Strongly Agree": {HN: 2.0} } },
+  { code: "HN7", question: "We are shaped more by our experiences than by our genetics", scores: { "Strongly Disagree": {HN: 2.0}, "Disagree": {HN: 1.4}, "Neutral": {HN: 0}, "Agree": {HN: -1.4}, "Strongly Agree": {HN: -2.0} } },
+  { code: "HN8", question: "People are born with certain characteristics that cannot be changed", scores: { "Strongly Disagree": {HN: -2.0}, "Disagree": {HN: -1.4}, "Neutral": {HN: 0}, "Agree": {HN: 1.4}, "Strongly Agree": {HN: 2.0} } },
 
-  // --- TRIBALISM ---
-  { code: "TRB1", question: "Strangers deserve as much of our help as members of our community", scores: { "Strongly Disagree": {TRB: 1}, "Disagree": {TRB: 0.5}, "Neutral": {TRB: 0}, "Agree": {TRB: -0.5}, "Strongly Agree": {TRB: -1} } },
-  { code: "TRB2", question: "Our most important responsibility is towards our own society", scores: { "Strongly Disagree": {TRB: -1}, "Disagree": {TRB: -0.5}, "Neutral": {TRB: 0}, "Agree": {TRB: 0.5}, "Strongly Agree": {TRB: 1} } },
-  { code: "TRB3", question: "There are things to be learned from every culture", scores: { "Strongly Disagree": {TRB: 1}, "Disagree": {TRB: 0.5}, "Neutral": {TRB: 0}, "Agree": {TRB: -0.5}, "Strongly Agree": {TRB: -1} } },
-  { code: "TRB4", question: "It is our duty to preserve our own social identity", scores: { "Strongly Disagree": {TRB: -1}, "Disagree": {TRB: -0.5}, "Neutral": {TRB: 0}, "Agree": {TRB: 0.5}, "Strongly Agree": {TRB: 1} } },
-  { code: "TRB5", question: "It is regrettable that global interconnectedness is causing ruptures in communities", scores: { "Strongly Disagree": {TRB: -1}, "Disagree": {TRB: -0.5}, "Neutral": {TRB: 0}, "Agree": {TRB: 0.5}, "Strongly Agree": {TRB: 1} } },
-  { code: "TRB6", question: "A society must maintain a strong distinction between its members and outsiders", scores: { "Strongly Disagree": {TRB: -1.5}, "Disagree": {TRB: -0.75}, "Neutral": {TRB: 0}, "Agree": {TRB: 0.75}, "Strongly Agree": {TRB: 1.5} } },
-  { code: "TRB7", question: "It is important for membership in society to be exclusive", scores: { "Strongly Disagree": {TRB: -1}, "Disagree": {TRB: -0.5}, "Neutral": {TRB: 0}, "Agree": {TRB: 0.5}, "Strongly Agree": {TRB: 1} } },
-  { code: "TRB8", question: "We should be accountable to our community for our actions", scores: { "Strongly Disagree": {TRB: 1}, "Disagree": {TRB: 0.5}, "Neutral": {TRB: 0}, "Agree": {TRB: -0.5}, "Strongly Agree": {TRB: -1} } },
+  // --- TRIBALISM (U-T) ---
+  { code: "TRB1", question: "Strangers deserve as much of our help as members of our community", scores: { "Strongly Disagree": {TRB: 2.0}, "Disagree": {TRB: 1.4}, "Neutral": {TRB: 0}, "Agree": {TRB: -1.4}, "Strongly Agree": {TRB: -2.0} } },
+  { code: "TRB2", question: "Our most important responsibility is towards our own society", scores: { "Strongly Disagree": {TRB: -2.0}, "Disagree": {TRB: -1.4}, "Neutral": {TRB: 0}, "Agree": {TRB: 1.4}, "Strongly Agree": {TRB: 2.0} } },
+  { code: "TRB3", question: "There are things to be learned from every culture", scores: { "Strongly Disagree": {TRB: 2.0}, "Disagree": {TRB: 1.4}, "Neutral": {TRB: 0}, "Agree": {TRB: -1.4}, "Strongly Agree": {TRB: -2.0} } },
+  { code: "TRB4", question: "It is our duty to preserve our own social identity", scores: { "Strongly Disagree": {TRB: -2.0}, "Disagree": {TRB: -1.4}, "Neutral": {TRB: 0}, "Agree": {TRB: 1.4}, "Strongly Agree": {TRB: 2.0} } },
+  { code: "TRB5", question: "It is regrettable that global interconnectedness is causing ruptures in existing communities", scores: { "Strongly Disagree": {TRB: -2.0}, "Disagree": {TRB: -1.4}, "Neutral": {TRB: 0}, "Agree": {TRB: 1.4}, "Strongly Agree": {TRB: 2.0} } },
+  { code: "TRB6", question: "A society must maintain a strong distinction between its members and outsiders", scores: { "Strongly Disagree": {TRB: -2.0}, "Disagree": {TRB: -1.4}, "Neutral": {TRB: 0}, "Agree": {TRB: 1.4}, "Strongly Agree": {TRB: 2.0} } },
+  { code: "TRB7", question: "It is important for membership in society to be exclusive", scores: { "Strongly Disagree": {TRB: -2.0}, "Disagree": {TRB: -1.4}, "Neutral": {TRB: 0}, "Agree": {TRB: 1.4}, "Strongly Agree": {TRB: 2.0} } },
+  { code: "TRB8", question: "We should be accountable to our community for our actions", scores: { "Strongly Disagree": {TRB: -2.0}, "Disagree": {TRB: -1.4}, "Neutral": {TRB: 0}, "Agree": {TRB: 1.4}, "Strongly Agree": {TRB: 2.0} } },
 
-  // --- JUSTICE ---
-  { code: "JST1", question: "Those who contribute more deserve a greater share of benefits", scores: { "Strongly Disagree": {JST: -1}, "Disagree": {JST: -0.5}, "Neutral": {JST: 0}, "Agree": {JST: 0.5}, "Strongly Agree": {JST: 1} } },
-  { code: "JST2", question: "Hierarchies protect society from anarchy", scores: { "Strongly Disagree": {JST: -1.5}, "Disagree": {JST: -0.75}, "Neutral": {JST: 0}, "Agree": {JST: 0.75}, "Strongly Agree": {JST: 1.5} } },
-  { code: "JST3", question: "From each according to his ability to each according to his needs", scores: { "Strongly Disagree": {JST: 1}, "Disagree": {JST: 0.5}, "Neutral": {JST: 0}, "Agree": {JST: -0.5}, "Strongly Agree": {JST: -1} } },
-  { code: "JST4", question: "Since humans have unequal abilities, social inequality is inevitable", scores: { "Strongly Disagree": {JST: -1}, "Disagree": {JST: -0.5}, "Neutral": {JST: 0}, "Agree": {JST: 0.5}, "Strongly Agree": {JST: 1} } },
-  { code: "JST5", question: "Affirmative action is ineffective at reducing inequality", scores: { "Strongly Disagree": {JST: -1}, "Disagree": {JST: -0.5}, "Neutral": {JST: 0}, "Agree": {JST: 0.5}, "Strongly Agree": {JST: 1} } },
-  { code: "JST6", question: "The more equal a society the more just", scores: { "Strongly Disagree": {JST: 1.5}, "Disagree": {JST: 0.75}, "Neutral": {JST: 0}, "Agree": {JST: -0.75}, "Strongly Agree": {JST: -1.5} } },
-  { code: "JST7", question: "It is better to be middle class in an equal society than it is to be wealthy in an unequal society", scores: { "Strongly Disagree": {JST: 1}, "Disagree": {JST: 0.5}, "Neutral": {JST: 0}, "Agree": {JST: -0.5}, "Strongly Agree": {JST: -1} } },
+  // --- JUSTICE (J-E) ---
+  { code: "JST1", question: "Those who contribute more deserve a greater share of benefits", scores: { "Strongly Disagree": {JST: -2.0}, "Disagree": {JST: -1.4}, "Neutral": {JST: 0}, "Agree": {JST: 1.4}, "Strongly Agree": {JST: 2.0} } },
+  { code: "JST2", question: "In a just society, a hierarchy based on skill, talent, and merit would be the norm", scores: { "Strongly Disagree": {JST: -2.0}, "Disagree": {JST: -1.4}, "Neutral": {JST: 0}, "Agree": {JST: 1.4}, "Strongly Agree": {JST: 2.0} } },
+  { code: "JST3", question: "From each according to his ability to each according to his needs", scores: { "Strongly Disagree": {JST: 2.0}, "Disagree": {JST: 1.4}, "Neutral": {JST: 0}, "Agree": {JST: -1.4}, "Strongly Agree": {JST: -2.0} } },
+  { code: "JST4", question: "Since humans have unequal abilities, social inequality is inevitable", scores: { "Strongly Disagree": {JST: -2.0}, "Disagree": {JST: -1.4}, "Neutral": {JST: 0}, "Agree": {JST: 1.4}, "Strongly Agree": {JST: 2.0} } },
+  { code: "JST5", question: "Affirmative action leads to unfair outcomes", scores: { "Strongly Disagree": {JST: -2.0}, "Disagree": {JST: -1.4}, "Neutral": {JST: 0}, "Agree": {JST: 1.4}, "Strongly Agree": {JST: 2.0} } },
+  { code: "JST6", question: "The more equal a society the more just", scores: { "Strongly Disagree": {JST: 2.0}, "Disagree": {JST: 1.4}, "Neutral": {JST: 0}, "Agree": {JST: -1.4}, "Strongly Agree": {JST: -2.0} } },
+  { code: "JST7", question: "It is better to be middle class in an equal society than it is to be wealthy in an unequal society", scores: { "Strongly Disagree": {JST: 2.0}, "Disagree": {JST: 1.4}, "Neutral": {JST: 0}, "Agree": {JST: -1.4}, "Strongly Agree": {JST: -2.0} } },
+  { code: "JST8", question: "A merit based system can be unfair to those who lack equal opportunities", scores: { "Strongly Disagree": {JST: 2.0}, "Disagree": {JST: 1.4}, "Neutral": {JST: 0}, "Agree": {JST: -1.4}, "Strongly Agree": {JST: -2.0} } },
 
-  // --- RELIGION ---
-  { code: "RLG1", question: "Science is the only universally valid source of knowledge", scores: { "Strongly Disagree": {RLG: 1}, "Disagree": {RLG: 0.5}, "Neutral": {RLG: 0}, "Agree": {RLG: -0.5}, "Strongly Agree": {RLG: -1} } },
-  { code: "RLG2", question: "There is an innate meaning to life", scores: { "Strongly Disagree": {RLG: -1}, "Disagree": {RLG: -0.5}, "Neutral": {RLG: 0}, "Agree": {RLG: 0.5}, "Strongly Agree": {RLG: 1} } },
-  { code: "RLG3", question: "Faith and reason complement each other", scores: { "Strongly Disagree": {RLG: -1}, "Disagree": {RLG: -0.5}, "Neutral": {RLG: 0}, "Agree": {RLG: 0.5}, "Strongly Agree": {RLG: 1} } },
-  { code: "RLG4", question: "Prayer can have a real effect on our lives", scores: { "Strongly Disagree": {RLG: -1}, "Disagree": {RLG: -0.5}, "Neutral": {RLG: 0}, "Agree": {RLG: 0.5}, "Strongly Agree": {RLG: 1} } },
-  { code: "RLG5", question: "Supernatural forces have played a major role in human history", scores: { "Strongly Disagree": {RLG: -1}, "Disagree": {RLG: -0.5}, "Neutral": {RLG: 0}, "Agree": {RLG: 0.5}, "Strongly Agree": {RLG: 1} } },
-  { code: "RLG6", question: "Morality cannot be explained in purely materialistic terms", scores: { "Strongly Disagree": {RLG: -1, ETH: -1}, "Disagree": {RLG: -0.5, ETH: -0.5}, "Neutral": {RLG: 0, ETH: 0}, "Agree": {RLG: 0.5, ETH: 0.5}, "Strongly Agree": {RLG: 1, ETH: 1} } },
-  { code: "RLG7", question: "Religion is an outdated concept", scores: { "Strongly Disagree": {RLG: 1}, "Disagree": {RLG: 0.5}, "Neutral": {RLG: 0}, "Agree": {RLG: -0.5}, "Strongly Agree": {RLG: -1} } },
-  { code: "RLG8", question: "Human life does not end with physical death", scores: { "Strongly Disagree": {RLG: -1}, "Disagree": {RLG: -0.5}, "Neutral": {RLG: 0}, "Agree": {RLG: 0.5}, "Strongly Agree": {RLG: 1} } }
+  // --- RELIGION (L-P) ---
+  { code: "RLG1", question: "Science is the only universally valid source of knowledge", scores: { "Strongly Disagree": {RLG: 2.0}, "Disagree": {RLG: 1.4}, "Neutral": {RLG: 0}, "Agree": {RLG: -1.4}, "Strongly Agree": {RLG: -2.0} } },
+  { code: "RLG2", question: "There is an innate meaning to life", scores: { "Strongly Disagree": {RLG: -2.0}, "Disagree": {RLG: -1.4}, "Neutral": {RLG: 0}, "Agree": {RLG: 1.4}, "Strongly Agree": {RLG: 2.0} } },
+  { code: "RLG3", question: "Faith and reason complement each other", scores: { "Strongly Disagree": {RLG: -2.0}, "Disagree": {RLG: -1.4}, "Neutral": {RLG: 0}, "Agree": {RLG: 1.4}, "Strongly Agree": {RLG: 2.0} } },
+  { code: "RLG4", question: "Prayer can have a real effect on our lives", scores: { "Strongly Disagree": {RLG: -2.0}, "Disagree": {RLG: -1.4}, "Neutral": {RLG: 0}, "Agree": {RLG: 1.4}, "Strongly Agree": {RLG: 2.0} } },
+  { code: "RLG5", question: "Supernatural forces play a role in our daily lives", scores: { "Strongly Disagree": {RLG: -2.0}, "Disagree": {RLG: -1.4}, "Neutral": {RLG: 0}, "Agree": {RLG: 1.4}, "Strongly Agree": {RLG: 2.0} } },
+  { code: "RLG6", question: "Morality cannot be explained in purely materialistic terms", scores: { "Strongly Disagree": {RLG: -2.0}, "Disagree": {RLG: -1.4}, "Neutral": {RLG: 0}, "Agree": {RLG: 1.4}, "Strongly Agree": {RLG: 2.0} } },
+  { code: "RLG7", question: "Religion is an outdated concept", scores: { "Strongly Disagree": {RLG: 2.0}, "Disagree": {RLG: 1.4}, "Neutral": {RLG: 0}, "Agree": {RLG: -1.4}, "Strongly Agree": {RLG: -2.0} } },
+  { code: "RLG8", question: "Human life does not end with physical death", scores: { "Strongly Disagree": {RLG: -2.0}, "Disagree": {RLG: -1.4}, "Neutral": {RLG: 0}, "Agree": {RLG: 1.4}, "Strongly Agree": {RLG: 2.0} } }
 ];
 
 const OPTIONS = ["Strongly Disagree", "Disagree", "Neutral", "Agree", "Strongly Agree"];
 
+/* 
+  EKSEN SIRALAMASI VE KUTUP ETİKETLERİ 
+  Yukarıdan Aşağıya Tam İstenen Sıra: S-O, C-R, U-T, J-E, L-P
+*/
 const AXIS_LABELS = {
   ETH: { neg: "Subjectivism",   negKey: "S", pos: "Objectivism", posKey: "O" },
   HN:  { neg: "Constructivism", negKey: "C", pos: "Realism",     posKey: "R" },
   TRB: { neg: "Universalism",   negKey: "U", pos: "Tribalism",   posKey: "T" },
-  JST: { neg: "Equality",       negKey: "E", pos: "Justice",     posKey: "J" },
+  JST: { neg: "Justice",        negKey: "J", pos: "Equality",    posKey: "E" },
   RLG: { neg: "Laicity",        negKey: "L", pos: "Spiritualism", posKey: "P" }
 };
 
 const AXIS_ORDER = ["ETH", "HN", "TRB", "JST", "RLG"];
 
-/* REVIZE EDILDI: Philosophical Cluster için X ve Y takas edildi */
+/* ============================================================
+   16 İDEOLOJİK KÜME İSMİ MAPPING
+   ============================================================ */
+const IDEOLOGICAL_CLUSTERS = {
+  "ORTJ": "Conservative Essentialism",
+  "ORUJ": "Meritocratic Essentialism",
+  "ORUE": "Universalist Essentialism",
+  "ORTE": "Communitarian Essentialism",
+
+  "OCTJ": "Conservative Idealism",
+  "OCUJ": "Meritocratic Idealism",
+  "OCUE": "Universalist Idealism",
+  "OCTE": "Communitarian Idealism",
+
+  "SCTJ": "Conservative Skepticism",
+  "SCUJ": "Meritocratic Skepticism",
+  "SCUE": "Universalist Skepticism",
+  "SCTE": "Communitarian Skepticism",
+
+  "SRTJ": "Conservative Naturalism",
+  "SRUJ": "Meritocratic Naturalism",
+  "SRUE": "Universalist Naturalism",
+  "SRTE": "Communitarian Naturalism"
+};
+
 const CLUSTERS = [
   {
     id: "PHI",
@@ -975,22 +1014,22 @@ const CLUSTERS = [
     x: "HN",               // yatay: C <-> R
     y: "ETH",              // dikey: S <-> O
     combos: {
-      RO: { hex: "#eab308" }, // Realism + Objectivism
-      SO: { hex: "#ef4444" }, // Constructivism + Objectivism
-      SC: { hex: "#22c55e" }, // Constructivism + Subjectivism
-      RC: { hex: "#3b82f6" }  // Realism + Subjectivism
+      RO: { hex: "#eab308" },
+      SO: { hex: "#ef4444" },
+      SC: { hex: "#22c55e" },
+      RC: { hex: "#3b82f6" } 
     }
   },
   {
     id: "POL",
     name: "Political Cluster",
-    x: "JST",              // yatay: E <-> J
+    x: "JST",              // yatay: J <-> E
     y: "TRB",              // dikey: U <-> T
     combos: {
-      TJ: { hex: "#f97316" }, // Tribalism + Justice
-      UJ: { hex: "#a855f7" }, // Universalism + Justice
-      UE: { hex: "#b07d57" }, // Universalism + Equality
-      TE: { hex: "#94a3b8" }  // Tribalism + Equality
+      TJ: { hex: "#f97316" },
+      UJ: { hex: "#a855f7" },
+      UE: { hex: "#b07d57" },
+      TE: { hex: "#94a3b8" } 
     }
   },
   {
@@ -1001,7 +1040,6 @@ const CLUSTERS = [
 ];
 
 let lastClusters = [];
-
 let currentIndex = 0;
 let rawScores = {};
 let maxPossibleScores = {};
@@ -1078,9 +1116,8 @@ async function saveResults() {
 }
 
 /* ============================================================
-   AKIS KONTROLU: intro -> demo -> survey -> result
+   AKIS KONTROLU
    ============================================================ */
-
 const STEP_VIEWS = {
   intro:  "intro-view",
   demo:   "demo-view",
@@ -1105,7 +1142,6 @@ function startSurvey() {
 /* ============================================================
    OPSIYONEL DEMOGRAFI ANKETI
    ============================================================ */
-
 const GENDER_OPTIONS = ["Male", "Female", "Queer", "Prefer not to say"];
 const AGE_OPTIONS = ["Below 18", "18-24", "25-34", "35-44", "45-54", "55-64", "65+", "Prefer not to say"];
 
@@ -1396,16 +1432,16 @@ async function handleDemoSkip() {
 }
 
 /* ============================================================
-   TEST MOTORU
+   TEST MOTORU HESAPLAMALARI
    ============================================================ */
-
 function calculateBounds() {
   SURVEY_DATA.forEach(q => {
     let qMaxPerAxis = {};
     Object.values(q.scores).forEach(weights => {
       Object.entries(weights).forEach(([axis, weight]) => {
-        if (!qMaxPerAxis[axis] || weight > qMaxPerAxis[axis]) {
-          qMaxPerAxis[axis] = weight;
+        const absWeight = Math.abs(weight);
+        if (!qMaxPerAxis[axis] || absWeight > qMaxPerAxis[axis]) {
+          qMaxPerAxis[axis] = absWeight;
         }
       });
     });
@@ -1499,9 +1535,9 @@ function letterColorFor(axis) {
 
 function computeAxis(axis) {
   const raw = rawScores[axis] || 0;
-  const max = maxPossibleScores[axis] || 0;
+  const max = maxPossibleScores[axis] || 1;
 
-  let scaled = max > 0 ? (raw / max) * 10 : 0;
+  let scaled = (raw / max) * 10;
   scaled = Math.max(-10, Math.min(10, scaled));
 
   const labels = AXIS_LABELS[axis];
@@ -1544,12 +1580,10 @@ function buildBarHTML(r) {
 }
 
 function buildGridSVG(cluster, xr, yr) {
-  // SVG için activeKey: [X_harfi][Y_harfi]
   const activeKey = xr.letter + yr.letter;
   const dx = 120 + (xr.scaled / 10) * 90;
   const dy = 120 - (yr.scaled / 10) * 90;
 
-  // Dört kadranın X ve Y koordinatlarına göre doğru key tanımlaması
   const quads = [
     { x: 120, y: 20,  key: xr.posKey + yr.posKey },
     { x: 20,  y: 20,  key: xr.negKey + yr.posKey },
@@ -1558,7 +1592,6 @@ function buildGridSVG(cluster, xr, yr) {
   ];
 
   const rects = quads.map(q => {
-    // Kombinasyon rengini bulmak için [Y_harfi][X_harfi] formatını eşleştiriyoruz
     const comboKey = q.key[1] + q.key[0];
     const combo = cluster.combos[comboKey];
     const active = (q.key === activeKey);
@@ -1586,6 +1619,7 @@ function buildGridSVG(cluster, xr, yr) {
 
 const AXIS_LEGEND = '<div class="axis-legend"><span>-10</span><span>-5</span><span>0</span><span>+5</span><span>+10</span></div>';
 
+/* REVIZE EDILDI: Düz barların sırası yr (Dikey - ETH/TRB) üstte, xr (Yatay - HN/JST) altta olacak şekilde düzeltildi */
 function buildClusterBlock(cluster, byAxis) {
   const block = document.createElement("section");
   block.className = "cluster";
@@ -1605,7 +1639,6 @@ function buildClusterBlock(cluster, byAxis) {
   const xr = byAxis[cluster.x];
   const yr = byAxis[cluster.y];
   
-  /* REVIZE EDILDI: Sıralama [Y_harfi][X_harfi] olarak ayarlandı, renk adı kaldırıldı */
   const displayKey = yr.letter + xr.letter; 
   const combo = cluster.combos[displayKey];
 
@@ -1619,7 +1652,7 @@ function buildClusterBlock(cluster, byAxis) {
     </div>
     <div class="cluster-body">
       <div class="cluster-grid">${buildGridSVG(cluster, xr, yr)}</div>
-      <div class="cluster-bars">${AXIS_LEGEND}${buildBarHTML(xr)}${buildBarHTML(yr)}</div>
+      <div class="cluster-bars">${AXIS_LEGEND}${buildBarHTML(yr)}${buildBarHTML(xr)}</div>
     </div>`;
 
   return block;
@@ -1634,7 +1667,6 @@ function showResults() {
   lastResults.forEach(r => { byAxis[r.axis] = r; });
 
   lastClusters = CLUSTERS.filter(c => c.combos).map(c => {
-    // Etiket sıralaması: Önce Y ekseni harfi, sonra X ekseni harfi
     const key = byAxis[c.y].letter + byAxis[c.x].letter;
     return { cluster: c, key: key, hex: c.combos[key] ? c.combos[key].hex : "#38bdf8" };
   });
@@ -1663,6 +1695,12 @@ function showResults() {
       return `<span class="code-letter" style="color:${col.hex}" title="${col.tip}">${r.letter}</span>`;
     }).join("");
   }
+
+  // Profil İdeolojik Küme İsmi Oluşturma (İlk 4 harfe göre)
+  const firstFour = codeString.slice(0, 4);
+  const clusterTitle = IDEOLOGICAL_CLUSTERS[firstFour] || "Unknown Cluster";
+  const clusterEl = document.getElementById("profile-cluster-title");
+  if (clusterEl) clusterEl.innerText = clusterTitle;
 
   const poles = document.getElementById("profile-poles");
   if (poles) poles.innerText = lastResults.map(r => r.pole).join(" \u00b7 ");
@@ -1979,6 +2017,7 @@ function drawPanelHead(ctx, x, y, w, title, entry, SANS, MONO) {
   ctx.fill();
 }
 
+/* REVIZE EDILDI: Canvas'taki barlar da yr (ETH/TRB) üstte, xr (HN/JST) altta olacak şekilde çiziliyor */
 function drawTwoAxisPanel(ctx, entry, byAxis, x, y, w, SANS, MONO) {
   const IP = 26, GS = 300, HEAD = 62;
   const panelH = HEAD + GS + 58;
@@ -1994,8 +2033,9 @@ function drawTwoAxisPanel(ctx, entry, byAxis, x, y, w, SANS, MONO) {
 
   const bx = gx + GS + 44;
   const bw = (x + w - IP) - bx;
-  drawCanvasBar(ctx, xr, bx, gy + 86,  bw, SANS, MONO);
-  drawCanvasBar(ctx, yr, bx, gy + 206, bw, SANS, MONO);
+  
+  drawCanvasBar(ctx, yr, bx, gy + 86,  bw, SANS, MONO);
+  drawCanvasBar(ctx, xr, bx, gy + 206, bw, SANS, MONO);
 
   return panelH;
 }
