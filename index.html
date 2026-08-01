@@ -568,6 +568,42 @@ body {
    ============================================================ */
 .about-intro { line-height: 1.6; color: #cbd5e1; font-size: 1rem; margin-bottom: 12px; }
 
+.about-lede {
+  line-height: 1.75;
+  color: #f8fafc;
+  font-size: 1.06rem;
+  margin-bottom: 20px;
+  border-left: 3px solid #38bdf8;
+  padding-left: 16px;
+}
+
+.about-principles { display: flex; flex-direction: column; gap: 18px; }
+
+.about-principles p {
+  line-height: 1.75;
+  color: #cbd5e1;
+  font-size: 1rem;
+}
+
+.about-principles strong { color: #f8fafc; }
+
+.about-closing {
+  line-height: 1.75;
+  color: #cbd5e1;
+  font-size: 1rem;
+  margin-top: 20px;
+  padding-top: 18px;
+  border-top: 1px dashed #334155;
+}
+
+.about-link {
+  color: #38bdf8;
+  text-decoration: none;
+  border-bottom: 1px dotted #38bdf8;
+  font-weight: 600;
+}
+.about-link:hover { color: #f8fafc; border-bottom-color: #f8fafc; }
+
 .axis-explanation { margin-bottom: 20px; }
 .axis-explanation h4 { margin-bottom: 6px; color: #38bdf8; }
 
@@ -754,14 +790,49 @@ body {
     <!-- ========== PAGE 2: ABOUT ========== -->
     <section id="page-about" class="page-section hidden">
       <div class="card">
-        <h2>About Us &amp; Methodology</h2>
-        <p class="about-intro">
-          The 5-Axis Philosophical Compass is a multi-dimensional analytical tool engineered to evaluate and map an individual's worldview across five core philosophical and political dimensions.
+        <h2>About Us</h2>
+
+        <p class="about-lede">
+          It is a truth universally acknowledged, that a political test in want of accuracy and
+          precision must be in possession of certain general principles: to ask questions that
+          distinguish between what is and what ought to be; are comprehensive in scope and
+          applicability; and provide results that are real, relevant, and revelatory.
+        </p>
+
+        <div class="about-principles">
+          <p>
+            As such, our <strong>first principle</strong> in the creation of this website is to ask
+            questions that can only be interpreted in a single way: either descriptively or
+            normatively, leaving as little room for ambiguity as possible. Our
+            <strong>second principle</strong> is to create a set of questions that can be answered
+            by anyone, anywhere, in any period of time. We have tried to avoid questions whose answers
+            would depend on the respondent’s own contingent situation, which may be shaped by their
+            place in the world, and their time in history. This has necessitated certain modifications
+            to traditional political questionnaires, explained in our third principle. Our
+            <strong>third principle</strong> is to design such categories as are relevant to a
+            person’s entire worldview. For this, we have created axes that are normally ignored in
+            political tests, but that underpin not only our political views, but our entire outlook on
+            life; namely Ethics and Human Nature. All five of our categories are explained in detail in
+            (<a href="#" id="link-methodology" class="about-link">Methodology</a>). Our
+            <strong>final principle</strong> is to display each respondent’s results in a way that
+            identifies their political-philosophical views most accurately. For this, we use 4+1 letter
+            method, where each letter corresponds to the respondent’s results in the relevant axis. In
+            doing so, we are able to cluster people with similar political views in 32 distinct groups,
+            without being too meticulous regarding naming conventions. Nevertheless, we have a
+            regularized method of denominating each identity, which we believe approximately describes
+            what the 4+1 letter result represents.
+          </p>
+        </div>
+
+        <p class="about-closing">
+          Our main aim in designing this test has been to look beyond political opinion, and to see the
+          underlying philosophical core of ideology as well. We hope this will allow us to measure views
+          across time and place, with questions that are and have been relevant throughout history.
         </p>
 
         <hr class="divider">
 
-        <h3>The Five Philosophical Axes Explained</h3>
+        <h3 id="methodology">Methodology: The Five Axes Explained</h3>
 
         <div class="axis-explanation">
           <h4>1. Ethics (ETH): Subjectivism (S) vs. Objectivism (O)</h4>
@@ -848,7 +919,7 @@ body {
   /* ============================================================
      1. CONFIG
      ============================================================ */
-  const BUILD = 29;
+  const BUILD = 30;
 
   // ---- Where answers are stored -------------------------------------
   // Paste your two Supabase values here. Both are safe to publish:
@@ -2112,6 +2183,15 @@ body {
       "btn-goto-comment": () => switchTab("comment")
     };
     Object.keys(clicks).forEach(id => $(id).addEventListener("click", clicks[id]));
+
+    // "(Methodology)" in the About text jumps to the axis explanations below it.
+    const methodologyLink = $("link-methodology");
+    if (methodologyLink) {
+      methodologyLink.addEventListener("click", ev => {
+        ev.preventDefault();
+        $("methodology").scrollIntoView({ behavior: "smooth", block: "start" });
+      });
+    }
 
     $("comment-form").addEventListener("submit", handleCommentSubmit);
 
