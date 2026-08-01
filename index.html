@@ -1007,8 +1007,8 @@ body {
     SRUE: "Universalist Naturalism",    SRTE: "Communitarian Naturalism"
   };
 
-  const GENDER_OPTIONS = ["Male", "Female", "Queer", "Prefer not to say"];
-  const AGE_OPTIONS = ["Below 18", "18-24", "25-34", "35-44", "45-54", "55-64", "65+", "Prefer not to say"];
+  const GENDER_OPTIONS = ["Male", "Female", "Queer"];
+  const AGE_OPTIONS = ["Below 18", "18-24", "25-34", "35-44", "45-54", "55-64", "65+"];
 
   const COUNTRY_CODES = [
     "AD","AE","AF","AG","AI","AL","AM","AO","AR","AS","AT","AU","AW","AX","AZ",
@@ -1092,9 +1092,24 @@ body {
   /* ============================================================
      5. STORAGE — the only place that talks to the backend
      ============================================================ */
-  // One INSERT into one table. Returns the new row when returnRow is true.
-  async function insertRow(table, row, returnRow) {
-    if (!STORAGE_READY) return null;
+  // Row ids are generated here rather than by the database, so the insert
+  // never has to ask for the new row back. Reading a returned row counts as
+  // a SELECT, which the insert-only security policy correctly refuses.
+  function newId() {
+    if (window.crypto && crypto.randomUUID) return crypto.randomUUID();
+
+    const bytes = new Uint8Array(16);
+    crypto.getRandomValues(bytes);
+    bytes[6] = (bytes[6] & 0x0f) | 0x40;   // version 4
+    bytes[8] = (bytes[8] & 0x3f) | 0x80;   // variant
+    const hex = Array.from(bytes, b => b.toString(16).padStart(2, "0")).join("");
+    return hex.slice(0, 8) + "-" + hex.slice(8, 12) + "-" + hex.slice(12, 16) +
+           "-" + hex.slice(16, 20) + "-" + hex.slice(20);
+  }
+
+  // One INSERT into one table. Nothing is read back.
+  async function insertRow(table, row) {
+    if (!STORAGE_READY) return;
 
     const response = await fetch(SUPABASE.url + "/rest/v1/" + table, {
       method: "POST",
@@ -1102,16 +1117,14 @@ body {
         "apikey": SUPABASE.anonKey,
         "Authorization": "Bearer " + SUPABASE.anonKey,
         "Content-Type": "application/json",
-        "Prefer": returnRow ? "return=representation" : "return=minimal"
+        "Prefer": "return=minimal"
       },
       body: JSON.stringify(row)
     });
 
-    if (!response.ok) throw new Error(table + " insert failed: " + response.status);
-    if (!returnRow) return null;
-
-    const rows = await response.json();
-    return Array.isArray(rows) ? rows[0] : rows;
+    if (!response.ok) {
+      throw new Error(table + " insert failed: " + response.status + " " + await response.text());
+    }
   }
 
   // Held so a second call reuses the first insert instead of duplicating it.
@@ -1120,13 +1133,18 @@ body {
   const Storage = {
     saveDemographics() {
       if (!demographicsRequest) {
+        const id = newId();
         demographicsRequest = insertRow(TABLES.demographics, {
+          id: id,
           gender: state.demographics.gender || null,
           age: state.demographics.age || null,
           nationality: state.demographics.nationality || null
-        }, true)
-          .then(row => { if (row && row.id) state.userId = row.id; })
-          .catch(err => { console.error("Could not save demographics:", err); });
+        })
+          .then(() => { state.userId = id; })
+          .catch(err => {
+            state.userId = null;         // results still save, just unlinked
+            console.error("Could not save demographics:", err);
+          });
       }
       return demographicsRequest;
     },
@@ -1156,7 +1174,7 @@ body {
       };
 
       try {
-        await insertRow(TABLES.results, payload, false);
+        await insertRow(TABLES.results, payload);
       } catch (err) {
         console.error("Could not save results:", err);
       }
