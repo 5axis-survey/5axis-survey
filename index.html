@@ -855,8 +855,8 @@ body {
   // the anon key can only INSERT, because of the row-level security
   // policies in the database. NEVER put the service_role key here.
   const SUPABASE = {
-    url: "https://supabase.com/dashboard/project/byvykwggnsyvkfvrkiyc",
-    anonKey: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJ5dnlrd2dnbnN5dmtmdnJraXljIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODU1OTYwMzMsImV4cCI6MjEwMTE3MjAzM30.fbXIR_5bbX8tELNNfDrQlHVChJxCj4QDU1lvya1p7_s"
+    url: "https://byvykwggnsyvkfvrkiyc.supabase.co",
+    anonKey: "sb_publishable_mk1gAUNF_Jw_Q2O-KZXARQ_rYlXj_di"
   };
 
   const TABLES = {
@@ -864,9 +864,9 @@ body {
     results: "test_results"
   };
 
-  // Until the two values above are filled in, saving is skipped so the
-  // test still runs cleanly instead of throwing network errors.
-  const STORAGE_READY = !SUPABASE.url.includes("YOUR-PROJECT-ID");
+  // Safety switch: if the values above are ever blanked out, saving is
+  // skipped so the test still runs cleanly instead of throwing errors.
+  const STORAGE_READY = SUPABASE.url.includes(".supabase.co") && SUPABASE.anonKey.length > 20;
 
   /* ============================================================
      2. SURVEY DATA
