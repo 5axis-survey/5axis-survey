@@ -850,13 +850,23 @@ body {
      ============================================================ */
   const BUILD = 29;
 
-  // Where answers are stored. Change ONLY these three lines when you
-  // move from a local server to a hosted database.
-  const API = {
-    baseUrl: "http://localhost:3000/api",
-    demographics: "/demographics",
-    results: "/test-results"
+  // ---- Where answers are stored -------------------------------------
+  // Paste your two Supabase values here. Both are safe to publish:
+  // the anon key can only INSERT, because of the row-level security
+  // policies in the database. NEVER put the service_role key here.
+  const SUPABASE = {
+    url: "https://YOUR-PROJECT-ID.supabase.co",
+    anonKey: "YOUR-ANON-PUBLIC-KEY"
   };
+
+  const TABLES = {
+    demographics: "demographics",
+    results: "test_results"
+  };
+
+  // Until the two values above are filled in, saving is skipped so the
+  // test still runs cleanly instead of throwing network errors.
+  const STORAGE_READY = !SUPABASE.url.includes("YOUR-PROJECT-ID");
 
   /* ============================================================
      2. SURVEY DATA
@@ -1082,23 +1092,43 @@ body {
   /* ============================================================
      5. STORAGE — the only place that talks to the backend
      ============================================================ */
+  // One INSERT into one table. Returns the new row when returnRow is true.
+  async function insertRow(table, row, returnRow) {
+    if (!STORAGE_READY) return null;
+
+    const response = await fetch(SUPABASE.url + "/rest/v1/" + table, {
+      method: "POST",
+      headers: {
+        "apikey": SUPABASE.anonKey,
+        "Authorization": "Bearer " + SUPABASE.anonKey,
+        "Content-Type": "application/json",
+        "Prefer": returnRow ? "return=representation" : "return=minimal"
+      },
+      body: JSON.stringify(row)
+    });
+
+    if (!response.ok) throw new Error(table + " insert failed: " + response.status);
+    if (!returnRow) return null;
+
+    const rows = await response.json();
+    return Array.isArray(rows) ? rows[0] : rows;
+  }
+
+  // Held so a second call reuses the first insert instead of duplicating it.
+  let demographicsRequest = null;
+
   const Storage = {
-    async saveDemographics() {
-      try {
-        const response = await fetch(API.baseUrl + API.demographics, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            gender: state.demographics.gender || null,
-            age: state.demographics.age || null,
-            nationality: state.demographics.nationality || null
-          })
-        });
-        const data = await response.json();
-        if (data && data.id) state.userId = data.id;
-      } catch (err) {
-        console.error("Could not save demographics:", err);
+    saveDemographics() {
+      if (!demographicsRequest) {
+        demographicsRequest = insertRow(TABLES.demographics, {
+          gender: state.demographics.gender || null,
+          age: state.demographics.age || null,
+          nationality: state.demographics.nationality || null
+        }, true)
+          .then(row => { if (row && row.id) state.userId = row.id; })
+          .catch(err => { console.error("Could not save demographics:", err); });
       }
+      return demographicsRequest;
     },
 
     async saveResults() {
@@ -1126,11 +1156,7 @@ body {
       };
 
       try {
-        await fetch(API.baseUrl + API.results, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(payload)
-        });
+        await insertRow(TABLES.results, payload, false);
       } catch (err) {
         console.error("Could not save results:", err);
       }
