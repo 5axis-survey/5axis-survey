@@ -5,38 +5,33 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>5-Axis Political &amp; Philosophical Compass</title>
   <style>
-* { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-body { background-color: #0f172a; color: #f8fafc; min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 20px; }
-
-.brand-box {
-  display: flex;
-  flex-direction: column;
-}
-
-.logo {
-  font-size: 1.5rem;
-  font-weight: 700;
+/* ============================================================
+   1. BASE
+   ============================================================ */
+* {
+  box-sizing: border-box;
   margin: 0;
   padding: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-.credits {
-  font-size: 0.8rem;
-  color: #94a3b8;
-  font-style: italic;
-  margin-top: 2px;
+body {
+  background-color: #0f172a;
+  color: #f8fafc;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
 }
 
-.axis-explanation {
-  margin-bottom: 20px;
-}
+.hidden { display: none !important; }
 
-.axis-explanation h4 {
-  margin-bottom: 6px;
-  color: #38bdf8;
-}
+.divider { border: 0; height: 1px; background: #334155; margin: 24px 0; }
 
-/* Navbar Styling */
+/* ============================================================
+   2. LAYOUT — navbar, page sections, card
+   ============================================================ */
 .navbar {
   width: 100%;
   max-width: 780px;
@@ -49,14 +44,12 @@ body { background-color: #0f172a; color: #f8fafc; min-height: 100vh; display: fl
   border-bottom: 1px solid #334155;
 }
 
-@media (min-width: 640px) {
-  .navbar {
-    flex-direction: row;
-    justify-content: space-between;
-  }
-}
+.brand-box { display: flex; flex-direction: column; }
+.logo { font-size: 1.5rem; font-weight: 700; margin: 0; padding: 0; }
+.credits { font-size: 0.8rem; color: #94a3b8; font-style: italic; margin-top: 2px; }
 
 .nav-links { display: flex; gap: 8px; }
+
 .nav-btn {
   background: transparent;
   border: 1px solid transparent;
@@ -71,11 +64,9 @@ body { background-color: #0f172a; color: #f8fafc; min-height: 100vh; display: fl
 .nav-btn:hover { color: #f8fafc; background-color: #1e293b; }
 .nav-btn.active { background-color: #38bdf8; color: #0f172a; }
 
-/* Main Container & Layout */
-.container { width: 100%; max-width: 780px; }
-.main-content, .page-content, .page-section { width: 100%; max-width: 780px; margin: 0 auto; }
+.main-content,
+.page-section { width: 100%; max-width: 780px; margin: 0 auto; }
 
-/* Ana Kart Kutusu */
 .card {
   background-color: #1e293b;
   border-radius: 14px;
@@ -86,18 +77,43 @@ body { background-color: #0f172a; color: #f8fafc; min-height: 100vh; display: fl
   border: 1px solid #334155;
 }
 
-/* Progress Header & Sağ Üstteki Previous Butonu */
-.progress-container { margin-bottom: 20px; }
-.progress-header, .progress-info {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 12px;
+.card h2 { margin-bottom: 16px; color: #38bdf8; font-size: 1.6rem; }
+.card h3 { margin: 24px 0 12px 0; font-size: 1.2rem; color: #f8fafc; }
+
+.subtitle { color: #94a3b8; font-size: 0.95rem; line-height: 1.5; margin-bottom: 4px; }
+
+/* ============================================================
+   3. BUTTONS
+   ============================================================ */
+.btn-primary {
+  margin-top: 20px;
+  width: 100%;
+  background-color: #38bdf8;
+  color: #0f172a;
+  font-size: 1.05rem;
+  font-weight: bold;
+  border: none;
+  padding: 14px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.2s ease;
 }
+.btn-primary:hover { background-color: #0284c7; color: #ffffff; }
 
-#progress-text { font-size: 0.9rem; color: #94a3b8; font-style: italic; font-weight: 500; }
+.btn-secondary {
+  background-color: transparent;
+  color: #38bdf8;
+  border: 1px solid #38bdf8;
+  font-size: 1.05rem;
+  font-weight: bold;
+  padding: 14px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.btn-secondary:hover { background-color: #38bdf8; color: #0f172a; }
 
-.btn-prev, #btn-prev {
+.btn-prev {
   background: #0f172a;
   border: 1px solid #475569;
   color: #cbd5e1;
@@ -108,39 +124,28 @@ body { background-color: #0f172a; color: #f8fafc; min-height: 100vh; display: fl
   cursor: pointer;
   transition: all 0.2s ease;
 }
-.btn-prev:hover:not(:disabled), #btn-prev:hover:not(:disabled) {
+.btn-prev:hover:not(:disabled) {
   background-color: #334155;
   color: #f8fafc;
   border-color: #38bdf8;
 }
-.btn-prev:disabled, #btn-prev:disabled { opacity: 0.3; cursor: not-allowed; }
+.btn-prev:disabled { opacity: 0.3; cursor: not-allowed; }
 
-.progress-bar-bg, .progress-bar-container { background-color: #334155; height: 8px; border-radius: 4px; overflow: hidden; }
-.progress-bar-fill, .progress-fill { background-color: #38bdf8; height: 100%; width: 0%; transition: width 0.3s ease; }
-
-.question-box {
-  background-color: #0f172a;
-  border: 1px solid #334155;
-  border-radius: 12px;
-  padding: 32px 24px;
-  margin: 24px 0 28px 0;
-  min-height: 140px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
+.btn-copy {
+  background-color: transparent;
+  border: 1px solid #475569;
+  color: #94a3b8;
+  padding: 6px 14px;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
 }
+.btn-copy:hover { border-color: #38bdf8; color: #f8fafc; background-color: #334155; }
 
-#question-text {
-  font-size: 1.35rem;
-  color: #f8fafc;
-  line-height: 1.5;
-  font-weight: 500;
-  margin: 0;
-}
-
-.options-group, .options-grid { display: flex; flex-direction: column; gap: 14px; }
 .btn-option {
+  position: relative;
   background-color: #334155;
   color: #f8fafc;
   border: 1px solid #475569;
@@ -158,79 +163,21 @@ body { background-color: #0f172a; color: #f8fafc; min-height: 100vh; display: fl
   border-color: #38bdf8;
   transform: translateY(-2px);
 }
-
-.controls {
-  display: flex;
-  justify-content: flex-end;
-  margin-top: 10px;
+.btn-option.selected {
+  background-color: #0284c7;
+  border-color: #38bdf8;
+  color: #ffffff;
+  box-shadow: inset 0 0 0 1px #38bdf8;
 }
-
-.hidden { display: none !important; }
-
-/* Result Styles */
-.result-row { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid #334155; font-size: 1rem; }
-.vector-box { margin-top: 24px; background-color: #0f172a; padding: 18px; border-radius: 10px; font-family: monospace; font-size: 1rem; word-break: break-all; border: 1px solid #334155; }
-.btn-restart, .btn-primary {
-  margin-top: 20px;
-  width: 100%;
-  background-color: #38bdf8;
-  color: #0f172a;
-  font-size: 1.05rem;
-  font-weight: bold;
-  border: none;
-  padding: 14px;
-  border-radius: 10px;
-  cursor: pointer;
-  transition: all 0.2s ease;
+.btn-option.selected::after {
+  content: "\2713";
+  position: absolute;
+  right: 18px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 1.1rem;
+  font-weight: 700;
 }
-.btn-primary:hover { background-color: #0284c7; color: #ffffff; }
-
-/* About & Comments Styling */
-.card h2 { margin-bottom: 16px; color: #38bdf8; font-size: 1.6rem; }
-.card h3 { margin: 24px 0 12px 0; font-size: 1.2rem; color: #f8fafc; }
-.about-description, .about-intro { line-height: 1.6; color: #cbd5e1; font-size: 1rem; margin-bottom: 12px; }
-.axes-guide, .about-list { list-style: none; padding: 0; }
-.axes-guide li, .about-list li { padding: 10px 0; border-bottom: 1px dashed #334155; color: #cbd5e1; font-size: 0.95rem; line-height: 1.5; }
-.divider { border: 0; height: 1px; background: #334155; margin: 24px 0; }
-.about-authors { line-height: 1.5; color: #94a3b8; font-size: 0.95rem; }
-
-/* Form Fields */
-.input-field {
-  width: 100%;
-  background-color: #0f172a;
-  border: 1px solid #334155;
-  color: #f8fafc;
-  padding: 14px;
-  border-radius: 8px;
-  margin-bottom: 16px;
-  font-size: 1rem;
-  outline: none;
-}
-.input-field:focus { border-color: #38bdf8; }
-.textarea-field { resize: vertical; min-height: 120px; }
-
-/* ============ INTRO & QUESTIONNAIRE ============ */
-.intro-text {
-  color: #cbd5e1;
-  line-height: 1.7;
-  font-size: 1.02rem;
-  margin-bottom: 16px;
-}
-.intro-text strong { color: #f8fafc; }
-
-.demo-field { margin-bottom: 28px; }
-
-.demo-label {
-  display: block;
-  font-size: 0.85rem;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: #94a3b8;
-  font-weight: 600;
-  margin-bottom: 12px;
-}
-
-.chip-row { display: flex; flex-wrap: wrap; gap: 10px; }
 
 .chip {
   background-color: #334155;
@@ -247,20 +194,31 @@ body { background-color: #0f172a; color: #f8fafc; min-height: 100vh; display: fl
 .chip:focus-visible { outline: 2px solid #38bdf8; outline-offset: 2px; }
 .chip.selected { background-color: #38bdf8; border-color: #38bdf8; color: #0f172a; }
 
-.demo-actions {
-  display: flex;
-  gap: 12px;
-  margin-top: 32px;
-  flex-wrap: wrap;
-}
-.demo-actions .btn-primary,
-.demo-actions .btn-secondary {
-  flex: 1 1 200px;
-  margin-top: 0;
-  width: auto;
+/* ============================================================
+   4. INTRO & DEMOGRAPHICS
+   ============================================================ */
+.intro-text { color: #cbd5e1; line-height: 1.7; font-size: 1.02rem; margin-bottom: 16px; }
+.intro-text strong { color: #f8fafc; }
+
+.demo-field { margin-bottom: 28px; }
+
+.demo-label {
+  display: block;
+  font-size: 0.85rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #94a3b8;
+  font-weight: 600;
+  margin-bottom: 12px;
 }
 
-/* Ülke seçici (combobox) */
+.chip-row { display: flex; flex-wrap: wrap; gap: 10px; }
+
+.demo-actions { display: flex; gap: 12px; margin-top: 32px; flex-wrap: wrap; }
+.demo-actions .btn-primary,
+.demo-actions .btn-secondary { flex: 1 1 200px; margin-top: 0; width: auto; }
+
+/* Country picker (combobox) */
 .combo { position: relative; }
 
 .combo-input {
@@ -290,6 +248,10 @@ body { background-color: #0f172a; color: #f8fafc; min-height: 100vh; display: fl
   padding: 6px;
   box-shadow: 0 12px 28px rgba(0,0,0,0.45);
 }
+.combo-list::-webkit-scrollbar { width: 10px; }
+.combo-list::-webkit-scrollbar-track { background: #0f172a; border-radius: 8px; }
+.combo-list::-webkit-scrollbar-thumb { background: #334155; border-radius: 8px; border: 2px solid #0f172a; }
+.combo-list::-webkit-scrollbar-thumb:hover { background: #475569; }
 
 .combo-opt {
   padding: 10px 12px;
@@ -300,32 +262,123 @@ body { background-color: #0f172a; color: #f8fafc; min-height: 100vh; display: fl
 }
 .combo-opt:hover, .combo-opt.active { background-color: #334155; color: #f8fafc; }
 
-.combo-empty {
-  padding: 10px 12px;
-  color: #64748b;
-  font-size: 0.9rem;
-  font-style: italic;
-}
+.combo-empty { padding: 10px 12px; color: #64748b; font-size: 0.9rem; font-style: italic; }
 
-.combo-list::-webkit-scrollbar { width: 10px; }
-.combo-list::-webkit-scrollbar-track { background: #0f172a; border-radius: 8px; }
-.combo-list::-webkit-scrollbar-thumb { background: #334155; border-radius: 8px; border: 2px solid #0f172a; }
-.combo-list::-webkit-scrollbar-thumb:hover { background: #475569; }
+.field-hint { margin-top: 8px; font-size: 0.85rem; color: #f87171; min-height: 1em; }
 
-.field-hint {
-  margin-top: 8px;
-  font-size: 0.85rem;
-  color: #f87171;
-  min-height: 1em;
-}
-
-.results-container {
+/* ============================================================
+   5. SURVEY
+   ============================================================ */
+.progress-info {
   display: flex;
-  flex-direction: column;
-  gap: 22px;
-  margin-top: 24px;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
 }
 
+#progress-text { font-size: 0.9rem; color: #94a3b8; font-style: italic; font-weight: 500; }
+
+.progress-bar-container { background-color: #334155; height: 8px; border-radius: 4px; overflow: hidden; }
+.progress-fill { background-color: #38bdf8; height: 100%; width: 0%; transition: width 0.3s ease; }
+
+.question-box {
+  background-color: #0f172a;
+  border: 1px solid #334155;
+  border-radius: 12px;
+  padding: 32px 24px;
+  margin: 24px 0 28px 0;
+  min-height: 140px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+#question-text {
+  font-size: 1.35rem;
+  color: #f8fafc;
+  line-height: 1.5;
+  font-weight: 500;
+  margin: 0;
+}
+
+.options-grid { display: flex; flex-direction: column; gap: 14px; }
+
+/* ============================================================
+   6. RESULTS — profile box, axis bars, clusters
+   ============================================================ */
+.profile-box {
+  background-color: #0f172a;
+  border: 1px solid #334155;
+  border-radius: 12px;
+  padding: 20px 22px;
+  margin-top: 20px;
+}
+
+.profile-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.profile-label {
+  color: #94a3b8;
+  font-size: 0.85rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-weight: 600;
+}
+
+.vector-code {
+  display: inline-block;
+  background-color: #1e293b;
+  border: 1px solid #334155;
+  border-radius: 10px;
+  padding: 14px 24px;
+  font-family: monospace;
+  font-size: 2.4rem;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: 0.03em;
+  color: #f8fafc;
+}
+
+.code-letter { cursor: default; }
+
+.profile-cluster-title { font-size: 1.4rem; color: #38bdf8; font-weight: 700; margin-top: 10px; }
+
+.profile-poles {
+  margin: 14px 0 0 0;
+  color: #94a3b8;
+  font-size: 0.85rem;
+  line-height: 1.6;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.results-container { display: flex; flex-direction: column; gap: 22px; margin-top: 24px; }
+
+.vector-box {
+  margin-top: 24px;
+  background-color: #0f172a;
+  padding: 18px;
+  border-radius: 10px;
+  font-family: monospace;
+  font-size: 1rem;
+  word-break: break-all;
+  border: 1px solid #334155;
+}
+
+.vector-label {
+  color: #94a3b8;
+  font-size: 0.85rem;
+  margin: 0 0 8px 0;
+  display: block;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* --- one axis: labels + bar --- */
 .axis-legend {
   display: flex;
   justify-content: space-between;
@@ -337,11 +390,7 @@ body { background-color: #0f172a; color: #f8fafc; min-height: 100vh; display: fl
   border-bottom: 1px dashed #334155;
 }
 
-.axis-result {
-  display: flex;
-  flex-direction: column;
-  gap: 9px;
-}
+.axis-result { display: flex; flex-direction: column; gap: 9px; }
 
 .axis-head {
   display: flex;
@@ -369,7 +418,7 @@ body { background-color: #0f172a; color: #f8fafc; min-height: 100vh; display: fl
   line-height: 1.4;
 }
 .axis-side.dominant .axis-key { background-color: #38bdf8; color: #0f172a; }
-.axis-side.left.dominant  .axis-key { background-color: #a78bfa; }
+.axis-side.left.dominant .axis-key { background-color: #a78bfa; }
 
 .axis-score {
   flex: 0 0 auto;
@@ -378,11 +427,7 @@ body { background-color: #0f172a; color: #f8fafc; min-height: 100vh; display: fl
   color: #64748b;
   letter-spacing: 0.06em;
 }
-.axis-score strong {
-  color: #f8fafc;
-  font-size: 1.05rem;
-  margin-left: 5px;
-}
+.axis-score strong { color: #f8fafc; font-size: 1.05rem; margin-left: 5px; }
 
 .axis-track {
   position: relative;
@@ -417,206 +462,7 @@ body { background-color: #0f172a; color: #f8fafc; min-height: 100vh; display: fl
 .axis-fill.pos { background-color: #38bdf8; }
 .axis-fill.neg { background-color: #a78bfa; }
 
-@media (prefers-reduced-motion: reduce) {
-  .axis-fill { transition: none; }
-}
-
-@media (max-width: 540px) {
-  .axis-head { flex-wrap: wrap; gap: 6px 10px; font-size: 0.82rem; }
-  .axis-side { flex: 1 1 40%; }
-  .axis-score { order: 3; flex: 1 0 100%; text-align: center; }
-}
-
-.subtitle {
-  color: #94a3b8;
-  font-size: 0.95rem;
-  line-height: 1.5;
-  margin-bottom: 4px;
-}
-
-.vector-label {
-  color: #94a3b8;
-  font-size: 0.85rem;
-  margin: 0 0 8px 0;
-  display: block;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-}
-
-.profile-box {
-  background-color: #0f172a;
-  border: 1px solid #334155;
-  border-radius: 12px;
-  padding: 20px 22px;
-  margin-top: 20px;
-}
-
-.profile-top {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  margin-bottom: 14px;
-}
-
-.profile-label {
-  color: #94a3b8;
-  font-size: 0.85rem;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  font-weight: 600;
-}
-
-.profile-cluster-title {
-  font-size: 1.4rem;
-  color: #38bdf8;
-  font-weight: 700;
-  margin-top: 10px;
-}
-
-.vector-code {
-  display: inline-block;
-  background-color: #1e293b;
-  border: 1px solid #334155;
-  border-radius: 10px;
-  padding: 14px 24px;
-  font-family: monospace;
-  font-size: 2.4rem;
-  font-weight: 700;
-  line-height: 1;
-  letter-spacing: 0.03em;
-  color: #f8fafc;
-}
-
-.code-letter { cursor: default; }
-
-.profile-poles {
-  margin: 14px 0 0 0;
-  color: #94a3b8;
-  font-size: 0.85rem;
-  line-height: 1.6;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-}
-
-.btn-copy {
-  background-color: transparent;
-  border: 1px solid #475569;
-  color: #94a3b8;
-  padding: 6px 14px;
-  border-radius: 6px;
-  font-size: 0.8rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-.btn-copy:hover { border-color: #38bdf8; color: #f8fafc; background-color: #334155; }
-
-@media (max-width: 480px) {
-  .vector-code { font-size: 1.9rem; padding: 12px 18px; }
-}
-
-.btn-option { position: relative; }
-
-.btn-option.selected {
-  background-color: #0284c7;
-  border-color: #38bdf8;
-  color: #ffffff;
-  box-shadow: inset 0 0 0 1px #38bdf8;
-}
-
-.btn-option.selected::after {
-  content: "\2713";
-  position: absolute;
-  right: 18px;
-  top: 50%;
-  transform: translateY(-50%);
-  font-size: 1.1rem;
-  font-weight: 700;
-}
-
-.result-actions {
-  display: flex;
-  gap: 12px;
-  margin-top: 28px;
-  flex-wrap: wrap;
-}
-.result-actions .btn-primary,
-.result-actions .btn-secondary {
-  flex: 1 1 200px;
-  margin-top: 0;
-  width: auto;
-}
-
-.btn-secondary {
-  background-color: transparent;
-  color: #38bdf8;
-  border: 1px solid #38bdf8;
-  font-size: 1.05rem;
-  font-weight: bold;
-  padding: 14px;
-  border-radius: 10px;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-.btn-secondary:hover { background-color: #38bdf8; color: #0f172a; }
-
-.share-box {
-  background-color: #0f172a;
-  border: 1px solid #334155;
-  border-radius: 12px;
-  padding: 20px 22px;
-  margin-top: 20px;
-}
-
-.share-tools,
-.share-links {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  margin-top: 16px;
-}
-
-.share-links {
-  padding-top: 16px;
-  border-top: 1px dashed #334155;
-}
-
-.btn-share {
-  flex: 1 1 auto;
-  min-width: 110px;
-  text-align: center;
-  text-decoration: none;
-  background-color: #1e293b;
-  border: 1px solid #475569;
-  color: #cbd5e1;
-  padding: 11px 16px;
-  border-radius: 8px;
-  font-size: 0.9rem;
-  font-weight: 600;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-.btn-share:hover {
-  background-color: #334155;
-  border-color: #38bdf8;
-  color: #f8fafc;
-}
-
-#btn-share-native {
-  background-color: #38bdf8;
-  border-color: #38bdf8;
-  color: #0f172a;
-}
-#btn-share-native:hover { background-color: #0284c7; color: #ffffff; }
-
-.share-note {
-  margin: 16px 0 0 0;
-  color: #64748b;
-  font-size: 0.8rem;
-  line-height: 1.55;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-}
-
+/* --- cluster panel --- */
 .cluster {
   background-color: #0f172a;
   border: 1px solid #334155;
@@ -656,45 +502,118 @@ body { background-color: #0f172a; color: #f8fafc; min-height: 100vh; display: fl
   color: #f8fafc;
 }
 
-.cluster-swatch {
-  width: 16px;
-  height: 16px;
-  border-radius: 4px;
-  flex: 0 0 auto;
-}
+.cluster-swatch { width: 16px; height: 16px; border-radius: 4px; flex: 0 0 auto; }
 
-.cluster-body {
-  display: flex;
-  align-items: flex-start;
-  gap: 22px;
-}
+.cluster-body { display: flex; align-items: flex-start; gap: 22px; }
 .cluster-body.single { display: block; }
 
 .cluster-grid { flex: 0 0 230px; }
 .cluster-bars { flex: 1 1 0; min-width: 0; display: flex; flex-direction: column; gap: 20px; }
 
-.cluster-svg {
-  display: block;
-  width: 100%;
-  height: auto;
+.cluster-svg { display: block; width: 100%; height: auto; }
+
+.grid-label { fill: #94a3b8; font-family: monospace; font-size: 15px; font-weight: 700; }
+
+/* ============================================================
+   7. SHARE BOX
+   ============================================================ */
+.share-box {
+  background-color: #0f172a;
+  border: 1px solid #334155;
+  border-radius: 12px;
+  padding: 20px 22px;
+  margin-top: 20px;
 }
 
-.grid-label {
-  fill: #94a3b8;
-  font-family: monospace;
-  font-size: 15px;
-  font-weight: 700;
+.share-tools,
+.share-links { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 16px; }
+
+.share-links { padding-top: 16px; border-top: 1px dashed #334155; }
+
+.btn-share {
+  flex: 1 1 auto;
+  min-width: 110px;
+  text-align: center;
+  text-decoration: none;
+  background-color: #1e293b;
+  border: 1px solid #475569;
+  color: #cbd5e1;
+  padding: 11px 16px;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.btn-share:hover { background-color: #334155; border-color: #38bdf8; color: #f8fafc; }
+
+#btn-share-native { background-color: #38bdf8; border-color: #38bdf8; color: #0f172a; }
+#btn-share-native:hover { background-color: #0284c7; color: #ffffff; }
+
+.share-note {
+  margin: 16px 0 0 0;
+  color: #64748b;
+  font-size: 0.8rem;
+  line-height: 1.55;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.result-actions { display: flex; gap: 12px; margin-top: 28px; flex-wrap: wrap; }
+.result-actions .btn-primary,
+.result-actions .btn-secondary { flex: 1 1 200px; margin-top: 0; width: auto; }
+
+/* ============================================================
+   8. ABOUT & COMMENT PAGES
+   ============================================================ */
+.about-intro { line-height: 1.6; color: #cbd5e1; font-size: 1rem; margin-bottom: 12px; }
+
+.axis-explanation { margin-bottom: 20px; }
+.axis-explanation h4 { margin-bottom: 6px; color: #38bdf8; }
+
+.input-field {
+  width: 100%;
+  background-color: #0f172a;
+  border: 1px solid #334155;
+  color: #f8fafc;
+  padding: 14px;
+  border-radius: 8px;
+  margin-bottom: 16px;
+  font-size: 1rem;
+  outline: none;
+}
+.input-field:focus { border-color: #38bdf8; }
+
+/* ============================================================
+   9. RESPONSIVE / MOTION
+   ============================================================ */
+@media (min-width: 640px) {
+  .navbar { flex-direction: row; justify-content: space-between; }
 }
 
 @media (max-width: 700px) {
   .cluster-body { flex-direction: column; }
   .cluster-grid { flex: 0 0 auto; width: 100%; max-width: 280px; margin: 0 auto 4px auto; }
 }
+
+@media (max-width: 540px) {
+  .axis-head { flex-wrap: wrap; gap: 6px 10px; font-size: 0.82rem; }
+  .axis-side { flex: 1 1 40%; }
+  .axis-score { order: 3; flex: 1 0 100%; text-align: center; }
+}
+
+@media (max-width: 480px) {
+  .vector-code { font-size: 1.9rem; padding: 12px 18px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .axis-fill { transition: none; }
+}
   </style>
 </head>
 <body>
 
-  <!-- Navigation Bar -->
+  <!-- ========== NAVBAR ========== -->
   <header class="navbar">
     <div class="nav-container">
       <div class="brand-box">
@@ -711,10 +630,10 @@ body { background-color: #0f172a; color: #f8fafc; min-height: 100vh; display: fl
 
   <main class="main-content">
 
-    <!-- PAGE 1: TEST PAGE -->
+    <!-- ========== PAGE 1: TEST ========== -->
     <section id="page-test" class="page-section">
 
-      <!-- Intro View -->
+      <!-- Step 1: intro -->
       <div id="intro-view" class="card">
         <h2>Welcome</h2>
         <p class="intro-text">
@@ -731,7 +650,7 @@ body { background-color: #0f172a; color: #f8fafc; min-height: 100vh; display: fl
         <button id="btn-start" class="btn-primary">Start</button>
       </div>
 
-      <!-- Questionnaire View -->
+      <!-- Step 2: optional demographics -->
       <div id="demo-view" class="card hidden">
         <h2>Three optional questions</h2>
         <p class="subtitle">
@@ -766,7 +685,7 @@ body { background-color: #0f172a; color: #f8fafc; min-height: 100vh; display: fl
         </div>
       </div>
 
-      <!-- Survey Active View -->
+      <!-- Step 3: questions -->
       <div id="survey-view" class="card hidden">
         <div class="progress-info">
           <span id="progress-text">Question 1 of 40</span>
@@ -784,7 +703,7 @@ body { background-color: #0f172a; color: #f8fafc; min-height: 100vh; display: fl
         <div id="options-container" class="options-grid"></div>
       </div>
 
-      <!-- Results View (Hidden initially) -->
+      <!-- Step 4: results -->
       <div id="result-view" class="card hidden">
         <h2>Your Results</h2>
         <p class="subtitle">Based on your responses across 5 philosophical axes:</p>
@@ -806,7 +725,6 @@ body { background-color: #0f172a; color: #f8fafc; min-height: 100vh; display: fl
           <code id="vector-text">[ETH:0|HN:0|TRB:0|JST:0|RLG:0]</code>
         </div>
 
-        <!-- Paylasim -->
         <div class="share-box">
           <span class="profile-label">Share your result</span>
 
@@ -826,14 +744,14 @@ body { background-color: #0f172a; color: #f8fafc; min-height: 100vh; display: fl
         </div>
 
         <div class="result-actions">
-          <button onclick="location.reload()" class="btn-primary">Retake Test</button>
-          <button onclick="switchTab('comment')" class="btn-secondary">Leave a Comment</button>
+          <button type="button" id="btn-retake" class="btn-primary">Retake Test</button>
+          <button type="button" id="btn-goto-comment" class="btn-secondary">Leave a Comment</button>
         </div>
       </div>
 
     </section>
 
-    <!-- PAGE 2: ABOUT US PAGE -->
+    <!-- ========== PAGE 2: ABOUT ========== -->
     <section id="page-about" class="page-section hidden">
       <div class="card">
         <h2>About Us &amp; Methodology</h2>
@@ -882,7 +800,7 @@ body { background-color: #0f172a; color: #f8fafc; min-height: 100vh; display: fl
       </div>
     </section>
 
-    <!-- PAGE 3: COMMENT PAGE -->
+    <!-- ========== PAGE 3: COMMENT ========== -->
     <section id="page-comment" class="page-section hidden">
       <div class="card">
         <h2>Submit Your Feedback</h2>
@@ -908,700 +826,704 @@ body { background-color: #0f172a; color: #f8fafc; min-height: 100vh; display: fl
   </main>
 
   <script>
-window.COMPASS_BUILD = 28;
-console.log("5-Axis Compass build 28 — JST Ekseni (Equality Sol / Justice Sağ) Düzeltildi");
-
 /* ============================================================
-   GÜNCEL 40 SORU VE KAÇAR PUAN ARTIRILMIŞ AĞIRLIKLARI (1.4 Katı)
+   5-AXIS COMPASS
+   Single-file app. Sections:
+     1. Config
+     2. Survey data (statements, axes, clusters)
+     3. State
+     4. Small helpers
+     5. Storage (backend calls)
+     6. Navigation & step flow
+     7. Demographics page (chips + country combobox)
+     8. Survey engine
+     9. Results (scores, bars, cluster grids)
+    10. Share (links + PNG canvas)
+    11. Comment form
+    12. Startup
    ============================================================ */
-const SURVEY_DATA = [
-  // --- ETHICS (S-O) ---
-  { code: "ETH1", question: "There is a set of moral values that are universally valid", scores: { "Strongly Disagree": {ETH: -2.0}, "Disagree": {ETH: -1.4}, "Neutral": {ETH: 0}, "Agree": {ETH: 1.4}, "Strongly Agree": {ETH: 2.0} } },
-  { code: "ETH2", question: "No set of moral values is superior to any other", scores: { "Strongly Disagree": {ETH: 2.0}, "Disagree": {ETH: 1.4}, "Neutral": {ETH: 0}, "Agree": {ETH: -1.4}, "Strongly Agree": {ETH: -2.0} } },
-  { code: "ETH3", question: "Good and evil are real, objective categories", scores: { "Strongly Disagree": {ETH: -2.0}, "Disagree": {ETH: -1.4}, "Neutral": {ETH: 0}, "Agree": {ETH: 1.4}, "Strongly Agree": {ETH: 2.0} } },
-  { code: "ETH4", question: "Morality is a social construct", scores: { "Strongly Disagree": {ETH: 2.0}, "Disagree": {ETH: 1.4}, "Neutral": {ETH: 0}, "Agree": {ETH: -1.4}, "Strongly Agree": {ETH: -2.0} } },
-  { code: "ETH5", question: "Some of my moral beliefs may be false", scores: { "Strongly Disagree": {ETH: 2.0}, "Disagree": {ETH: 1.4}, "Neutral": {ETH: 0}, "Agree": {ETH: -1.4}, "Strongly Agree": {ETH: -2.0} } },
-  { code: "ETH6", question: "No moral standard is objectively correct throughout history and across all societies", scores: { "Strongly Disagree": {ETH: 2.0}, "Disagree": {ETH: 1.4}, "Neutral": {ETH: 0}, "Agree": {ETH: -1.4}, "Strongly Agree": {ETH: -2.0} } },
-  { code: "ETH7", question: "Universal moral truths are accessible through common sense or reason", scores: { "Strongly Disagree": {ETH: -2.0}, "Disagree": {ETH: -1.4}, "Neutral": {ETH: 0}, "Agree": {ETH: 1.4}, "Strongly Agree": {ETH: 2.0} } },
-  { code: "ETH8", question: "There are objectively correct answers to moral disagreements", scores: { "Strongly Disagree": {ETH: -2.0}, "Disagree": {ETH: -1.4}, "Neutral": {ETH: 0}, "Agree": {ETH: 1.4}, "Strongly Agree": {ETH: 2.0} } },
+(function () {
+  "use strict";
 
-  // --- HUMAN NATURE (C-R) ---
-  { code: "HN1", question: "All humans share a common moral foundation at birth", scores: { "Strongly Disagree": {HN: -2.0}, "Disagree": {HN: -1.4}, "Neutral": {HN: 0}, "Agree": {HN: 1.4}, "Strongly Agree": {HN: 2.0} } },
-  { code: "HN2", question: "Some political systems go against human nature", scores: { "Strongly Disagree": {HN: -2.0}, "Disagree": {HN: -1.4}, "Neutral": {HN: 0}, "Agree": {HN: 1.4}, "Strongly Agree": {HN: 2.0} } },
-  { code: "HN3", question: "Human nature limits how much an individual can be shaped by society", scores: { "Strongly Disagree": {HN: -2.0}, "Disagree": {HN: -1.4}, "Neutral": {HN: 0}, "Agree": {HN: 1.4}, "Strongly Agree": {HN: 2.0} } },
-  { code: "HN4", question: "Some people are predisposed to violent behavior", scores: { "Strongly Disagree": {HN: -2.0}, "Disagree": {HN: -1.4}, "Neutral": {HN: 0}, "Agree": {HN: 1.4}, "Strongly Agree": {HN: 2.0} } },
-  { code: "HN5", question: "A perfect society is achievable", scores: { "Strongly Disagree": {HN: 2.0}, "Disagree": {HN: 1.4}, "Neutral": {HN: 0}, "Agree": {HN: -1.4}, "Strongly Agree": {HN: -2.0} } },
-  { code: "HN6", question: "All people possess a fixed underlying human nature", scores: { "Strongly Disagree": {HN: -2.0}, "Disagree": {HN: -1.4}, "Neutral": {HN: 0}, "Agree": {HN: 1.4}, "Strongly Agree": {HN: 2.0} } },
-  { code: "HN7", question: "We are shaped more by our experiences than by our genetics", scores: { "Strongly Disagree": {HN: 2.0}, "Disagree": {HN: 1.4}, "Neutral": {HN: 0}, "Agree": {HN: -1.4}, "Strongly Agree": {HN: -2.0} } },
-  { code: "HN8", question: "People are born with certain characteristics that cannot be changed", scores: { "Strongly Disagree": {HN: -2.0}, "Disagree": {HN: -1.4}, "Neutral": {HN: 0}, "Agree": {HN: 1.4}, "Strongly Agree": {HN: 2.0} } },
+  /* ============================================================
+     1. CONFIG
+     ============================================================ */
+  const BUILD = 29;
 
-  // --- TRIBALISM (U-T) ---
-  { code: "TRB1", question: "Strangers deserve as much of our help as members of our community", scores: { "Strongly Disagree": {TRB: 2.0}, "Disagree": {TRB: 1.4}, "Neutral": {TRB: 0}, "Agree": {TRB: -1.4}, "Strongly Agree": {TRB: -2.0} } },
-  { code: "TRB2", question: "Our most important responsibility is towards our own society", scores: { "Strongly Disagree": {TRB: -2.0}, "Disagree": {TRB: -1.4}, "Neutral": {TRB: 0}, "Agree": {TRB: 1.4}, "Strongly Agree": {TRB: 2.0} } },
-  { code: "TRB3", question: "There are things to be learned from every culture", scores: { "Strongly Disagree": {TRB: 2.0}, "Disagree": {TRB: 1.4}, "Neutral": {TRB: 0}, "Agree": {TRB: -1.4}, "Strongly Agree": {TRB: -2.0} } },
-  { code: "TRB4", question: "It is our duty to preserve our own social identity", scores: { "Strongly Disagree": {TRB: -2.0}, "Disagree": {TRB: -1.4}, "Neutral": {TRB: 0}, "Agree": {TRB: 1.4}, "Strongly Agree": {TRB: 2.0} } },
-  { code: "TRB5", question: "It is regrettable that global interconnectedness is causing ruptures in existing communities", scores: { "Strongly Disagree": {TRB: -2.0}, "Disagree": {TRB: -1.4}, "Neutral": {TRB: 0}, "Agree": {TRB: 1.4}, "Strongly Agree": {TRB: 2.0} } },
-  { code: "TRB6", question: "A society must maintain a strong distinction between its members and outsiders", scores: { "Strongly Disagree": {TRB: -2.0}, "Disagree": {TRB: -1.4}, "Neutral": {TRB: 0}, "Agree": {TRB: 1.4}, "Strongly Agree": {TRB: 2.0} } },
-  { code: "TRB7", question: "It is important for membership in society to be exclusive", scores: { "Strongly Disagree": {TRB: -2.0}, "Disagree": {TRB: -1.4}, "Neutral": {TRB: 0}, "Agree": {TRB: 1.4}, "Strongly Agree": {TRB: 2.0} } },
-  { code: "TRB8", question: "We should be accountable to our community for our actions", scores: { "Strongly Disagree": {TRB: -2.0}, "Disagree": {TRB: -1.4}, "Neutral": {TRB: 0}, "Agree": {TRB: 1.4}, "Strongly Agree": {TRB: 2.0} } },
-
-  // --- JUSTICE (J-E) ---
-  { code: "JST1", question: "Those who contribute more deserve a greater share of benefits", scores: { "Strongly Disagree": {JST: -2.0}, "Disagree": {JST: -1.4}, "Neutral": {JST: 0}, "Agree": {JST: 1.4}, "Strongly Agree": {JST: 2.0} } },
-  { code: "JST2", question: "In a just society, a hierarchy based on skill, talent, and merit would be the norm", scores: { "Strongly Disagree": {JST: -2.0}, "Disagree": {JST: -1.4}, "Neutral": {JST: 0}, "Agree": {JST: 1.4}, "Strongly Agree": {JST: 2.0} } },
-  { code: "JST3", question: "From each according to his ability to each according to his needs", scores: { "Strongly Disagree": {JST: 2.0}, "Disagree": {JST: 1.4}, "Neutral": {JST: 0}, "Agree": {JST: -1.4}, "Strongly Agree": {JST: -2.0} } },
-  { code: "JST4", question: "Since humans have unequal abilities, social inequality is inevitable", scores: { "Strongly Disagree": {JST: -2.0}, "Disagree": {JST: -1.4}, "Neutral": {JST: 0}, "Agree": {JST: 1.4}, "Strongly Agree": {JST: 2.0} } },
-  { code: "JST5", question: "Affirmative action leads to unfair outcomes", scores: { "Strongly Disagree": {JST: -2.0}, "Disagree": {JST: -1.4}, "Neutral": {JST: 0}, "Agree": {JST: 1.4}, "Strongly Agree": {JST: 2.0} } },
-  { code: "JST6", question: "The more equal a society the more just", scores: { "Strongly Disagree": {JST: 2.0}, "Disagree": {JST: 1.4}, "Neutral": {JST: 0}, "Agree": {JST: -1.4}, "Strongly Agree": {JST: -2.0} } },
-  { code: "JST7", question: "It is better to be middle class in an equal society than it is to be wealthy in an unequal society", scores: { "Strongly Disagree": {JST: 2.0}, "Disagree": {JST: 1.4}, "Neutral": {JST: 0}, "Agree": {JST: -1.4}, "Strongly Agree": {JST: -2.0} } },
-  { code: "JST8", question: "A merit based system can be unfair to those who lack equal opportunities", scores: { "Strongly Disagree": {JST: 2.0}, "Disagree": {JST: 1.4}, "Neutral": {JST: 0}, "Agree": {JST: -1.4}, "Strongly Agree": {JST: -2.0} } },
-
-  // --- RELIGION (L-P) ---
-  { code: "RLG1", question: "Science is the only universally valid source of knowledge", scores: { "Strongly Disagree": {RLG: 2.0}, "Disagree": {RLG: 1.4}, "Neutral": {RLG: 0}, "Agree": {RLG: -1.4}, "Strongly Agree": {RLG: -2.0} } },
-  { code: "RLG2", question: "There is an innate meaning to life", scores: { "Strongly Disagree": {RLG: -2.0}, "Disagree": {RLG: -1.4}, "Neutral": {RLG: 0}, "Agree": {RLG: 1.4}, "Strongly Agree": {RLG: 2.0} } },
-  { code: "RLG3", question: "Faith and reason complement each other", scores: { "Strongly Disagree": {RLG: -2.0}, "Disagree": {RLG: -1.4}, "Neutral": {RLG: 0}, "Agree": {RLG: 1.4}, "Strongly Agree": {RLG: 2.0} } },
-  { code: "RLG4", question: "Prayer can have a real effect on our lives", scores: { "Strongly Disagree": {RLG: -2.0}, "Disagree": {RLG: -1.4}, "Neutral": {RLG: 0}, "Agree": {RLG: 1.4}, "Strongly Agree": {RLG: 2.0} } },
-  { code: "RLG5", question: "Supernatural forces play a role in our daily lives", scores: { "Strongly Disagree": {RLG: -2.0}, "Disagree": {RLG: -1.4}, "Neutral": {RLG: 0}, "Agree": {RLG: 1.4}, "Strongly Agree": {RLG: 2.0} } },
-  { code: "RLG6", question: "Morality cannot be explained in purely materialistic terms", scores: { "Strongly Disagree": {RLG: -2.0}, "Disagree": {RLG: -1.4}, "Neutral": {RLG: 0}, "Agree": {RLG: 1.4}, "Strongly Agree": {RLG: 2.0} } },
-  { code: "RLG7", question: "Religion is an outdated concept", scores: { "Strongly Disagree": {RLG: 2.0}, "Disagree": {RLG: 1.4}, "Neutral": {RLG: 0}, "Agree": {RLG: -1.4}, "Strongly Agree": {RLG: -2.0} } },
-  { code: "RLG8", question: "Human life does not end with physical death", scores: { "Strongly Disagree": {RLG: -2.0}, "Disagree": {RLG: -1.4}, "Neutral": {RLG: 0}, "Agree": {RLG: 1.4}, "Strongly Agree": {RLG: 2.0} } }
-];
-
-const OPTIONS = ["Strongly Disagree", "Disagree", "Neutral", "Agree", "Strongly Agree"];
-
-/*
-  EKSEN SIRALAMASI VE KUTUP ETİKETLERİ
-  DÜZELTME: JST ekseninde Equality (Sol / E) ve Justice (Sağ / J) olarak ayarlandı.
-*/
-const AXIS_LABELS = {
-  ETH: { neg: "Subjectivism",   negKey: "S", pos: "Objectivism", posKey: "O" },
-  HN:  { neg: "Constructivism", negKey: "C", pos: "Realism",     posKey: "R" },
-  TRB: { neg: "Universalism",   negKey: "U", pos: "Tribalism",   posKey: "T" },
-  JST: { neg: "Equality",       negKey: "E", pos: "Justice",     posKey: "J" },
-  RLG: { neg: "Laicity",        negKey: "L", pos: "Spiritualism", posKey: "P" }
-};
-
-const AXIS_ORDER = ["ETH", "HN", "TRB", "JST", "RLG"];
-
-/* ============================================================
-   16 İDEOLOJİK KÜME İSMİ MAPPING
-   ============================================================ */
-const IDEOLOGICAL_CLUSTERS = {
-  "ORTJ": "Conservative Essentialism",
-  "ORUJ": "Meritocratic Essentialism",
-  "ORUE": "Universalist Essentialism",
-  "ORTE": "Communitarian Essentialism",
-
-  "OCTJ": "Conservative Idealism",
-  "OCUJ": "Meritocratic Idealism",
-  "OCUE": "Universalist Idealism",
-  "OCTE": "Communitarian Idealism",
-
-  "SCTJ": "Conservative Skepticism",
-  "SCUJ": "Meritocratic Skepticism",
-  "SCUE": "Universalist Skepticism",
-  "SCTE": "Communitarian Skepticism",
-
-  "SRTJ": "Conservative Naturalism",
-  "SRUJ": "Meritocratic Naturalism",
-  "SRUE": "Universalist Naturalism",
-  "SRTE": "Communitarian Naturalism"
-};
-
-const CLUSTERS = [
-  {
-    id: "PHI",
-    name: "Philosophical Cluster",
-    x: "HN",               // yatay: C <-> R
-    y: "ETH",              // dikey: S <-> O
-    combos: {
-      OR: { hex: "#d69e2e" },
-      OC: { hex: "#2b6cb0" },
-      SC: { hex: "#38a169" },
-      SR: { hex: "#e53e3e" }
-    }
-  },
-  {
-    id: "POL",
-    name: "Political Cluster",
-    x: "JST",              // yatay: E <-> J
-    y: "TRB",              // dikey: U <-> T
-    combos: {
-      TJ: { hex: "#dd6b20" },
-      UJ: { hex: "#805ad5" },
-      UE: { hex: "#8b4513" },
-      TE: { hex: "#718096" }
-    }
-  },
-  {
-    id: "RLG",
-    name: "Religion Cluster",
-    single: "RLG"
-  }
-];
-
-let lastClusters = [];
-let currentIndex = 0;
-let rawScores = {};
-let maxPossibleScores = {};
-let userAnswers = [];
-let lastResults = [];
-let shareBlob = null;
-
-/* ============================================================
-   LOCAL POSTGRESQL API ENTEGRASYONU
-   ============================================================ */
-const LOCAL_API_URL = "http://localhost:3000/api";
-let activeUserId = null;
-let saveDone = false;
-let surveyStartedAt = 0;
-
-async function saveDemographics() {
-  try {
-    const response = await fetch(`${LOCAL_API_URL}/demographics`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        gender: demographics.gender || null,
-        age: demographics.age || null,
-        nationality: demographics.nationality || null
-      })
-    });
-    const data = await response.json();
-    if (data.id) {
-      activeUserId = data.id;
-      console.log("Demografi kaydedildi, Kullanıcı UUID:", activeUserId);
-    }
-  } catch (err) {
-    console.error("Demografi yerel API'ye kaydedilemedi:", err);
-  }
-}
-
-async function saveResults() {
-  if (saveDone) return;
-  saveDone = true;
-
-  if (!activeUserId) {
-    await saveDemographics();
-  }
-
-  const rawAnswers = {};
-  SURVEY_DATA.forEach((q, i) => {
-    const entry = userAnswers[i];
-    rawAnswers[q.code] = entry ? entry.selectedOption : "";
-  });
-
-  const scoresObj = {};
-  lastResults.forEach(r => { scoresObj[r.axis] = Number(r.formatted); });
-
-  const payload = {
-    user_id: activeUserId,
-    profile_code: getProfileCode(),
-    vector_string: getVectorString(),
-    clusters: lastClusters.map(c => `${c.cluster.id}:${c.key}`).join(" | "),
-    duration_sec: surveyStartedAt ? Math.round((Date.now() - surveyStartedAt) / 1000) : 0,
-    scores: scoresObj,
-    raw_answers: rawAnswers
+  // Where answers are stored. Change ONLY these three lines when you
+  // move from a local server to a hosted database.
+  const API = {
+    baseUrl: "http://localhost:3000/api",
+    demographics: "/demographics",
+    results: "/test-results"
   };
 
-  try {
-    await fetch(`${LOCAL_API_URL}/test-results`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload)
-    });
-    console.log("Test sonuçları yerel PostgreSQL veritabanına kaydedildi.");
-  } catch (err) {
-    console.error("Test sonucu kaydedilemedi:", err);
-  }
-}
+  /* ============================================================
+     2. SURVEY DATA
+     ============================================================ */
 
-/* ============================================================
-   AKIS KONTROLU
-   ============================================================ */
-const STEP_VIEWS = {
-  intro:  "intro-view",
-  demo:   "demo-view",
-  survey: "survey-view",
-  result: "result-view"
-};
+  // The five answer buttons and the weight each one carries.
+  // A "+" statement uses these weights as-is; a "-" statement flips them.
+  const SCALE = [
+    { label: "Strongly Disagree", weight: -2.0 },
+    { label: "Disagree",          weight: -1.4 },
+    { label: "Neutral",           weight:  0.0 },
+    { label: "Agree",             weight:  1.4 },
+    { label: "Strongly Agree",    weight:  2.0 }
+  ];
+  const MAX_WEIGHT = 2.0;
+  const OPTION_LABELS = SCALE.map(o => o.label);
+  const WEIGHT_OF = {};
+  SCALE.forEach(o => { WEIGHT_OF[o.label] = o.weight; });
 
-function showStep(step) {
-  Object.entries(STEP_VIEWS).forEach(([name, id]) => {
-    const el = document.getElementById(id);
-    if (el) el.classList.toggle("hidden", name !== step);
-  });
-  window.scrollTo({ top: 0, behavior: "smooth" });
-}
+  // Statements per axis, in display order.
+  //   "+" = agreeing moves you toward the positive pole (the right-hand label)
+  //   "-" = agreeing moves you toward the negative pole (the left-hand label)
+  // Question codes are generated from the axis + position: ETH1, ETH2, ...
+  const STATEMENTS = {
+    ETH: [
+      ["+", "There is a set of moral values that are universally valid"],
+      ["-", "No set of moral values is superior to any other"],
+      ["+", "Good and evil are real, objective categories"],
+      ["-", "Morality is a social construct"],
+      ["-", "Some of my moral beliefs may be false"],
+      ["-", "No moral standard is objectively correct throughout history and across all societies"],
+      ["+", "Universal moral truths are accessible through common sense or reason"],
+      ["+", "There are objectively correct answers to moral disagreements"]
+    ],
+    HN: [
+      ["+", "All humans share a common moral foundation at birth"],
+      ["+", "Some political systems go against human nature"],
+      ["+", "Human nature limits how much an individual can be shaped by society"],
+      ["+", "Some people are predisposed to violent behavior"],
+      ["-", "A perfect society is achievable"],
+      ["+", "All people possess a fixed underlying human nature"],
+      ["-", "We are shaped more by our experiences than by our genetics"],
+      ["+", "People are born with certain characteristics that cannot be changed"]
+    ],
+    TRB: [
+      ["-", "Strangers deserve as much of our help as members of our community"],
+      ["+", "Our most important responsibility is towards our own society"],
+      ["-", "There are things to be learned from every culture"],
+      ["+", "It is our duty to preserve our own social identity"],
+      ["+", "It is regrettable that global interconnectedness is causing ruptures in existing communities"],
+      ["+", "A society must maintain a strong distinction between its members and outsiders"],
+      ["+", "It is important for membership in society to be exclusive"],
+      ["+", "We should be accountable to our community for our actions"]
+    ],
+    JST: [
+      ["+", "Those who contribute more deserve a greater share of benefits"],
+      ["+", "In a just society, a hierarchy based on skill, talent, and merit would be the norm"],
+      ["-", "From each according to his ability to each according to his needs"],
+      ["+", "Since humans have unequal abilities, social inequality is inevitable"],
+      ["+", "Affirmative action leads to unfair outcomes"],
+      ["-", "The more equal a society the more just"],
+      ["-", "It is better to be middle class in an equal society than it is to be wealthy in an unequal society"],
+      ["-", "A merit based system can be unfair to those who lack equal opportunities"]
+    ],
+    RLG: [
+      ["-", "Science is the only universally valid source of knowledge"],
+      ["+", "There is an innate meaning to life"],
+      ["+", "Faith and reason complement each other"],
+      ["+", "Prayer can have a real effect on our lives"],
+      ["+", "Supernatural forces play a role in our daily lives"],
+      ["+", "Morality cannot be explained in purely materialistic terms"],
+      ["-", "Religion is an outdated concept"],
+      ["+", "Human life does not end with physical death"]
+    ]
+  };
 
-function startSurvey() {
-  surveyStartedAt = Date.now();
-  showStep("survey");
-  loadQuestion();
-}
-
-/* ============================================================
-   OPSIYONEL DEMOGRAFI ANKETI
-   ============================================================ */
-const GENDER_OPTIONS = ["Male", "Female", "Queer", "Prefer not to say"];
-const AGE_OPTIONS = ["Below 18", "18-24", "25-34", "35-44", "45-54", "55-64", "65+", "Prefer not to say"];
-
-const demographics = { gender: "", age: "", nationality: "" };
-
-const COUNTRY_CODES = [
-  "AD","AE","AF","AG","AI","AL","AM","AO","AR","AS","AT","AU","AW","AX","AZ",
-  "BA","BB","BD","BE","BF","BG","BH","BI","BJ","BL","BM","BN","BO","BQ","BR","BS","BT","BW","BY","BZ",
-  "CA","CC","CD","CF","CG","CH","CI","CK","CL","CM","CN","CO","CR","CU","CV","CW","CX","CY","CZ",
-  "DE","DJ","DK","DM","DO","DZ",
-  "EC","EE","EG","EH","ER","ES","ET",
-  "FI","FJ","FK","FM","FO","FR",
-  "GA","GB","GD","GE","GF","GG","GH","GI","GL","GM","GN","GP","GQ","GR","GT","GU","GW","GY",
-  "HK","HN","HR","HT","HU",
-  "ID","IE","IL","IM","IN","IO","IQ","IR","IS","IT",
-  "JE","JM","JO","JP",
-  "KE","KG","KH","KI","KM","KN","KP","KR","KW","KY","KZ",
-  "LA","LB","LC","LI","LK","LR","LS","LT","LU","LV","LY",
-  "MA","MC","MD","ME","MF","MG","MH","MK","ML","MM","MN","MO","MP","MQ","MR","MS","MT","MU","MV","MW","MX","MY","MZ",
-  "NA","NC","NE","NF","NG","NI","NL","NO","NP","NR","NU","NZ",
-  "OM",
-  "PA","PE","PF","PG","PH","PK","PL","PM","PN","PR","PS","PT","PW","PY",
-  "QA",
-  "RE","RO","RS","RU","RW",
-  "SA","SB","SC","SD","SE","SG","SH","SI","SJ","SK","SL","SM","SN","SO","SR","SS","ST","SV","SX","SY","SZ",
-  "TC","TD","TG","TH","TJ","TK","TL","TM","TN","TO","TR","TT","TV","TW","TZ",
-  "UA","UG","US","UY","UZ",
-  "VA","VC","VE","VG","VI","VN","VU",
-  "WF","WS",
-  "YE","YT",
-  "ZA","ZM","ZW"
-];
-
-const COUNTRY_ALIASES = {
-  TR: "turkey", PS: "palestine", CD: "democratic republic of the congo drc zaire", CG: "republic of the congo",
-  KR: "korea republic of korea", KP: "korea dprk", AE: "uae emirates", VA: "holy see", MM: "burma",
-  CZ: "czech republic", CI: "ivory coast cote divoire", SZ: "swaziland", TL: "east timor", CV: "cabo verde",
-  MK: "macedonia", NL: "holland", GB: "uk britain great britain england scotland wales northern ireland",
-  US: "usa united states of america", RU: "russian federation", SY: "syrian arab republic", LA: "lao pdr",
-  IR: "islamic republic of iran persia", VN: "viet nam", BN: "brunei darussalam", MD: "republic of moldova",
-  TW: "republic of china", HK: "hong kong", MO: "macao macau", BO: "plurinational state of bolivia",
-  VE: "bolivarian republic of venezuela", TZ: "united republic of tanzania", FK: "malvinas", GR: "hellas",
-  CH: "helvetia", DE: "deutschland", ES: "espana", JP: "nippon", CN: "prc peoples republic of china",
-  EG: "arab republic of egypt", SA: "ksa kingdom of saudi arabia"
-};
-
-let countryList = [];
-let comboMatches = [];
-let comboActive = -1;
-
-function normalizeText(value) {
-  const text = String(value || "").toLowerCase();
-  try {
-    return text.normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[’']/g, "");
-  } catch (err) {
-    return text;
-  }
-}
-
-function buildChipGroup(containerId, options, field) {
-  const box = document.getElementById(containerId);
-  if (!box) return;
-
-  box.innerHTML = "";
-  options.forEach(optText => {
-    const btn = document.createElement("button");
-    btn.type = "button";
-    btn.className = "chip";
-    btn.innerText = optText;
-    btn.setAttribute("aria-pressed", "false");
-
-    btn.onclick = () => {
-      demographics[field] = (demographics[field] === optText) ? "" : optText;
-      box.querySelectorAll(".chip").forEach(chip => {
-        const on = (chip.innerText === demographics[field]);
-        chip.classList.toggle("selected", on);
-        chip.setAttribute("aria-pressed", on ? "true" : "false");
+  // Flat question list used by the engine: { code, axis, dir, text }
+  const SURVEY = [];
+  Object.keys(STATEMENTS).forEach(axis => {
+    STATEMENTS[axis].forEach((row, i) => {
+      SURVEY.push({
+        code: axis + (i + 1),
+        axis: axis,
+        dir: row[0] === "+" ? 1 : -1,
+        text: row[1]
       });
-    };
-
-    box.appendChild(btn);
-  });
-}
-
-function buildCountryList() {
-  let display = null;
-  try {
-    display = new Intl.DisplayNames(["en"], { type: "region" });
-  } catch (err) {
-    return null;
-  }
-  if (!display) return null;
-
-  const list = [];
-  COUNTRY_CODES.forEach(code => {
-    let name = null;
-    try { name = display.of(code); } catch (err) { name = null; }
-    if (!name || name === code) return;
-
-    list.push({
-      name: name,
-      search: normalizeText(name + " " + (COUNTRY_ALIASES[code] || ""))
     });
   });
 
-  if (!list.length) return null;
-  return list.sort((a, b) => a.name.localeCompare(b.name));
-}
+  // Highest score each axis can reach (used to scale results to -10..+10).
+  const MAX_SCORE = {};
+  SURVEY.forEach(q => { MAX_SCORE[q.axis] = (MAX_SCORE[q.axis] || 0) + MAX_WEIGHT; });
 
-function setNatHint(msg) {
-  const hint = document.getElementById("nat-hint");
-  if (hint) hint.innerText = msg || "";
-}
+  const AXIS_ORDER = ["ETH", "HN", "TRB", "JST", "RLG"];
 
-function openCombo() {
-  const list = document.getElementById("nat-list");
-  const input = document.getElementById("nat-input");
-  if (!list) return;
-  list.classList.remove("hidden");
-  if (input) input.setAttribute("aria-expanded", "true");
-}
+  // neg = left pole (negative scores), pos = right pole (positive scores)
+  const AXIS_LABELS = {
+    ETH: { neg: "Subjectivism",   negKey: "S", pos: "Objectivism",  posKey: "O" },
+    HN:  { neg: "Constructivism", negKey: "C", pos: "Realism",      posKey: "R" },
+    TRB: { neg: "Universalism",   negKey: "U", pos: "Tribalism",    posKey: "T" },
+    JST: { neg: "Equality",       negKey: "E", pos: "Justice",      posKey: "J" },
+    RLG: { neg: "Laicity",        negKey: "L", pos: "Spiritualism", posKey: "P" }
+  };
 
-function closeCombo() {
-  const list = document.getElementById("nat-list");
-  const input = document.getElementById("nat-input");
-  if (!list) return;
-  list.classList.add("hidden");
-  if (input) input.setAttribute("aria-expanded", "false");
-  comboActive = -1;
-}
-
-function renderCombo(query) {
-  const list = document.getElementById("nat-list");
-  if (!list) return;
-
-  const term = normalizeText(query).trim();
-  comboMatches = term
-    ? countryList.filter(c => c.search.includes(term))
-    : countryList.slice();
-  comboActive = -1;
-
-  if (!comboMatches.length) {
-    list.innerHTML = '<div class="combo-empty">No country matches that.</div>';
-    return;
-  }
-
-  list.innerHTML = comboMatches
-    .map((c, i) => `<div class="combo-opt" role="option" data-index="${i}">${c.name}</div>`)
-    .join("");
-
-  list.querySelectorAll(".combo-opt").forEach(el => {
-    el.addEventListener("mousedown", ev => {
-      ev.preventDefault();
-      const match = comboMatches[Number(el.dataset.index)];
-      if (match) pickCountry(match.name);
-    });
-  });
-}
-
-function highlightCombo(nextIndex) {
-  const list = document.getElementById("nat-list");
-  if (!list || !comboMatches.length) return;
-
-  const opts = list.querySelectorAll(".combo-opt");
-  if (!opts.length) return;
-
-  comboActive = (nextIndex + opts.length) % opts.length;
-  opts.forEach((el, i) => el.classList.toggle("active", i === comboActive));
-  const active = opts[comboActive];
-  if (active) active.scrollIntoView({ block: "nearest" });
-}
-
-function pickCountry(name) {
-  if (!name) return;
-  demographics.nationality = name;
-  const input = document.getElementById("nat-input");
-  if (input) input.value = name;
-  closeCombo();
-  setNatHint("");
-}
-
-function initNationality() {
-  const input = document.getElementById("nat-input");
-  const list = document.getElementById("nat-list");
-  if (!input) return;
-
-  countryList = buildCountryList() || [];
-
-  if (!countryList.length) {
-    if (list) list.remove();
-    input.placeholder = "Type your nationality";
-    input.removeAttribute("role");
-    input.removeAttribute("aria-controls");
-    input.oninput = () => { demographics.nationality = input.value.trim(); };
-    return;
-  }
-
-  renderCombo("");
-
-  input.addEventListener("focus", () => {
-    renderCombo(input.value === demographics.nationality ? "" : input.value);
-    openCombo();
-  });
-
-  input.addEventListener("input", () => {
-    demographics.nationality = "";
-    setNatHint("");
-    renderCombo(input.value);
-    openCombo();
-  });
-
-  input.addEventListener("keydown", ev => {
-    if (ev.key === "ArrowDown") {
-      ev.preventDefault();
-      openCombo();
-      highlightCombo(comboActive + 1);
-    } else if (ev.key === "ArrowUp") {
-      ev.preventDefault();
-      highlightCombo(comboActive - 1);
-    } else if (ev.key === "Enter") {
-      if (comboActive >= 0 && comboMatches[comboActive]) {
-        ev.preventDefault();
-        pickCountry(comboMatches[comboActive].name);
-      } else if (comboMatches.length === 1) {
-        ev.preventDefault();
-        pickCountry(comboMatches[0].name);
-      }
-    } else if (ev.key === "Escape") {
-      closeCombo();
+  // Result panels. Two-axis panels draw a grid; the single-axis panel draws one bar.
+  // Combo keys are always written vertical-axis letter first, then horizontal.
+  const CLUSTERS = [
+    {
+      id: "PHI",
+      name: "Philosophical Cluster",
+      x: "HN",            // horizontal: C <-> R
+      y: "ETH",           // vertical:   S <-> O
+      combos: { OR: "#d69e2e", OC: "#2b6cb0", SC: "#38a169", SR: "#e53e3e" }
+    },
+    {
+      id: "POL",
+      name: "Political Cluster",
+      x: "JST",           // horizontal: E <-> J
+      y: "TRB",           // vertical:   U <-> T
+      combos: { TJ: "#dd6b20", UJ: "#805ad5", UE: "#8b4513", TE: "#718096" }
+    },
+    {
+      id: "RLG",
+      name: "Religion Cluster",
+      single: "RLG"
     }
-  });
+  ];
 
-  input.addEventListener("blur", () => {
+  // Named ideology for the first four letters of the profile code.
+  const IDEOLOGICAL_CLUSTERS = {
+    ORTJ: "Conservative Essentialism",  ORUJ: "Meritocratic Essentialism",
+    ORUE: "Universalist Essentialism",  ORTE: "Communitarian Essentialism",
+    OCTJ: "Conservative Idealism",      OCUJ: "Meritocratic Idealism",
+    OCUE: "Universalist Idealism",      OCTE: "Communitarian Idealism",
+    SCTJ: "Conservative Skepticism",    SCUJ: "Meritocratic Skepticism",
+    SCUE: "Universalist Skepticism",    SCTE: "Communitarian Skepticism",
+    SRTJ: "Conservative Naturalism",    SRUJ: "Meritocratic Naturalism",
+    SRUE: "Universalist Naturalism",    SRTE: "Communitarian Naturalism"
+  };
+
+  const GENDER_OPTIONS = ["Male", "Female", "Queer", "Prefer not to say"];
+  const AGE_OPTIONS = ["Below 18", "18-24", "25-34", "35-44", "45-54", "55-64", "65+", "Prefer not to say"];
+
+  const COUNTRY_CODES = [
+    "AD","AE","AF","AG","AI","AL","AM","AO","AR","AS","AT","AU","AW","AX","AZ",
+    "BA","BB","BD","BE","BF","BG","BH","BI","BJ","BL","BM","BN","BO","BQ","BR","BS","BT","BW","BY","BZ",
+    "CA","CC","CD","CF","CG","CH","CI","CK","CL","CM","CN","CO","CR","CU","CV","CW","CX","CY","CZ",
+    "DE","DJ","DK","DM","DO","DZ",
+    "EC","EE","EG","EH","ER","ES","ET",
+    "FI","FJ","FK","FM","FO","FR",
+    "GA","GB","GD","GE","GF","GG","GH","GI","GL","GM","GN","GP","GQ","GR","GT","GU","GW","GY",
+    "HK","HN","HR","HT","HU",
+    "ID","IE","IL","IM","IN","IO","IQ","IR","IS","IT",
+    "JE","JM","JO","JP",
+    "KE","KG","KH","KI","KM","KN","KP","KR","KW","KY","KZ",
+    "LA","LB","LC","LI","LK","LR","LS","LT","LU","LV","LY",
+    "MA","MC","MD","ME","MF","MG","MH","MK","ML","MM","MN","MO","MP","MQ","MR","MS","MT","MU","MV","MW","MX","MY","MZ",
+    "NA","NC","NE","NF","NG","NI","NL","NO","NP","NR","NU","NZ",
+    "OM",
+    "PA","PE","PF","PG","PH","PK","PL","PM","PN","PR","PS","PT","PW","PY",
+    "QA",
+    "RE","RO","RS","RU","RW",
+    "SA","SB","SC","SD","SE","SG","SH","SI","SJ","SK","SL","SM","SN","SO","SR","SS","ST","SV","SX","SY","SZ",
+    "TC","TD","TG","TH","TJ","TK","TL","TM","TN","TO","TR","TT","TV","TW","TZ",
+    "UA","UG","US","UY","UZ",
+    "VA","VC","VE","VG","VI","VN","VU",
+    "WF","WS",
+    "YE","YT",
+    "ZA","ZM","ZW"
+  ];
+
+  // Extra search terms so people can type the name they actually use.
+  const COUNTRY_ALIASES = {
+    TR: "turkey", PS: "palestine", CD: "democratic republic of the congo drc zaire", CG: "republic of the congo",
+    KR: "korea republic of korea", KP: "korea dprk", AE: "uae emirates", VA: "holy see", MM: "burma",
+    CZ: "czech republic", CI: "ivory coast cote divoire", SZ: "swaziland", TL: "east timor", CV: "cabo verde",
+    MK: "macedonia", NL: "holland", GB: "uk britain great britain england scotland wales northern ireland",
+    US: "usa united states of america", RU: "russian federation", SY: "syrian arab republic", LA: "lao pdr",
+    IR: "islamic republic of iran persia", VN: "viet nam", BN: "brunei darussalam", MD: "republic of moldova",
+    TW: "republic of china", HK: "hong kong", MO: "macao macau", BO: "plurinational state of bolivia",
+    VE: "bolivarian republic of venezuela", TZ: "united republic of tanzania", FK: "malvinas", GR: "hellas",
+    CH: "helvetia", DE: "deutschland", ES: "espana", JP: "nippon", CN: "prc peoples republic of china",
+    EG: "arab republic of egypt", SA: "ksa kingdom of saudi arabia"
+  };
+
+  /* ============================================================
+     3. STATE — everything that changes while the app runs
+     ============================================================ */
+  const state = {
+    index: 0,          // current question
+    answers: [],       // [{ option, weight }] by question index
+    raw: {},           // running score per axis
+    results: [],       // computed axis results, filled on the results page
+    clusters: [],      // [{ cluster, key, hex }] for the two-axis panels
+    demographics: { gender: "", age: "", nationality: "" },
+    userId: null,      // id returned by the demographics endpoint
+    saved: false,      // results already sent?
+    startedAt: 0,      // timestamp, used for duration_sec
+    shareBlob: null    // pre-rendered PNG
+  };
+  AXIS_ORDER.forEach(axis => { state.raw[axis] = 0; });
+
+  /* ============================================================
+     4. HELPERS
+     ============================================================ */
+  const $ = id => document.getElementById(id);
+
+  const byAxis = list => {
+    const map = {};
+    list.forEach(r => { map[r.axis] = r; });
+    return map;
+  };
+
+  function normalizeText(value) {
+    const text = String(value || "").toLowerCase();
+    try {
+      return text.normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[’']/g, "");
+    } catch (err) {
+      return text;
+    }
+  }
+
+  /* ============================================================
+     5. STORAGE — the only place that talks to the backend
+     ============================================================ */
+  const Storage = {
+    async saveDemographics() {
+      try {
+        const response = await fetch(API.baseUrl + API.demographics, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            gender: state.demographics.gender || null,
+            age: state.demographics.age || null,
+            nationality: state.demographics.nationality || null
+          })
+        });
+        const data = await response.json();
+        if (data && data.id) state.userId = data.id;
+      } catch (err) {
+        console.error("Could not save demographics:", err);
+      }
+    },
+
+    async saveResults() {
+      if (state.saved) return;
+      state.saved = true;
+
+      if (!state.userId) await Storage.saveDemographics();
+
+      const rawAnswers = {};
+      SURVEY.forEach((q, i) => {
+        rawAnswers[q.code] = state.answers[i] ? state.answers[i].option : "";
+      });
+
+      const scores = {};
+      state.results.forEach(r => { scores[r.axis] = Number(r.formatted); });
+
+      const payload = {
+        user_id: state.userId,
+        profile_code: getProfileCode(),
+        vector_string: getVectorString(),
+        clusters: state.clusters.map(c => c.cluster.id + ":" + c.key).join(" | "),
+        duration_sec: state.startedAt ? Math.round((Date.now() - state.startedAt) / 1000) : 0,
+        scores: scores,
+        raw_answers: rawAnswers
+      };
+
+      try {
+        await fetch(API.baseUrl + API.results, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload)
+        });
+      } catch (err) {
+        console.error("Could not save results:", err);
+      }
+    }
+  };
+
+  /* ============================================================
+     6. NAVIGATION & STEP FLOW
+     ============================================================ */
+  const TABS = {
+    test:    { page: "page-test",    nav: "nav-test" },
+    about:   { page: "page-about",   nav: "nav-about" },
+    comment: { page: "page-comment", nav: "nav-comment" }
+  };
+
+  function switchTab(name) {
+    Object.keys(TABS).forEach(key => {
+      const active = key === name;
+      $(TABS[key].page).classList.toggle("hidden", !active);
+      $(TABS[key].nav).classList.toggle("active", active);
+    });
+  }
+
+  const STEPS = {
+    intro:  "intro-view",
+    demo:   "demo-view",
+    survey: "survey-view",
+    result: "result-view"
+  };
+
+  function showStep(name) {
+    Object.keys(STEPS).forEach(key => {
+      $(STEPS[key]).classList.toggle("hidden", key !== name);
+    });
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+
+  function startSurvey() {
+    state.startedAt = Date.now();
+    showStep("survey");
+    loadQuestion();
+  }
+
+  /* ============================================================
+     7. DEMOGRAPHICS PAGE
+     ============================================================ */
+  function buildChipGroup(containerId, options, field) {
+    const box = $(containerId);
+    box.innerHTML = "";
+
+    options.forEach(label => {
+      const chip = document.createElement("button");
+      chip.type = "button";
+      chip.className = "chip";
+      chip.dataset.value = label;
+      chip.innerText = label;
+      chip.setAttribute("aria-pressed", "false");
+      chip.addEventListener("click", () => {
+        // clicking the selected chip clears the answer
+        state.demographics[field] = state.demographics[field] === label ? "" : label;
+        paintChips(box, state.demographics[field]);
+      });
+      box.appendChild(chip);
+    });
+  }
+
+  function paintChips(box, selected) {
+    box.querySelectorAll(".chip").forEach(chip => {
+      const on = chip.dataset.value === selected;
+      chip.classList.toggle("selected", on);
+      chip.setAttribute("aria-pressed", on ? "true" : "false");
+    });
+  }
+
+  /* --- country combobox --- */
+  const combo = {
+    list: [],       // [{ name, search }]
+    matches: [],
+    active: -1
+  };
+
+  function buildCountryList() {
+    let display;
+    try {
+      display = new Intl.DisplayNames(["en"], { type: "region" });
+    } catch (err) {
+      return [];
+    }
+
+    const list = [];
+    COUNTRY_CODES.forEach(code => {
+      let name = null;
+      try { name = display.of(code); } catch (err) { name = null; }
+      if (!name || name === code) return;
+      list.push({ name: name, search: normalizeText(name + " " + (COUNTRY_ALIASES[code] || "")) });
+    });
+
+    return list.sort((a, b) => a.name.localeCompare(b.name));
+  }
+
+  function setNatHint(message) {
+    $("nat-hint").innerText = message || "";
+  }
+
+  function openCombo() {
+    $("nat-list").classList.remove("hidden");
+    $("nat-input").setAttribute("aria-expanded", "true");
+  }
+
+  function closeCombo() {
+    const list = $("nat-list");
+    if (!list) return;
+    list.classList.add("hidden");
+    $("nat-input").setAttribute("aria-expanded", "false");
+    combo.active = -1;
+  }
+
+  function renderCombo(query) {
+    const list = $("nat-list");
+    const term = normalizeText(query).trim();
+
+    combo.matches = term ? combo.list.filter(c => c.search.includes(term)) : combo.list.slice();
+    combo.active = -1;
+
+    if (!combo.matches.length) {
+      list.innerHTML = '<div class="combo-empty">No country matches that.</div>';
+      return;
+    }
+
+    list.innerHTML = combo.matches
+      .map((c, i) => '<div class="combo-opt" role="option" data-index="' + i + '">' + c.name + '</div>')
+      .join("");
+
+    list.querySelectorAll(".combo-opt").forEach(el => {
+      el.addEventListener("mousedown", ev => {
+        ev.preventDefault();          // keep focus so blur does not undo the pick
+        const match = combo.matches[Number(el.dataset.index)];
+        if (match) pickCountry(match.name);
+      });
+    });
+  }
+
+  function highlightCombo(nextIndex) {
+    const options = $("nat-list").querySelectorAll(".combo-opt");
+    if (!options.length) return;
+
+    combo.active = (nextIndex + options.length) % options.length;
+    options.forEach((el, i) => el.classList.toggle("active", i === combo.active));
+    options[combo.active].scrollIntoView({ block: "nearest" });
+  }
+
+  function pickCountry(name) {
+    if (!name) return;
+    state.demographics.nationality = name;
+    $("nat-input").value = name;
     closeCombo();
-    const typed = input.value.trim();
-    if (!typed) { demographics.nationality = ""; return; }
+    setNatHint("");
+  }
 
-    const hit = resolveCountry(typed);
-    if (hit) pickCountry(hit.name);
-    else input.value = demographics.nationality;
-  });
+  // Accepts an exact name, or a fragment that matches exactly one country.
+  function resolveCountry(typed) {
+    const term = normalizeText(typed).trim();
+    if (!term) return null;
 
-  document.addEventListener("click", ev => {
-    const combo = document.getElementById("nat-combo");
-    if (combo && !combo.contains(ev.target)) closeCombo();
-  });
-}
+    const exact = combo.list.find(c => normalizeText(c.name) === term);
+    if (exact) return exact;
 
-function resolveCountry(typed) {
-  const term = normalizeText(typed).trim();
-  if (!term) return null;
+    const partial = combo.list.filter(c => c.search.includes(term));
+    return partial.length === 1 ? partial[0] : null;
+  }
 
-  const exact = countryList.find(c => normalizeText(c.name) === term);
-  if (exact) return exact;
+  function initNationality() {
+    const input = $("nat-input");
+    combo.list = buildCountryList();
 
-  const partial = countryList.filter(c => c.search.includes(term));
-  return (partial.length === 1) ? partial[0] : null;
-}
+    // Old browser without Intl.DisplayNames: fall back to a plain text field.
+    if (!combo.list.length) {
+      $("nat-list").remove();
+      input.placeholder = "Type your nationality";
+      input.removeAttribute("role");
+      input.removeAttribute("aria-controls");
+      input.addEventListener("input", () => {
+        state.demographics.nationality = input.value.trim();
+      });
+      return;
+    }
 
-async function handleDemoNext() {
-  const input = document.getElementById("nat-input");
+    renderCombo("");
 
-  if (input && countryList.length) {
-    const typed = input.value.trim();
-    if (typed && !demographics.nationality) {
-      const hit = resolveCountry(typed);
-      if (hit) {
-        pickCountry(hit.name);
-      } else {
-        setNatHint("Pick a country from the list, or clear the field to skip it.");
-        input.focus();
+    input.addEventListener("focus", () => {
+      renderCombo(input.value === state.demographics.nationality ? "" : input.value);
+      openCombo();
+    });
+
+    input.addEventListener("input", () => {
+      state.demographics.nationality = "";
+      setNatHint("");
+      renderCombo(input.value);
+      openCombo();
+    });
+
+    input.addEventListener("keydown", ev => {
+      if (ev.key === "ArrowDown") {
+        ev.preventDefault();
+        openCombo();
+        highlightCombo(combo.active + 1);
+      } else if (ev.key === "ArrowUp") {
+        ev.preventDefault();
+        highlightCombo(combo.active - 1);
+      } else if (ev.key === "Enter") {
+        if (combo.active >= 0 && combo.matches[combo.active]) {
+          ev.preventDefault();
+          pickCountry(combo.matches[combo.active].name);
+        } else if (combo.matches.length === 1) {
+          ev.preventDefault();
+          pickCountry(combo.matches[0].name);
+        }
+      } else if (ev.key === "Escape") {
+        closeCombo();
+      }
+    });
+
+    input.addEventListener("blur", () => {
+      closeCombo();
+      const typed = input.value.trim();
+      if (!typed) {
+        state.demographics.nationality = "";
         return;
       }
-    }
+      const hit = resolveCountry(typed);
+      if (hit) pickCountry(hit.name);
+      else input.value = state.demographics.nationality;
+    });
+
+    document.addEventListener("click", ev => {
+      if (!$("nat-combo").contains(ev.target)) closeCombo();
+    });
   }
 
-  await saveDemographics();
-  startSurvey();
-}
+  async function handleDemoNext() {
+    const input = $("nat-input");
 
-async function handleDemoSkip() {
-  demographics.gender = "";
-  demographics.age = "";
-  demographics.nationality = "";
-
-  await saveDemographics();
-  startSurvey();
-}
-
-/* ============================================================
-   TEST MOTORU HESAPLAMALARI
-   ============================================================ */
-function calculateBounds() {
-  SURVEY_DATA.forEach(q => {
-    let qMaxPerAxis = {};
-    Object.values(q.scores).forEach(weights => {
-      Object.entries(weights).forEach(([axis, weight]) => {
-        const absWeight = Math.abs(weight);
-        if (!qMaxPerAxis[axis] || absWeight > qMaxPerAxis[axis]) {
-          qMaxPerAxis[axis] = absWeight;
+    if (combo.list.length) {
+      const typed = input.value.trim();
+      if (typed && !state.demographics.nationality) {
+        const hit = resolveCountry(typed);
+        if (!hit) {
+          setNatHint("Pick a country from the list, or clear the field to skip it.");
+          input.focus();
+          return;
         }
-      });
-    });
+        pickCountry(hit.name);
+      }
+    }
 
-    Object.entries(qMaxPerAxis).forEach(([axis, maxW]) => {
-      maxPossibleScores[axis] = (maxPossibleScores[axis] || 0) + maxW;
-      if (!(axis in rawScores)) rawScores[axis] = 0;
-    });
-  });
-}
+    await Storage.saveDemographics();
+    startSurvey();
+  }
 
-function loadQuestion() {
-  const qData = SURVEY_DATA[currentIndex];
-  if (!qData) return;
+  async function handleDemoSkip() {
+    state.demographics = { gender: "", age: "", nationality: "" };
+    await Storage.saveDemographics();
+    startSurvey();
+  }
 
-  const progText = document.getElementById("progress-text");
-  if (progText) progText.innerText = `Question ${currentIndex + 1} of ${SURVEY_DATA.length}`;
+  /* ============================================================
+     8. SURVEY ENGINE
+     ============================================================ */
+  function loadQuestion() {
+    const question = SURVEY[state.index];
+    if (!question) return;
 
-  const progFill = document.getElementById("progress-fill");
-  if (progFill) progFill.style.width = `${(currentIndex / SURVEY_DATA.length) * 100}%`;
+    $("progress-text").innerText = "Question " + (state.index + 1) + " of " + SURVEY.length;
+    $("progress-fill").style.width = ((state.index / SURVEY.length) * 100) + "%";
+    $("btn-prev").disabled = state.index === 0;
+    $("question-text").innerText = question.text;
 
-  const btnPrev = document.getElementById("btn-prev");
-  if (btnPrev) btnPrev.disabled = (currentIndex === 0);
+    const chosen = state.answers[state.index] ? state.answers[state.index].option : null;
+    const box = $("options-container");
+    box.innerHTML = "";
 
-  const qText = document.getElementById("question-text");
-  if (qText) qText.innerText = qData.question;
-
-  const saved = userAnswers[currentIndex];
-
-  const container = document.getElementById("options-container");
-  if (container) {
-    container.innerHTML = "";
-    OPTIONS.forEach(optText => {
+    OPTION_LABELS.forEach(label => {
       const btn = document.createElement("button");
       btn.className = "btn-option";
-      btn.innerText = optText;
-      btn.setAttribute("aria-pressed", "false");
-
-      if (saved && saved.selectedOption === optText) {
-        btn.classList.add("selected");
-        btn.setAttribute("aria-pressed", "true");
-      }
-
-      btn.onclick = () => handleChoice(optText);
-      container.appendChild(btn);
-    });
-  }
-}
-
-function handleChoice(selectedOption) {
-  const qData = SURVEY_DATA[currentIndex];
-  const weights = qData.scores[selectedOption] || {};
-
-  const previous = userAnswers[currentIndex];
-  if (previous) {
-    Object.entries(previous.weights).forEach(([axis, weight]) => {
-      if (axis in rawScores) rawScores[axis] -= weight;
+      btn.innerText = label;
+      btn.setAttribute("aria-pressed", label === chosen ? "true" : "false");
+      if (label === chosen) btn.classList.add("selected");
+      btn.addEventListener("click", () => selectOption(label));
+      box.appendChild(btn);
     });
   }
 
-  userAnswers[currentIndex] = {
-    questionIndex: currentIndex,
-    selectedOption: selectedOption,
-    weights: weights
-  };
+  function selectOption(label) {
+    const question = SURVEY[state.index];
+    const previous = state.answers[state.index];
 
-  Object.entries(weights).forEach(([axis, weight]) => {
-    if (axis in rawScores) rawScores[axis] += weight;
-  });
+    // changing an earlier answer: take the old weight back out first
+    if (previous) state.raw[question.axis] -= previous.weight;
 
-  currentIndex++;
-  if (currentIndex < SURVEY_DATA.length) {
+    const weight = question.dir * WEIGHT_OF[label];
+    state.answers[state.index] = { option: label, weight: weight };
+    state.raw[question.axis] += weight;
+
+    state.index++;
+    if (state.index < SURVEY.length) loadQuestion();
+    else showResults();
+  }
+
+  function handlePrevious() {
+    if (state.index <= 0) return;
+    state.index--;
     loadQuestion();
-  } else {
-    showResults();
   }
-}
 
-function handlePrevious() {
-  if (currentIndex <= 0) return;
-  currentIndex--;
-  loadQuestion();
-}
+  /* ============================================================
+     9. RESULTS
+     ============================================================ */
 
-function letterColorFor(axis) {
-  const entry = lastClusters.find(c => c.cluster.x === axis || c.cluster.y === axis);
-  return entry
-    ? { hex: entry.hex, tip: `${entry.cluster.name}: ${entry.key}` }
-    : { hex: "#f8fafc", tip: "Religion Cluster" };
-}
+  // Turns a raw axis total into a -10..+10 score plus its labels.
+  function computeAxis(axis) {
+    const labels = AXIS_LABELS[axis];
+    const raw = state.raw[axis] || 0;
+    const max = MAX_SCORE[axis] || 1;
+    const scaled = Math.max(-10, Math.min(10, (raw / max) * 10));
+    const isPos = scaled >= 0;
 
-function computeAxis(axis) {
-  const raw = rawScores[axis] || 0;
-  const max = maxPossibleScores[axis] || 1;
+    return {
+      axis: axis,
+      scaled: scaled,
+      formatted: scaled.toFixed(1),
+      isPos: isPos,
+      isNeutral: Math.abs(scaled) < 0.05,
+      neg: labels.neg, negKey: labels.negKey,
+      pos: labels.pos, posKey: labels.posKey,
+      letter: isPos ? labels.posKey : labels.negKey,
+      pole: isPos ? labels.pos : labels.neg
+    };
+  }
 
-  let scaled = (raw / max) * 10;
-  scaled = Math.max(-10, Math.min(10, scaled));
+  // Colour of a profile letter = colour of the cluster quadrant it belongs to.
+  function letterColorFor(axis) {
+    const entry = state.clusters.find(c => c.cluster.x === axis || c.cluster.y === axis);
+    return entry
+      ? { hex: entry.hex, tip: entry.cluster.name + ": " + entry.key }
+      : { hex: "#f8fafc", tip: "Religion Cluster" };
+  }
 
-  const labels = AXIS_LABELS[axis];
-  const isPos = scaled >= 0;
+  const AXIS_LEGEND =
+    '<div class="axis-legend"><span>-10</span><span>-5</span><span>0</span><span>+5</span><span>+10</span></div>';
 
-  return {
-    axis: axis,
-    scaled: scaled,
-    formatted: scaled.toFixed(1),
-    isPos: isPos,
-    isNeutral: Math.abs(scaled) < 0.05,
-    neg: labels.neg, negKey: labels.negKey,
-    pos: labels.pos, posKey: labels.posKey,
-    letter: isPos ? labels.posKey : labels.negKey,
-    pole: isPos ? labels.pos : labels.neg
-  };
-}
+  function buildBarHTML(r) {
+    const half = (Math.abs(r.scaled) / 10) * 50;
+    const left = r.isPos ? 50 : 50 - half;
+    const leftDom = (!r.isNeutral && !r.isPos) ? " dominant" : "";
+    const rightDom = (!r.isNeutral && r.isPos) ? " dominant" : "";
+    const sign = (r.isPos && !r.isNeutral) ? "+" : "";
+    const readOut = r.axis + ": " + r.formatted + " towards " + (r.isNeutral ? "neither pole" : r.pole);
 
-function buildBarHTML(r) {
-  const half = (Math.abs(r.scaled) / 10) * 50;
-  const left = r.isPos ? 50 : 50 - half;
-  const ld = (!r.isNeutral && !r.isPos) ? " dominant" : "";
-  const rd = (!r.isNeutral && r.isPos) ? " dominant" : "";
-  const sign = (r.isPos && !r.isNeutral) ? "+" : "";
-
-  return `
+    return `
     <div class="axis-result">
       <div class="axis-head">
-        <span class="axis-side left${ld}"><span class="axis-key">${r.negKey}</span> ${r.neg}</span>
+        <span class="axis-side left${leftDom}"><span class="axis-key">${r.negKey}</span> ${r.neg}</span>
         <span class="axis-score">${r.axis} <strong>${sign}${r.formatted}</strong></span>
-        <span class="axis-side right${rd}">${r.pos} <span class="axis-key">${r.posKey}</span></span>
+        <span class="axis-side right${rightDom}">${r.pos} <span class="axis-key">${r.posKey}</span></span>
       </div>
-      <div class="axis-track" role="img"
-           aria-label="${r.axis}: ${r.formatted} towards ${r.isNeutral ? "neither pole" : r.pole}">
+      <div class="axis-track" role="img" aria-label="${readOut}">
         <div class="axis-fill ${r.isPos ? "pos" : "neg"}"
              data-left="${left}" data-width="${half}" style="left:50%; width:0%;"></div>
         <div class="axis-midline"></div>
       </div>
     </div>`;
-}
+  }
 
-function buildGridSVG(cluster, xr, yr) {
-  const activeKey = xr.letter + yr.letter;
-  const dx = 120 + (xr.scaled / 10) * 90;
-  const dy = 120 - (yr.scaled / 10) * 90;
+  // 2x2 quadrant grid with a dot showing the exact position.
+  function buildGridSVG(cluster, xr, yr) {
+    const activeKey = yr.letter + xr.letter;
+    const dotX = 120 + (xr.scaled / 10) * 90;
+    const dotY = 120 - (yr.scaled / 10) * 90;
 
-  const quads = [
-    { x: 120, y: 20,  key: xr.posKey + yr.posKey },
-    { x: 20,  y: 20,  key: xr.negKey + yr.posKey },
-    { x: 20,  y: 120, key: xr.negKey + yr.negKey },
-    { x: 120, y: 120, key: xr.posKey + yr.negKey }
-  ];
+    const quads = [
+      { x: 120, y: 20,  key: yr.posKey + xr.posKey },
+      { x: 20,  y: 20,  key: yr.posKey + xr.negKey },
+      { x: 20,  y: 120, key: yr.negKey + xr.negKey },
+      { x: 120, y: 120, key: yr.negKey + xr.posKey }
+    ];
 
-  const rects = quads.map(q => {
-    const comboKey = q.key[1] + q.key[0];
-    const combo = cluster.combos[comboKey];
-    const active = (q.key === activeKey);
-    return `<rect x="${q.x}" y="${q.y}" width="100" height="100" rx="2"
-              fill="${combo ? combo.hex : '#334155'}" opacity="${active ? 0.58 : 0.15}">
-              <title>${comboKey}</title>
-            </rect>`;
-  }).join("");
+    const rects = quads.map(q => `
+      <rect x="${q.x}" y="${q.y}" width="100" height="100" rx="2"
+            fill="${cluster.combos[q.key] || '#334155'}" opacity="${q.key === activeKey ? 0.58 : 0.15}">
+        <title>${q.key}</title>
+      </rect>`).join("");
 
-  return `
+    return `
     <svg viewBox="0 0 240 240" width="240" height="240"
          preserveAspectRatio="xMidYMid meet" class="cluster-svg" role="img"
          aria-label="${cluster.name} position">
@@ -1613,41 +1535,36 @@ function buildGridSVG(cluster, xr, yr) {
       <text class="grid-label" x="120" y="236" text-anchor="middle">${yr.negKey}</text>
       <text class="grid-label" x="9"   y="125" text-anchor="middle">${xr.negKey}</text>
       <text class="grid-label" x="231" y="125" text-anchor="middle">${xr.posKey}</text>
-      <circle cx="${dx}" cy="${dy}" r="8" fill="#f8fafc" stroke="#0f172a" stroke-width="2.5"></circle>
+      <circle cx="${dotX}" cy="${dotY}" r="8" fill="#f8fafc" stroke="#0f172a" stroke-width="2.5"></circle>
     </svg>`;
-}
+  }
 
-const AXIS_LEGEND = '<div class="axis-legend"><span>-10</span><span>-5</span><span>0</span><span>+5</span><span>+10</span></div>';
+  // One result panel. Bars are always vertical axis first, horizontal second.
+  function buildClusterBlock(cluster, axes) {
+    const block = document.createElement("section");
+    block.className = "cluster";
 
-/* REVIZE EDILDI: Düz barların sırası yr (Dikey - ETH/TRB) üstte, xr (Yatay - HN/JST) altta olacak şekilde düzeltildi */
-function buildClusterBlock(cluster, byAxis) {
-  const block = document.createElement("section");
-  block.className = "cluster";
-
-  if (cluster.single) {
-    const r = byAxis[cluster.single];
-    block.innerHTML = `
+    if (cluster.single) {
+      block.innerHTML = `
       <div class="cluster-head">
         <h3 class="cluster-name">${cluster.name}</h3>
       </div>
       <div class="cluster-body single">
-        <div class="cluster-bars">${AXIS_LEGEND}${buildBarHTML(r)}</div>
+        <div class="cluster-bars">${AXIS_LEGEND}${buildBarHTML(axes[cluster.single])}</div>
       </div>`;
-    return block;
-  }
+      return block;
+    }
 
-  const xr = byAxis[cluster.x];
-  const yr = byAxis[cluster.y];
+    const xr = axes[cluster.x];
+    const yr = axes[cluster.y];
+    const key = yr.letter + xr.letter;
 
-  const displayKey = yr.letter + xr.letter;
-  const combo = cluster.combos[displayKey];
-
-  block.innerHTML = `
+    block.innerHTML = `
     <div class="cluster-head">
       <h3 class="cluster-name">${cluster.name}</h3>
       <span class="cluster-tag">
-        <span class="cluster-swatch" style="background:${combo ? combo.hex : '#38bdf8'}"></span>
-        ${displayKey}
+        <span class="cluster-swatch" style="background:${cluster.combos[key] || '#38bdf8'}"></span>
+        ${key}
       </span>
     </div>
     <div class="cluster-body">
@@ -1655,597 +1572,515 @@ function buildClusterBlock(cluster, byAxis) {
       <div class="cluster-bars">${AXIS_LEGEND}${buildBarHTML(yr)}${buildBarHTML(xr)}</div>
     </div>`;
 
-  return block;
-}
+    return block;
+  }
 
-function showResults() {
-  showStep("result");
+  function showResults() {
+    showStep("result");
 
-  lastResults = AXIS_ORDER.map(computeAxis);
+    state.results = AXIS_ORDER.map(computeAxis);
+    const axes = byAxis(state.results);
 
-  const byAxis = {};
-  lastResults.forEach(r => { byAxis[r.axis] = r; });
+    state.clusters = CLUSTERS.filter(c => c.combos).map(c => {
+      const key = axes[c.y].letter + axes[c.x].letter;
+      return { cluster: c, key: key, hex: c.combos[key] || "#38bdf8" };
+    });
 
-  lastClusters = CLUSTERS.filter(c => c.combos).map(c => {
-    const key = byAxis[c.y].letter + byAxis[c.x].letter;
-    return { cluster: c, key: key, hex: c.combos[key] ? c.combos[key].hex : "#38bdf8" };
-  });
+    // panels
+    const list = $("results-list");
+    list.innerHTML = "";
+    CLUSTERS.forEach(c => list.appendChild(buildClusterBlock(c, axes)));
 
-  const container = document.getElementById("results-list");
-  if (container) {
-    container.innerHTML = "";
-    CLUSTERS.forEach(c => container.appendChild(buildClusterBlock(c, byAxis)));
-
+    // animate the bars out from the centre once they are in the DOM
     requestAnimationFrame(() => {
       requestAnimationFrame(() => {
-        container.querySelectorAll(".axis-fill").forEach(el => {
+        list.querySelectorAll(".axis-fill").forEach(el => {
           el.style.left = el.dataset.left + "%";
           el.style.width = el.dataset.width + "%";
         });
       });
     });
-  }
 
-  const codeString = lastResults.map(r => r.letter).join("");
-  const codeBox = document.getElementById("vector-code");
-  if (codeBox) {
-    codeBox.dataset.code = codeString;
-    codeBox.innerHTML = lastResults.map(r => {
-      const col = letterColorFor(r.axis);
-      return `<span class="code-letter" style="color:${col.hex}" title="${col.tip}">${r.letter}</span>`;
+    // profile code, ideology name, poles, vector
+    const code = state.results.map(r => r.letter).join("");
+    const codeBox = $("vector-code");
+    codeBox.dataset.code = code;
+    codeBox.innerHTML = state.results.map(r => {
+      const color = letterColorFor(r.axis);
+      return `<span class="code-letter" style="color:${color.hex}" title="${color.tip}">${r.letter}</span>`;
     }).join("");
+
+    $("profile-cluster-title").innerText = IDEOLOGICAL_CLUSTERS[code.slice(0, 4)] || "Unknown Cluster";
+    $("profile-poles").innerText = state.results.map(r => r.pole).join(" \u00b7 ");
+    $("vector-text").innerText = "[" + state.results.map(r => r.axis + ":" + r.formatted).join("|") + "]";
+
+    Storage.saveResults();
+    wireShareLinks();
+    prepareShareImage();
+    $("btn-share-native").classList.toggle("hidden", !canShareFiles());
   }
 
-  // Profil İdeolojik Küme İsmi Oluşturma (İlk 4 harfe göre)
-  const firstFour = codeString.slice(0, 4);
-  const clusterTitle = IDEOLOGICAL_CLUSTERS[firstFour] || "Unknown Cluster";
-  const clusterEl = document.getElementById("profile-cluster-title");
-  if (clusterEl) clusterEl.innerText = clusterTitle;
-
-  const poles = document.getElementById("profile-poles");
-  if (poles) poles.innerText = lastResults.map(r => r.pole).join(" \u00b7 ");
-
-  const vecText = document.getElementById("vector-text");
-  if (vecText) vecText.innerText = `[${lastResults.map(r => `${r.axis}:${r.formatted}`).join("|")}]`;
-
-  saveResults();
-  wireShareLinks();
-  prepareShareImage();
-
-  const btnNative = document.getElementById("btn-share-native");
-  if (btnNative) btnNative.classList.toggle("hidden", !canShareFiles());
-}
-
-async function handleCopyCode() {
-  const codeBox = document.getElementById("vector-code");
-  const vecText = document.getElementById("vector-text");
-  const btn = document.getElementById("btn-copy-code");
-  if (!codeBox || !codeBox.dataset.code || !btn) return;
-
-  const payload = `Your Profile: ${codeBox.dataset.code} ${vecText ? vecText.innerText : ""}`.trim();
-  const original = "Copy";
-
-  try {
-    await navigator.clipboard.writeText(payload);
-    btn.innerText = "Copied";
-  } catch (err) {
-    btn.innerText = "Copy failed";
-  }
-  setTimeout(() => { btn.innerText = original; }, 1600);
-}
-
-function switchTab(tabName) {
-  const pageTest = document.getElementById("page-test");
-  const pageAbout = document.getElementById("page-about");
-  const pageComment = document.getElementById("page-comment");
-
-  const navTest = document.getElementById("nav-test");
-  const navAbout = document.getElementById("nav-about");
-  const navComment = document.getElementById("nav-comment");
-
-  if (pageTest) pageTest.classList.add("hidden");
-  if (pageAbout) pageAbout.classList.add("hidden");
-  if (pageComment) pageComment.classList.add("hidden");
-
-  if (navTest) navTest.classList.remove("active");
-  if (navAbout) navAbout.classList.remove("active");
-  if (navComment) navComment.classList.remove("active");
-
-  if (tabName === "test" && pageTest && navTest) {
-    pageTest.classList.remove("hidden");
-    navTest.classList.add("active");
-  } else if (tabName === "about" && pageAbout && navAbout) {
-    pageAbout.classList.remove("hidden");
-    navAbout.classList.add("active");
-  } else if (tabName === "comment" && pageComment && navComment) {
-    pageComment.classList.remove("hidden");
-    navComment.classList.add("active");
-  }
-}
-
-async function handleCommentSubmit(event) {
-  event.preventDefault();
-
-  const form = event.target;
-  const actionUrl = form.action;
-  const statusText = document.getElementById("comment-status");
-  const btnSubmit = document.getElementById("btn-submit-comment");
-
-  const nicknameInput = document.getElementById("comment-nickname");
-  const commentInput = document.getElementById("comment-text");
-  const vectorElement = document.getElementById("vector-text");
-  const codeElement = document.getElementById("vector-code");
-
-  const nickname = nicknameInput ? nicknameInput.value.trim() : "";
-  const comment = commentInput ? commentInput.value.trim() : "";
-  const currentVector = (vectorElement && vectorElement.innerText) ? vectorElement.innerText : "Not Taken Yet";
-  const currentCode = (codeElement && codeElement.dataset.code) ? codeElement.dataset.code : "Not Taken Yet";
-
-  if (!nickname || !comment) return;
-
-  btnSubmit.disabled = true;
-  btnSubmit.innerText = "Sending...";
-  if (statusText) {
-    statusText.style.display = "block";
-    statusText.style.color = "#94a3b8";
-    statusText.innerText = "Sending your message...";
+  /* ============================================================
+     10. SHARE
+     ============================================================ */
+  function getProfileCode() {
+    return $("vector-code").dataset.code || "";
   }
 
-  const payload = {
-    Nickname: nickname,
-    Comment: comment,
-    Type_Code: currentCode,
-    Vector_Result: currentVector
-  };
+  function getVectorString() {
+    return $("vector-text").innerText;
+  }
 
-  try {
-    const response = await fetch(actionUrl, {
-      method: "POST",
-      headers: {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json'
-      },
-      body: JSON.stringify(payload)
+  function getShareText() {
+    return ("My 5-Axis Compass profile: " + getProfileCode() + " " + getVectorString()).trim();
+  }
+
+  function wireShareLinks() {
+    const text = encodeURIComponent(getShareText());
+    const url = encodeURIComponent(location.origin + location.pathname);
+    const both = encodeURIComponent(getShareText() + "\n" + location.origin + location.pathname);
+    const subject = encodeURIComponent("My 5-Axis Compass result");
+
+    const links = {
+      "share-wa":   "https://wa.me/?text=" + both,
+      "share-x":    "https://twitter.com/intent/tweet?text=" + text + "&url=" + url,
+      "share-tg":   "https://t.me/share/url?url=" + url + "&text=" + text,
+      "share-mail": "https://mail.google.com/mail/?view=cm&fs=1&su=" + subject + "&body=" + both
+    };
+
+    Object.keys(links).forEach(id => { $(id).href = links[id]; });
+  }
+
+  async function handleCopyCode() {
+    const btn = $("btn-copy-code");
+    if (!getProfileCode()) return;
+
+    const payload = ("Your Profile: " + getProfileCode() + " " + getVectorString()).trim();
+    try {
+      await navigator.clipboard.writeText(payload);
+      btn.innerText = "Copied";
+    } catch (err) {
+      btn.innerText = "Copy failed";
+    }
+    setTimeout(() => { btn.innerText = "Copy"; }, 1600);
+  }
+
+  /* --- PNG rendering ------------------------------------------------
+     The canvas is a stand-alone copy of the results page. It has to be
+     drawn by hand because the on-screen version is HTML, not an image.
+     Layout constants live next to the code that uses them.
+     ------------------------------------------------------------------ */
+  const SANS = "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif";
+  const MONO = "'Courier New', Courier, monospace";
+
+  function roundRectPath(ctx, x, y, w, h, r) {
+    const rr = Math.max(0, Math.min(r, w / 2, h / 2));
+    ctx.beginPath();
+    ctx.moveTo(x + rr, y);
+    ctx.arcTo(x + w, y, x + w, y + h, rr);
+    ctx.arcTo(x + w, y + h, x, y + h, rr);
+    ctx.arcTo(x, y + h, x, y, rr);
+    ctx.arcTo(x, y, x + w, y, rr);
+    ctx.closePath();
+  }
+
+  function hexToRgba(hex, alpha) {
+    const n = parseInt(hex.slice(1), 16);
+    return "rgba(" + ((n >> 16) & 255) + ", " + ((n >> 8) & 255) + ", " + (n & 255) + ", " + alpha + ")";
+  }
+
+  function drawGrid(ctx, gx, gy, size, entry, xr, yr) {
+    const half = size / 2;
+    const activeKey = yr.letter + xr.letter;
+
+    const quads = [
+      { x: gx + half, y: gy,        key: yr.posKey + xr.posKey },
+      { x: gx,        y: gy,        key: yr.posKey + xr.negKey },
+      { x: gx,        y: gy + half, key: yr.negKey + xr.negKey },
+      { x: gx + half, y: gy + half, key: yr.negKey + xr.posKey }
+    ];
+
+    quads.forEach(q => {
+      const hex = entry.cluster.combos[q.key] || "#334155";
+      ctx.fillStyle = hexToRgba(hex, q.key === activeKey ? 0.58 : 0.15);
+      ctx.fillRect(q.x, q.y, half, half);
     });
 
-    if (response.ok) {
-      if (statusText) {
-        statusText.style.color = "#4ade80";
-        statusText.innerText = "Thank you! Your comment has been sent successfully.";
-      }
-      nicknameInput.value = "";
-      commentInput.value = "";
-    } else {
-      throw new Error("Server error");
-    }
-  } catch (error) {
-    if (statusText) {
-      statusText.style.color = "#ef4444";
-      statusText.innerText = "An error occurred. Please check the endpoint URL or try again.";
-    }
-  } finally {
-    btnSubmit.disabled = false;
-    btnSubmit.innerText = "Submit Comment";
+    ctx.strokeStyle = "#64748b";
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.moveTo(gx + half, gy); ctx.lineTo(gx + half, gy + size);
+    ctx.moveTo(gx, gy + half); ctx.lineTo(gx + size, gy + half);
+    ctx.stroke();
+
+    ctx.strokeStyle = "#475569";
+    ctx.lineWidth = 3;
+    ctx.strokeRect(gx, gy, size, size);
+
+    ctx.fillStyle = "#94a3b8";
+    ctx.font = "700 26px " + MONO;
+    ctx.textAlign = "center";
+    ctx.fillText(yr.posKey, gx + half, gy + 34);
+    ctx.fillText(yr.negKey, gx + half, gy + size - 16);
+    ctx.textAlign = "left";
+    ctx.fillText(xr.negKey, gx + 14, gy + half + 10);
+    ctx.textAlign = "right";
+    ctx.fillText(xr.posKey, gx + size - 14, gy + half + 10);
+
+    const dotX = gx + half + (xr.scaled / 10) * (half * 0.9);
+    const dotY = gy + half - (yr.scaled / 10) * (half * 0.9);
+    ctx.beginPath();
+    ctx.arc(dotX, dotY, 15, 0, Math.PI * 2);
+    ctx.fillStyle = "#f8fafc";
+    ctx.fill();
+    ctx.strokeStyle = "#0f172a";
+    ctx.lineWidth = 4;
+    ctx.stroke();
   }
-}
 
-function getProfileCode() {
-  const box = document.getElementById("vector-code");
-  return (box && box.dataset.code) ? box.dataset.code : "";
-}
+  function drawBar(ctx, r, x, y, w) {
+    const trackH = 20;
+    const cx = x + w / 2;
 
-function getVectorString() {
-  const el = document.getElementById("vector-text");
-  return el ? el.innerText : "";
-}
+    ctx.font = "19px " + SANS;
+    ctx.textAlign = "left";
+    ctx.fillStyle = (!r.isNeutral && !r.isPos) ? "#f8fafc" : "#64748b";
+    ctx.fillText(r.negKey + "  " + r.neg, x, y);
 
-function getPageUrl() {
-  return location.origin + location.pathname;
-}
+    ctx.textAlign = "right";
+    ctx.fillStyle = (!r.isNeutral && r.isPos) ? "#f8fafc" : "#64748b";
+    ctx.fillText(r.pos + "  " + r.posKey, x + w, y);
 
-function getShareText() {
-  return `My 5-Axis Compass profile: ${getProfileCode()} ${getVectorString()}`.trim();
-}
+    ctx.textAlign = "center";
+    ctx.fillStyle = "#cbd5e1";
+    ctx.font = "700 19px " + MONO;
+    ctx.fillText(r.axis + " " + ((r.isPos && !r.isNeutral) ? "+" : "") + r.formatted, cx, y);
 
-function wireShareLinks() {
-  const text = getShareText();
-  const url = getPageUrl();
-  const t = encodeURIComponent(text);
-  const u = encodeURIComponent(url);
-  const both = encodeURIComponent(`${text}\n${url}`);
+    const trackY = y + 12;
+    roundRectPath(ctx, x, trackY, w, trackH, 10);
+    ctx.fillStyle = "#0f172a";
+    ctx.fill();
+    ctx.strokeStyle = "#334155";
+    ctx.lineWidth = 1.5;
+    ctx.stroke();
 
-  const links = {
-    "share-wa":   `https://wa.me/?text=${both}`,
-    "share-x":    `https://twitter.com/intent/tweet?text=${t}&url=${u}`,
-    "share-tg":   `https://t.me/share/url?url=${u}&text=${t}`,
-    "share-mail": `https://mail.google.com/mail/?view=cm&fs=1&su=${encodeURIComponent("My 5-Axis Compass result")}&body=${both}`
-  };
+    const fillW = (Math.abs(r.scaled) / 10) * (w / 2);
+    if (fillW > 1) {
+      roundRectPath(ctx, r.isPos ? cx : cx - fillW, trackY, fillW, trackH, 10);
+      ctx.fillStyle = r.isPos ? "#38bdf8" : "#a78bfa";
+      ctx.fill();
+    }
 
-  Object.entries(links).forEach(([id, href]) => {
-    const el = document.getElementById(id);
-    if (el) el.href = href;
-  });
-}
+    ctx.strokeStyle = "#64748b";
+    ctx.lineWidth = 1.5;
+    ctx.beginPath();
+    ctx.moveTo(cx, trackY);
+    ctx.lineTo(cx, trackY + trackH);
+    ctx.stroke();
 
-function roundRectPath(ctx, x, y, w, h, r) {
-  const rr = Math.max(0, Math.min(r, w / 2, h / 2));
-  ctx.beginPath();
-  ctx.moveTo(x + rr, y);
-  ctx.arcTo(x + w, y, x + w, y + h, rr);
-  ctx.arcTo(x + w, y + h, x, y + h, rr);
-  ctx.arcTo(x, y + h, x, y, rr);
-  ctx.arcTo(x, y, x + w, y, rr);
-  ctx.closePath();
-}
+    ctx.font = "15px " + MONO;
+    ctx.fillStyle = "#64748b";
+    const legendY = trackY + trackH + 22;
+    ctx.textAlign = "left";   ctx.fillText("-10", x, legendY);
+    ctx.textAlign = "center"; ctx.fillText("0", cx, legendY);
+    ctx.textAlign = "right";  ctx.fillText("+10", x + w, legendY);
+  }
 
-function hexToRgba(hex, alpha) {
-  const n = parseInt(hex.slice(1), 16);
-  return `rgba(${(n >> 16) & 255}, ${(n >> 8) & 255}, ${n & 255}, ${alpha})`;
-}
+  function drawPanelFrame(ctx, x, y, w, h) {
+    roundRectPath(ctx, x, y, w, h, 18);
+    ctx.fillStyle = "#0f172a";
+    ctx.fill();
+    ctx.strokeStyle = "#334155";
+    ctx.lineWidth = 2;
+    ctx.stroke();
+  }
 
-function drawCanvasGrid(ctx, gx, gy, size, entry, xr, yr, SANS, MONO) {
-  const half = size / 2;
-  const activeKey = xr.letter + yr.letter;
+  function drawPanelHead(ctx, x, y, w, title, entry) {
+    const pad = 26;
+    ctx.textBaseline = "alphabetic";
+    ctx.textAlign = "left";
+    ctx.fillStyle = "#f8fafc";
+    ctx.font = "700 23px " + SANS;
+    ctx.fillText(title.toUpperCase(), x + pad, y + 42);
 
-  const quads = [
-    { x: gx + half, y: gy,        key: xr.posKey + yr.posKey },
-    { x: gx,        y: gy,        key: xr.negKey + yr.posKey },
-    { x: gx,        y: gy + half, key: xr.negKey + yr.negKey },
-    { x: gx + half, y: gy + half, key: xr.posKey + yr.negKey }
-  ];
+    if (!entry) return;
 
-  quads.forEach(q => {
-    const comboKey = q.key[1] + q.key[0];
-    const combo = entry.cluster.combos[comboKey];
-    ctx.fillStyle = hexToRgba(combo ? combo.hex : "#334155", q.key === activeKey ? 0.58 : 0.15);
-    ctx.fillRect(q.x, q.y, half, half);
-  });
+    ctx.font = "700 22px " + MONO;
+    const capWidth = ctx.measureText(entry.key).width;
+    const right = x + w - pad;
 
-  ctx.strokeStyle = "#64748b";
-  ctx.lineWidth = 2;
-  ctx.beginPath();
-  ctx.moveTo(gx + half, gy); ctx.lineTo(gx + half, gy + size);
-  ctx.moveTo(gx, gy + half); ctx.lineTo(gx + size, gy + half);
-  ctx.stroke();
+    ctx.textAlign = "right";
+    ctx.fillStyle = "#f8fafc";
+    ctx.fillText(entry.key, right, y + 42);
 
-  ctx.strokeStyle = "#475569";
-  ctx.lineWidth = 3;
-  ctx.strokeRect(gx, gy, size, size);
-
-  ctx.fillStyle = "#94a3b8";
-  ctx.font = `700 26px ${MONO}`;
-  ctx.textAlign = "center";
-  ctx.fillText(yr.posKey, gx + half, gy + 34);
-  ctx.fillText(yr.negKey, gx + half, gy + size - 16);
-  ctx.textAlign = "left";
-  ctx.fillText(xr.negKey, gx + 14, gy + half + 10);
-  ctx.textAlign = "right";
-  ctx.fillText(xr.posKey, gx + size - 14, gy + half + 10);
-
-  const dx = gx + half + (xr.scaled / 10) * (half * 0.9);
-  const dy = gy + half - (yr.scaled / 10) * (half * 0.9);
-  ctx.beginPath();
-  ctx.arc(dx, dy, 15, 0, Math.PI * 2);
-  ctx.fillStyle = "#f8fafc";
-  ctx.fill();
-  ctx.strokeStyle = "#0f172a";
-  ctx.lineWidth = 4;
-  ctx.stroke();
-}
-
-function drawCanvasBar(ctx, r, x, y, w, SANS, MONO) {
-  const trackH = 20;
-  const cx = x + w / 2;
-
-  ctx.font = `19px ${SANS}`;
-  ctx.textAlign = "left";
-  ctx.fillStyle = (!r.isNeutral && !r.isPos) ? "#f8fafc" : "#64748b";
-  ctx.fillText(`${r.negKey}  ${r.neg}`, x, y);
-
-  ctx.textAlign = "right";
-  ctx.fillStyle = (!r.isNeutral && r.isPos) ? "#f8fafc" : "#64748b";
-  ctx.fillText(`${r.pos}  ${r.posKey}`, x + w, y);
-
-  ctx.textAlign = "center";
-  ctx.fillStyle = "#cbd5e1";
-  ctx.font = `700 19px ${MONO}`;
-  const sign = (r.isPos && !r.isNeutral) ? "+" : "";
-  ctx.fillText(`${r.axis} ${sign}${r.formatted}`, cx, y);
-
-  const trackY = y + 12;
-  roundRectPath(ctx, x, trackY, w, trackH, 10);
-  ctx.fillStyle = "#0f172a";
-  ctx.fill();
-  ctx.strokeStyle = "#334155";
-  ctx.lineWidth = 1.5;
-  ctx.stroke();
-
-  const halfW = (Math.abs(r.scaled) / 10) * (w / 2);
-  if (halfW > 1) {
-    roundRectPath(ctx, r.isPos ? cx : cx - halfW, trackY, halfW, trackH, 10);
-    ctx.fillStyle = r.isPos ? "#38bdf8" : "#a78bfa";
+    ctx.beginPath();
+    ctx.arc(right - capWidth - 19, y + 34, 9, 0, Math.PI * 2);
+    ctx.fillStyle = entry.hex;
     ctx.fill();
   }
 
-  ctx.strokeStyle = "#64748b";
-  ctx.lineWidth = 1.5;
-  ctx.beginPath();
-  ctx.moveTo(cx, trackY);
-  ctx.lineTo(cx, trackY + trackH);
-  ctx.stroke();
+  function drawTwoAxisPanel(ctx, entry, axes, x, y, w) {
+    const pad = 26, gridSize = 300, headH = 62;
+    const panelH = headH + gridSize + 58;
 
-  ctx.font = `15px ${MONO}`;
-  ctx.fillStyle = "#64748b";
-  const legY = trackY + trackH + 22;
-  ctx.textAlign = "left";   ctx.fillText("-10", x, legY);
-  ctx.textAlign = "center"; ctx.fillText("0", cx, legY);
-  ctx.textAlign = "right";  ctx.fillText("+10", x + w, legY);
-}
+    drawPanelFrame(ctx, x, y, w, panelH);
+    drawPanelHead(ctx, x, y, w, entry.cluster.name, entry);
 
-function drawPanelFrame(ctx, x, y, w, h) {
-  roundRectPath(ctx, x, y, w, h, 18);
-  ctx.fillStyle = "#0f172a";
-  ctx.fill();
-  ctx.strokeStyle = "#334155";
-  ctx.lineWidth = 2;
-  ctx.stroke();
-}
+    const xr = axes[entry.cluster.x];
+    const yr = axes[entry.cluster.y];
+    const gx = x + pad, gy = y + headH;
 
-function drawPanelHead(ctx, x, y, w, title, entry, SANS, MONO) {
-  const IP = 26;
-  ctx.textBaseline = "alphabetic";
-  ctx.textAlign = "left";
-  ctx.fillStyle = "#f8fafc";
-  ctx.font = `700 23px ${SANS}`;
-  ctx.fillText(title.toUpperCase(), x + IP, y + 42);
+    drawGrid(ctx, gx, gy, gridSize, entry, xr, yr);
 
-  if (!entry) return;
+    const barX = gx + gridSize + 44;
+    const barW = (x + w - pad) - barX;
+    drawBar(ctx, yr, barX, gy + 86, barW);
+    drawBar(ctx, xr, barX, gy + 206, barW);
 
-  const cap = `${entry.key}`;
-  ctx.font = `700 22px ${MONO}`;
-  const capW = ctx.measureText(cap).width;
-  const right = x + w - IP;
-  const dotR = 9;
+    return panelH;
+  }
 
-  ctx.textAlign = "right";
-  ctx.fillStyle = "#f8fafc";
-  ctx.fillText(cap, right, y + 42);
+  function drawSingleAxisPanel(ctx, cluster, r, x, y, w) {
+    const pad = 26, headH = 62;
+    const panelH = headH + 96;
 
-  ctx.beginPath();
-  ctx.arc(right - capW - 10 - dotR, y + 34, dotR, 0, Math.PI * 2);
-  ctx.fillStyle = entry.hex;
-  ctx.fill();
-}
+    drawPanelFrame(ctx, x, y, w, panelH);
+    drawPanelHead(ctx, x, y, w, cluster.name, null);
+    drawBar(ctx, r, x + pad, y + headH + 24, w - pad * 2);
 
-/* REVIZE EDILDI: Canvas'taki barlar da yr (ETH/TRB) üstte, xr (HN/JST) altta olacak şekilde çiziliyor */
-function drawTwoAxisPanel(ctx, entry, byAxis, x, y, w, SANS, MONO) {
-  const IP = 26, GS = 300, HEAD = 62;
-  const panelH = HEAD + GS + 58;
+    return panelH;
+  }
 
-  drawPanelFrame(ctx, x, y, w, panelH);
-  drawPanelHead(ctx, x, y, w, entry.cluster.name, entry, SANS, MONO);
+  // Shrinks the font until the text fits the given width.
+  function fitText(ctx, text, maxWidth, startSize, minSize, family) {
+    let size = startSize;
+    ctx.font = size + "px " + family;
+    while (ctx.measureText(text).width > maxWidth && size > minSize) {
+      size -= 1;
+      ctx.font = size + "px " + family;
+    }
+  }
 
-  const xr = byAxis[entry.cluster.x];
-  const yr = byAxis[entry.cluster.y];
+  function drawShareCanvas() {
+    const W = 1080, H = 1740, PAD = 90;
+    const CW = W - PAD * 2;
 
-  const gx = x + IP, gy = y + HEAD;
-  drawCanvasGrid(ctx, gx, gy, GS, entry, xr, yr, SANS, MONO);
+    const canvas = document.createElement("canvas");
+    canvas.width = W;
+    canvas.height = H;
+    const ctx = canvas.getContext("2d");
 
-  const bx = gx + GS + 44;
-  const bw = (x + w - IP) - bx;
+    // background + card
+    ctx.fillStyle = "#0f172a";
+    ctx.fillRect(0, 0, W, H);
+    roundRectPath(ctx, 36, 36, W - 72, H - 72, 30);
+    ctx.fillStyle = "#1e293b";
+    ctx.fill();
+    ctx.strokeStyle = "#334155";
+    ctx.lineWidth = 2;
+    ctx.stroke();
 
-  drawCanvasBar(ctx, yr, bx, gy + 86,  bw, SANS, MONO);
-  drawCanvasBar(ctx, xr, bx, gy + 206, bw, SANS, MONO);
+    // header
+    ctx.textBaseline = "alphabetic";
+    ctx.textAlign = "left";
+    ctx.fillStyle = "#38bdf8";
+    ctx.font = "700 44px " + SANS;
+    ctx.fillText("5-Axis Compass", PAD, 124);
+    ctx.fillStyle = "#94a3b8";
+    ctx.font = "italic 22px " + SANS;
+    ctx.fillText("created by Hüseyin Baştuğ & Arda Toby Özdemir", PAD, 160);
 
-  return panelH;
-}
+    // profile code box
+    const letterSize = 78, boxPadX = 40, boxPadY = 24;
+    ctx.font = "700 " + letterSize + "px " + MONO;
 
-function drawSingleAxisPanel(ctx, cluster, r, x, y, w, SANS, MONO) {
-  const IP = 26, HEAD = 62;
-  const panelH = HEAD + 96;
+    const letterWidths = state.results.map(r => ctx.measureText(r.letter).width);
+    const codeW = letterWidths.reduce((a, b) => a + b, 0) + boxPadX * 2;
+    const codeH = letterSize + boxPadY * 2;
+    const codeX = (W - codeW) / 2;
+    const codeY = 200;
 
-  drawPanelFrame(ctx, x, y, w, panelH);
-  drawPanelHead(ctx, x, y, w, cluster.name, null, SANS, MONO);
-  drawCanvasBar(ctx, r, x + IP, y + HEAD + 24, w - IP * 2, SANS, MONO);
+    roundRectPath(ctx, codeX, codeY, codeW, codeH, 16);
+    ctx.fillStyle = "#0f172a";
+    ctx.fill();
+    ctx.strokeStyle = "#334155";
+    ctx.lineWidth = 2;
+    ctx.stroke();
 
-  return panelH;
-}
+    ctx.textAlign = "left";
+    let letterX = codeX + boxPadX;
+    state.results.forEach((r, i) => {
+      ctx.fillStyle = letterColorFor(r.axis).hex;
+      ctx.fillText(r.letter, letterX, codeY + boxPadY + letterSize * 0.78);
+      letterX += letterWidths[i];
+    });
 
-function drawShareCanvas() {
-  const W = 1080, H = 1740;
-  const SANS = "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif";
-  const MONO = "'Courier New', Courier, monospace";
-  const PAD = 90;
-  const CW = W - PAD * 2;
+    // poles line
+    const poles = state.results.map(r => r.pole).join("  \u00b7  ");
+    ctx.textAlign = "center";
+    ctx.fillStyle = "#94a3b8";
+    fitText(ctx, poles, CW, 23, 14, SANS);
+    ctx.fillText(poles, W / 2, codeY + codeH + 46);
 
-  const canvas = document.createElement("canvas");
-  canvas.width = W;
-  canvas.height = H;
-  const ctx = canvas.getContext("2d");
+    // panels
+    const axes = byAxis(state.results);
+    let y = 440;
 
-  ctx.fillStyle = "#0f172a";
-  ctx.fillRect(0, 0, W, H);
+    state.clusters.forEach(entry => {
+      y += drawTwoAxisPanel(ctx, entry, axes, PAD, y, CW) + 28;
+    });
 
-  roundRectPath(ctx, 36, 36, W - 72, H - 72, 30);
-  ctx.fillStyle = "#1e293b";
-  ctx.fill();
-  ctx.strokeStyle = "#334155";
-  ctx.lineWidth = 2;
-  ctx.stroke();
+    const single = CLUSTERS.find(c => c.single);
+    if (single && axes[single.single]) {
+      y += drawSingleAxisPanel(ctx, single, axes[single.single], PAD, y, CW) + 28;
+    }
 
-  ctx.textBaseline = "alphabetic";
-  ctx.textAlign = "left";
+    // footer
+    const footerY = y + 20;
+    ctx.strokeStyle = "#334155";
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.moveTo(PAD, footerY);
+    ctx.lineTo(PAD + CW, footerY);
+    ctx.stroke();
 
-  ctx.fillStyle = "#38bdf8";
-  ctx.font = `700 44px ${SANS}`;
-  ctx.fillText("5-Axis Compass", PAD, 124);
+    ctx.textAlign = "center";
+    ctx.fillStyle = "#94a3b8";
+    ctx.font = "20px " + SANS;
+    ctx.fillText("Result Vector", W / 2, footerY + 44);
 
-  ctx.fillStyle = "#94a3b8";
-  ctx.font = `italic 22px ${SANS}`;
-  ctx.fillText("created by Hüseyin Baştuğ & Arda Toby Özdemir", PAD, 160);
+    ctx.fillStyle = "#f8fafc";
+    const vector = getVectorString();
+    fitText(ctx, vector, CW, 25, 13, MONO);
+    ctx.fillText(vector, W / 2, footerY + 84);
 
-  const LS = 78;
-  ctx.font = `700 ${LS}px ${MONO}`;
+    if (location.host) {
+      ctx.fillStyle = "#64748b";
+      ctx.font = "19px " + SANS;
+      ctx.fillText(location.host, W / 2, footerY + 140);
+    }
 
-  const BOXPX = 40, BOXPY = 24;
-  const letterW = lastResults.map(r => ctx.measureText(r.letter).width);
-  const codeW = letterW.reduce((a, b) => a + b, 0) + BOXPX * 2;
-  const codeH = LS + BOXPY * 2;
-  const codeX = (W - codeW) / 2;
-  const codeY = 200;
+    return canvas;
+  }
 
-  roundRectPath(ctx, codeX, codeY, codeW, codeH, 16);
-  ctx.fillStyle = "#0f172a";
-  ctx.fill();
-  ctx.strokeStyle = "#334155";
-  ctx.lineWidth = 2;
-  ctx.stroke();
+  function prepareShareImage() {
+    state.shareBlob = null;
+    try {
+      drawShareCanvas().toBlob(blob => { state.shareBlob = blob; }, "image/png");
+    } catch (err) {
+      state.shareBlob = null;
+    }
+  }
 
-  ctx.textAlign = "left";
-  let lx = codeX + BOXPX;
-  lastResults.forEach((r, i) => {
-    ctx.fillStyle = letterColorFor(r.axis).hex;
-    ctx.fillText(r.letter, lx, codeY + BOXPY + LS * 0.78);
-    lx += letterW[i];
+  function canShareFiles() {
+    try {
+      const probe = new File([new Blob()], "probe.png", { type: "image/png" });
+      return !!(navigator.canShare && navigator.canShare({ files: [probe] }));
+    } catch (err) {
+      return false;
+    }
+  }
+
+  function shareImageNative() {
+    if (!state.shareBlob) return;
+    const file = new File([state.shareBlob], "5-axis-compass.png", { type: "image/png" });
+    navigator.share({ files: [file], title: "5-Axis Compass", text: getShareText() }).catch(() => {});
+  }
+
+  async function downloadShareImage() {
+    const blob = state.shareBlob
+      || await new Promise(resolve => drawShareCanvas().toBlob(resolve, "image/png"));
+    if (!blob) return;
+
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = "5-axis-compass-" + (getProfileCode() || "result") + ".png";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    setTimeout(() => URL.revokeObjectURL(url), 2000);
+  }
+
+  /* ============================================================
+     11. COMMENT FORM
+     ============================================================ */
+  async function handleCommentSubmit(event) {
+    event.preventDefault();
+
+    const nickname = $("comment-nickname").value.trim();
+    const comment = $("comment-text").value.trim();
+    if (!nickname || !comment) return;
+
+    const status = $("comment-status");
+    const btn = $("btn-submit-comment");
+
+    btn.disabled = true;
+    btn.innerText = "Sending...";
+    status.style.display = "block";
+    status.style.color = "#94a3b8";
+    status.innerText = "Sending your message...";
+
+    const payload = {
+      Nickname: nickname,
+      Comment: comment,
+      Type_Code: getProfileCode() || "Not Taken Yet",
+      Vector_Result: getVectorString() || "Not Taken Yet"
+    };
+
+    try {
+      const response = await fetch(event.target.action, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "Accept": "application/json" },
+        body: JSON.stringify(payload)
+      });
+      if (!response.ok) throw new Error("Server error");
+
+      status.style.color = "#4ade80";
+      status.innerText = "Thank you! Your comment has been sent successfully.";
+      $("comment-nickname").value = "";
+      $("comment-text").value = "";
+    } catch (err) {
+      status.style.color = "#ef4444";
+      status.innerText = "An error occurred. Please check the endpoint URL or try again.";
+    } finally {
+      btn.disabled = false;
+      btn.innerText = "Submit Comment";
+    }
+  }
+
+  /* ============================================================
+     12. STARTUP
+     ============================================================ */
+  document.addEventListener("DOMContentLoaded", () => {
+    const clicks = {
+      "nav-test":        () => switchTab("test"),
+      "nav-about":       () => switchTab("about"),
+      "nav-comment":     () => switchTab("comment"),
+      "btn-start":       () => showStep("demo"),
+      "btn-demo-next":   handleDemoNext,
+      "btn-demo-skip":   handleDemoSkip,
+      "btn-prev":        handlePrevious,
+      "btn-copy-code":   handleCopyCode,
+      "btn-download-img": downloadShareImage,
+      "btn-share-native": shareImageNative,
+      "btn-retake":      () => location.reload(),
+      "btn-goto-comment": () => switchTab("comment")
+    };
+    Object.keys(clicks).forEach(id => $(id).addEventListener("click", clicks[id]));
+
+    $("comment-form").addEventListener("submit", handleCommentSubmit);
+
+    buildChipGroup("gender-options", GENDER_OPTIONS, "gender");
+    buildChipGroup("age-options", AGE_OPTIONS, "age");
+    initNationality();
+
+    showStep("intro");
+    console.log("5-Axis Compass build " + BUILD);
   });
 
-  const poles = lastResults.map(r => r.pole).join("  \u00b7  ");
-  ctx.textAlign = "center";
-  ctx.fillStyle = "#94a3b8";
-  let poleSize = 23;
-  ctx.font = `${poleSize}px ${SANS}`;
-  while (ctx.measureText(poles).width > CW && poleSize > 14) {
-    poleSize -= 1;
-    ctx.font = `${poleSize}px ${SANS}`;
-  }
-  ctx.fillText(poles, W / 2, codeY + codeH + 46);
-
-  const byAxis = {};
-  lastResults.forEach(r => { byAxis[r.axis] = r; });
-
-  let y = 440;
-  lastClusters.forEach(entry => {
-    y += drawTwoAxisPanel(ctx, entry, byAxis, PAD, y, CW, SANS, MONO) + 28;
-  });
-
-  const relCluster = CLUSTERS.find(c => c.single);
-  if (relCluster && byAxis[relCluster.single]) {
-    y += drawSingleAxisPanel(ctx, relCluster, byAxis[relCluster.single], PAD, y, CW, SANS, MONO) + 28;
-  }
-
-  const footerY = y + 20;
-  ctx.strokeStyle = "#334155";
-  ctx.lineWidth = 2;
-  ctx.beginPath();
-  ctx.moveTo(PAD, footerY);
-  ctx.lineTo(PAD + CW, footerY);
-  ctx.stroke();
-
-  ctx.textAlign = "center";
-  ctx.fillStyle = "#94a3b8";
-  ctx.font = `20px ${SANS}`;
-  ctx.fillText("Result Vector", W / 2, footerY + 44);
-
-  ctx.fillStyle = "#f8fafc";
-  const vec = getVectorString();
-  let vecSize = 25;
-  ctx.font = `${vecSize}px ${MONO}`;
-  while (ctx.measureText(vec).width > CW && vecSize > 13) {
-    vecSize -= 1;
-    ctx.font = `${vecSize}px ${MONO}`;
-  }
-  ctx.fillText(vec, W / 2, footerY + 84);
-
-  if (location.host) {
-    ctx.fillStyle = "#64748b";
-    ctx.font = `19px ${SANS}`;
-    ctx.fillText(location.host, W / 2, footerY + 140);
-  }
-
-  return canvas;
-}
-
-function prepareShareImage() {
-  shareBlob = null;
-  try {
-    drawShareCanvas().toBlob(blob => { shareBlob = blob; }, "image/png");
-  } catch (err) {
-    shareBlob = null;
-  }
-}
-
-function canShareFiles() {
-  try {
-    const probe = new File([new Blob()], "probe.png", { type: "image/png" });
-    return !!(navigator.canShare && navigator.canShare({ files: [probe] }));
-  } catch (err) {
-    return false;
-  }
-}
-
-function shareImageNative() {
-  if (!shareBlob) return;
-  const file = new File([shareBlob], "5-axis-compass.png", { type: "image/png" });
-  navigator.share({
-    files: [file],
-    title: "5-Axis Compass",
-    text: getShareText()
-  }).catch(() => { });
-}
-
-async function downloadShareImage() {
-  let blob = shareBlob;
-  if (!blob) {
-    blob = await new Promise(resolve => drawShareCanvas().toBlob(resolve, "image/png"));
-  }
-  if (!blob) return;
-
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = `5-axis-compass-${getProfileCode() || "result"}.png`;
-  document.body.appendChild(a);
-  a.click();
-  document.body.removeChild(a);
-  setTimeout(() => URL.revokeObjectURL(url), 2000);
-}
-
-document.addEventListener("DOMContentLoaded", () => {
-  const btnNavTest = document.getElementById("nav-test");
-  const btnNavAbout = document.getElementById("nav-about");
-  const btnNavComment = document.getElementById("nav-comment");
-  const btnPrev = document.getElementById("btn-prev");
-  const commentForm = document.getElementById("comment-form");
-  const btnCopyCode = document.getElementById("btn-copy-code");
-
-  if (btnNavTest) btnNavTest.onclick = () => switchTab("test");
-  if (btnNavAbout) btnNavAbout.onclick = () => switchTab("about");
-  if (btnNavComment) btnNavComment.onclick = () => switchTab("comment");
-  if (btnPrev) btnPrev.onclick = handlePrevious;
-  if (commentForm) commentForm.onsubmit = handleCommentSubmit;
-  if (btnCopyCode) btnCopyCode.onclick = handleCopyCode;
-
-  const btnDownloadImg = document.getElementById("btn-download-img");
-  const btnShareNative = document.getElementById("btn-share-native");
-
-  if (btnDownloadImg) btnDownloadImg.onclick = downloadShareImage;
-  if (btnShareNative) btnShareNative.onclick = shareImageNative;
-
-  const btnStart = document.getElementById("btn-start");
-  const btnDemoNext = document.getElementById("btn-demo-next");
-  const btnDemoSkip = document.getElementById("btn-demo-skip");
-
-  if (btnStart) btnStart.onclick = () => showStep("demo");
-  if (btnDemoNext) btnDemoNext.onclick = handleDemoNext;
-  if (btnDemoSkip) btnDemoSkip.onclick = handleDemoSkip;
-
-  buildChipGroup("gender-options", GENDER_OPTIONS, "gender");
-  buildChipGroup("age-options", AGE_OPTIONS, "age");
-  initNationality();
-
-  calculateBounds();
-  showStep("intro");
-});
+  window.COMPASS_BUILD = BUILD;
+})();
   </script>
 </body>
 </html>
