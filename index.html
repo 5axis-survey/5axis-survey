@@ -99,6 +99,7 @@ body {
   transition: all 0.2s ease;
 }
 .btn-primary:hover { background-color: #0284c7; color: #ffffff; }
+.btn-primary:disabled { opacity: 0.55; cursor: not-allowed; }
 
 .btn-secondary {
   background-color: transparent;
@@ -717,6 +718,30 @@ body {
 }
 .input-field:focus { border-color: #38bdf8; }
 
+textarea.input-field { resize: vertical; min-height: 120px; line-height: 1.55; }
+
+.comment-form { margin-top: 24px; }
+
+.form-group { margin-bottom: 4px; }
+
+.form-group label {
+  display: block;
+  font-size: 0.85rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #94a3b8;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+
+.status-message {
+  display: none;
+  margin-top: 14px;
+  font-size: 0.92rem;
+  line-height: 1.5;
+  text-align: center;
+}
+
 /* ============================================================
    9. RESPONSIVE / MOTION
    ============================================================ */
@@ -987,17 +1012,23 @@ body {
     <section id="page-comment" class="page-section hidden">
       <div class="card">
         <h2>Submit Your Feedback</h2>
-        <p class="subtitle">Share your thoughts on the test or your result vector.</p>
+        <p class="subtitle">
+          Share your thoughts on the test or your result vector. Your comment is stored in the same
+          private database as the answers — pick any nickname you like, and please leave out anything
+          that would identify you.
+        </p>
 
-        <form id="comment-form" action="https://formsubmit.co/ajax/huseyinbastug@gmail.com" method="POST" class="comment-form">
+        <form id="comment-form" class="comment-form">
           <div class="form-group">
             <label for="comment-nickname">Nickname / Identifier</label>
-            <input type="text" id="comment-nickname" name="Nickname" required placeholder="Enter your nickname" class="input-field">
+            <input type="text" id="comment-nickname" name="Nickname" required maxlength="60"
+                   placeholder="Enter your nickname" class="input-field">
           </div>
 
           <div class="form-group">
             <label for="comment-text">Your Comment</label>
-            <textarea id="comment-text" name="Comment" rows="5" required placeholder="Type your thoughts here..." class="input-field"></textarea>
+            <textarea id="comment-text" name="Comment" rows="5" required maxlength="2000"
+                      placeholder="Type your thoughts here..." class="input-field"></textarea>
           </div>
 
           <button type="submit" id="btn-submit-comment" class="btn-primary">Submit Comment</button>
@@ -1031,7 +1062,7 @@ body {
   /* ============================================================
      1. CONFIG
      ============================================================ */
-  const BUILD = 33;
+  const BUILD = 34;
 
   // ---- Where answers are stored -------------------------------------
   // Paste your two Supabase values here. Both are safe to publish:
@@ -1044,12 +1075,18 @@ body {
 
   const TABLES = {
     demographics: "demographics",
-    results: "test_results"
+    results: "test_results",
+    comments: "comments"
   };
 
   // Safety switch: if the values above are ever blanked out, saving is
   // skipped so the test still runs cleanly instead of throwing errors.
   const STORAGE_READY = SUPABASE.url.includes(".supabase.co") && SUPABASE.anonKey.length > 20;
+
+  // Longest a comment field may be. The same ceilings exist as CHECK
+  // constraints in the database; trimming here means a long-winded
+  // visitor gets a saved comment rather than a rejection.
+  const COMMENT_LIMITS = { nickname: 60, comment: 2000 };
 
   /* ============================================================
      2. SURVEY DATA
@@ -1399,6 +1436,25 @@ body {
       } catch (err) {
         console.error("Could not save results:", err);
       }
+    },
+
+    // Feedback used to be emailed through a third-party form service,
+    // which put a personal address in the page source and let anyone
+    // post to that endpoint. It goes into the database now, through the
+    // same insert-only key as everything else.
+    saveComment(nickname, comment) {
+      return insertRow(TABLES.comments, {
+        id: newId(),
+        // Only set once the demographics row is confirmed saved: the
+        // foreign key rejects an id that is not in that table, and a
+        // comment from someone who never took the test is still worth
+        // keeping, just without a link.
+        session_id: state.userId,
+        nickname: nickname,
+        comment: comment,
+        profile_code: getProfileCode() || null,
+        vector_string: state.saved ? getVectorString() : null
+      });
     }
   };
 
@@ -2281,47 +2337,41 @@ body {
   /* ============================================================
      11. COMMENT FORM
      ============================================================ */
+  function setCommentStatus(message, color) {
+    const status = $("comment-status");
+    status.style.display = message ? "block" : "none";
+    status.style.color = color || "#94a3b8";
+    status.innerText = message || "";
+  }
+
   async function handleCommentSubmit(event) {
     event.preventDefault();
 
-    const nickname = $("comment-nickname").value.trim();
-    const comment = $("comment-text").value.trim();
+    // Trimmed to the same ceilings the database enforces, so a long
+    // comment is shortened rather than rejected outright.
+    const nickname = $("comment-nickname").value.trim().slice(0, COMMENT_LIMITS.nickname);
+    const comment = $("comment-text").value.trim().slice(0, COMMENT_LIMITS.comment);
     if (!nickname || !comment) return;
 
-    const status = $("comment-status");
-    const btn = $("btn-submit-comment");
+    if (!STORAGE_READY) {
+      setCommentStatus("Comments are turned off right now. Sorry about that.", "#ef4444");
+      return;
+    }
 
+    const btn = $("btn-submit-comment");
     btn.disabled = true;
     btn.innerText = "Sending...";
-    status.style.display = "block";
-    status.style.color = "#94a3b8";
-    status.innerText = "Sending your message...";
-
-    const payload = {
-      Nickname: nickname,
-      Comment: comment,
-      Type_Code: getProfileCode() || "Not Taken Yet",
-      Vector_Result: getVectorString() || "Not Taken Yet",
-      // Lets a comment be matched to the row in survey_full, so feedback
-      // can be read next to the result it is about.
-      Session_Id: state.saved ? state.sessionId : "Not Taken Yet"
-    };
+    setCommentStatus("Sending your message...", "#94a3b8");
 
     try {
-      const response = await fetch(event.target.action, {
-        method: "POST",
-        headers: { "Content-Type": "application/json", "Accept": "application/json" },
-        body: JSON.stringify(payload)
-      });
-      if (!response.ok) throw new Error("Server error");
+      await Storage.saveComment(nickname, comment);
 
-      status.style.color = "#4ade80";
-      status.innerText = "Thank you! Your comment has been sent successfully.";
+      setCommentStatus("Thank you! Your comment has been saved.", "#4ade80");
       $("comment-nickname").value = "";
       $("comment-text").value = "";
     } catch (err) {
-      status.style.color = "#ef4444";
-      status.innerText = "An error occurred. Please check the endpoint URL or try again.";
+      console.error("Could not save comment:", err);
+      setCommentStatus("Something went wrong and your comment was not saved. Please try again.", "#ef4444");
     } finally {
       btn.disabled = false;
       btn.innerText = "Submit Comment";
@@ -2367,7 +2417,6 @@ body {
 
     ensureSessionId();          // one id for both rows this visit will write
     showStep("intro");
-    console.log("5-Axis Compass build " + BUILD + " — session " + state.sessionId);
   });
 
   window.COMPASS_BUILD = BUILD;
