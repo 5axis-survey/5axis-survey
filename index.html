@@ -1031,7 +1031,7 @@ body {
   /* ============================================================
      1. CONFIG
      ============================================================ */
-  const BUILD = 32;
+  const BUILD = 33;
 
   // ---- Where answers are stored -------------------------------------
   // Paste your two Supabase values here. Both are safe to publish:
@@ -1245,7 +1245,8 @@ body {
     results: [],       // computed axis results, filled on the results page
     clusters: [],      // [{ cluster, key, hex }] for the two-axis panels
     demographics: { gender: "", age: "", nationality: "" },
-    userId: null,      // id returned by the demographics endpoint
+    sessionId: null,   // the one id this visit uses in BOTH tables
+    userId: null,      // sessionId once the demographics row is confirmed saved
     saved: false,      // results already sent?
     startedAt: 0,      // timestamp, used for duration_sec
     shareBlob: null    // pre-rendered PNG
@@ -1275,19 +1276,45 @@ body {
   /* ============================================================
      5. STORAGE — the only place that talks to the backend
      ============================================================ */
-  // Row ids are generated here rather than by the database, so the insert
-  // never has to ask for the new row back. Reading a returned row counts as
-  // a SELECT, which the insert-only security policy correctly refuses.
+  // ONE ID PER VISIT.
+  //
+  // The id is generated here, in the browser, before anything is sent,
+  // and the same value is used as the primary key of the demographics
+  // row, the primary key of the results row, and the user_id linking
+  // them. So a person's two rows carry an identical id and line up on
+  // sight in the dashboard — no cross-referencing two different keys.
+  //
+  // Generating ids here rather than letting the database do it also
+  // means an insert never has to ask for the new row back. Reading a
+  // returned row counts as a SELECT, which the insert-only security
+  // policy correctly refuses.
   function newId() {
-    if (window.crypto && crypto.randomUUID) return crypto.randomUUID();
+    const crypto = window.crypto || window.msCrypto;
 
-    const bytes = new Uint8Array(16);
-    crypto.getRandomValues(bytes);
-    bytes[6] = (bytes[6] & 0x0f) | 0x40;   // version 4
-    bytes[8] = (bytes[8] & 0x3f) | 0x80;   // variant
-    const hex = Array.from(bytes, b => b.toString(16).padStart(2, "0")).join("");
-    return hex.slice(0, 8) + "-" + hex.slice(8, 12) + "-" + hex.slice(12, 16) +
-           "-" + hex.slice(16, 20) + "-" + hex.slice(20);
+    if (crypto && crypto.randomUUID) return crypto.randomUUID();
+
+    if (crypto && crypto.getRandomValues) {
+      const bytes = new Uint8Array(16);
+      crypto.getRandomValues(bytes);
+      bytes[6] = (bytes[6] & 0x0f) | 0x40;   // version 4
+      bytes[8] = (bytes[8] & 0x3f) | 0x80;   // variant
+      const hex = Array.from(bytes, b => b.toString(16).padStart(2, "0")).join("");
+      return hex.slice(0, 8) + "-" + hex.slice(8, 12) + "-" + hex.slice(12, 16) +
+             "-" + hex.slice(16, 20) + "-" + hex.slice(20);
+    }
+
+    // Last resort for very old browsers: Math.random is not a proper
+    // source of unique ids, but a collision needs two visits to draw the
+    // same 122 bits, and a lost row beats a crashed page.
+    return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, ch => {
+      const r = Math.random() * 16 | 0;
+      return (ch === "x" ? r : (r & 0x3 | 0x8)).toString(16);
+    });
+  }
+
+  function ensureSessionId() {
+    if (!state.sessionId) state.sessionId = newId();
+    return state.sessionId;
   }
 
   // One INSERT into one table. Nothing is read back.
@@ -1310,13 +1337,15 @@ body {
     }
   }
 
-  // Held so a second call reuses the first insert instead of duplicating it.
+  // Held so a second call reuses the first insert instead of duplicating
+  // it. Cleared again if that insert failed, so a later call can retry.
   let demographicsRequest = null;
 
   const Storage = {
     saveDemographics() {
       if (!demographicsRequest) {
-        const id = newId();
+        const id = ensureSessionId();
+
         demographicsRequest = insertRow(TABLES.demographics, {
           id: id,
           gender: state.demographics.gender || null,
@@ -1325,7 +1354,8 @@ body {
         })
           .then(() => { state.userId = id; })
           .catch(err => {
-            state.userId = null;         // results still save, just unlinked
+            state.userId = null;
+            demographicsRequest = null;    // let saveResults try once more
             console.error("Could not save demographics:", err);
           });
       }
@@ -1336,6 +1366,10 @@ body {
       if (state.saved) return;
       state.saved = true;
 
+      // Normally already done and instant. If the first attempt failed —
+      // a dropped connection on the demographics page, say — this is the
+      // second chance, taken while the person is reading their results.
+      await Storage.saveDemographics();
       if (!state.userId) await Storage.saveDemographics();
 
       const rawAnswers = {};
@@ -1347,6 +1381,10 @@ body {
       state.results.forEach(r => { scores[r.axis] = Number(r.formatted); });
 
       const payload = {
+        id: ensureSessionId(),
+        // Left null if the demographics row never landed. The foreign key
+        // would reject an id that is not there, and losing the whole test
+        // over three optional questions is the worse outcome.
         user_id: state.userId,
         profile_code: getProfileCode(),
         vector_string: getVectorString(),
@@ -2263,7 +2301,10 @@ body {
       Nickname: nickname,
       Comment: comment,
       Type_Code: getProfileCode() || "Not Taken Yet",
-      Vector_Result: getVectorString() || "Not Taken Yet"
+      Vector_Result: getVectorString() || "Not Taken Yet",
+      // Lets a comment be matched to the row in survey_full, so feedback
+      // can be read next to the result it is about.
+      Session_Id: state.saved ? state.sessionId : "Not Taken Yet"
     };
 
     try {
@@ -2324,8 +2365,9 @@ body {
     buildChipGroup("age-options", AGE_OPTIONS, "age");
     initNationality();
 
+    ensureSessionId();          // one id for both rows this visit will write
     showStep("intro");
-    console.log("5-Axis Compass build " + BUILD);
+    console.log("5-Axis Compass build " + BUILD + " — session " + state.sessionId);
   });
 
   window.COMPASS_BUILD = BUILD;
