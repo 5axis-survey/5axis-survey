@@ -114,7 +114,6 @@ body {
 }
 .btn-secondary:hover { background-color: #38bdf8; color: #0f172a; }
 
-/* Green primary action — Start the Test / Next */
 .btn-start {
   background-color: #22c55e;
   color: #052e16;
@@ -130,7 +129,6 @@ body {
 .btn-start:hover { background-color: #16a34a; color: #ffffff; }
 .btn-start:focus-visible { outline: 2px solid #86efac; outline-offset: 3px; }
 
-/* Small, quiet skip button that sits in the corner */
 .btn-skip {
   background: transparent;
   border: 1px solid #475569;
@@ -231,7 +229,6 @@ body {
 .intro-text { color: #cbd5e1; line-height: 1.7; font-size: 1.02rem; margin-bottom: 16px; }
 .intro-text strong { color: #f8fafc; }
 
-/* Start button centred on its own line, quick-jump cards underneath */
 .intro-actions {
   display: flex;
   flex-direction: column;
@@ -293,7 +290,6 @@ body {
 
 .chip-row { display: flex; flex-wrap: wrap; gap: 10px; }
 
-/* Next sits in the middle; Skip is pinned to the right edge. */
 .demo-actions {
   position: relative;
   display: flex;
@@ -316,7 +312,6 @@ body {
   .demo-actions .btn-skip { position: static; transform: none; align-self: flex-end; }
 }
 
-/* Country picker (combobox) */
 .combo { position: relative; }
 
 .combo-input {
@@ -403,7 +398,7 @@ body {
 .options-grid { display: flex; flex-direction: column; gap: 14px; }
 
 /* ============================================================
-   6. RESULTS — profile box, axis bars, clusters
+   6. RESULTS — profile box, axis bars, clusters & modular text
    ============================================================ */
 .profile-box {
   background-color: #0f172a;
@@ -453,6 +448,48 @@ body {
   font-size: 0.85rem;
   line-height: 1.6;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Modüler Açıklama Kartları Stili */
+.profile-description-box {
+  margin-top: 20px;
+  padding-top: 18px;
+  border-top: 1px dashed #334155;
+}
+
+.profile-main-text {
+  font-size: 1rem;
+  line-height: 1.65;
+  color: #f8fafc;
+  font-style: italic;
+  margin-bottom: 20px;
+}
+
+.sub-modules-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.sub-module-card {
+  background-color: #1e293b;
+  border: 1px solid #334155;
+  border-radius: 8px;
+  padding: 14px 16px;
+}
+
+.sub-module-card h4 {
+  font-size: 0.98rem;
+  color: #38bdf8;
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+
+.sub-module-card p {
+  font-size: 0.88rem;
+  line-height: 1.5;
+  color: #cbd5e1;
+  margin-bottom: 0;
 }
 
 .results-container { display: flex; flex-direction: column; gap: 22px; margin-top: 24px; }
@@ -889,6 +926,12 @@ textarea.input-field { resize: vertical; min-height: 120px; line-height: 1.55; }
           <div id="vector-code" class="vector-code" data-code=""></div>
           <h3 id="profile-cluster-title" class="profile-cluster-title"></h3>
           <p id="profile-poles" class="profile-poles"></p>
+
+          <!-- Modüler Profil Tanım ve Alt Kartları -->
+          <div class="profile-description-box">
+            <p id="profile-main-desc" class="profile-main-text"></p>
+            <div id="profile-submodules-list" class="sub-modules-list"></div>
+          </div>
         </div>
 
         <div id="results-list" class="results-container"></div>
@@ -1044,14 +1087,14 @@ textarea.input-field { resize: vertical; min-height: 120px; line-height: 1.55; }
    5-AXIS COMPASS
    Single-file app. Sections:
      1. Config
-     2. Survey data (statements, axes, clusters)
+     2. Survey data & Dynamic Descriptions
      3. State
      4. Small helpers
      5. Storage (backend calls)
      6. Navigation & step flow
      7. Demographics page (chips + country combobox)
      8. Survey engine
-     9. Results (scores, bars, cluster grids)
+     9. Results (scores, bars, cluster grids, modular text)
     10. Share (links + PNG canvas)
     11. Comment form
     12. Startup
@@ -1062,12 +1105,8 @@ textarea.input-field { resize: vertical; min-height: 120px; line-height: 1.55; }
   /* ============================================================
      1. CONFIG
      ============================================================ */
-  const BUILD = 34;
+  const BUILD = 37;
 
-  // ---- Where answers are stored -------------------------------------
-  // Paste your two Supabase values here. Both are safe to publish:
-  // the anon key can only INSERT, because of the row-level security
-  // policies in the database. NEVER put the service_role key here.
   const SUPABASE = {
     url: "https://byvykwggnsyvkfvrkiyc.supabase.co",
     anonKey: "sb_publishable_mk1gAUNF_Jw_Q2O-KZXARQ_rYlXj_di"
@@ -1079,21 +1118,13 @@ textarea.input-field { resize: vertical; min-height: 120px; line-height: 1.55; }
     comments: "comments"
   };
 
-  // Safety switch: if the values above are ever blanked out, saving is
-  // skipped so the test still runs cleanly instead of throwing errors.
   const STORAGE_READY = SUPABASE.url.includes(".supabase.co") && SUPABASE.anonKey.length > 20;
-
-  // Longest a comment field may be. The same ceilings exist as CHECK
-  // constraints in the database; trimming here means a long-winded
-  // visitor gets a saved comment rather than a rejection.
   const COMMENT_LIMITS = { nickname: 60, comment: 2000 };
 
   /* ============================================================
-     2. SURVEY DATA
+     2. SURVEY DATA & DYNAMIC DESCRIPTIONS
      ============================================================ */
 
-  // The five answer buttons and the weight each one carries.
-  // A "+" statement uses these weights as-is; a "-" statement flips them.
   const SCALE = [
     { label: "Strongly Disagree", weight: -2.0 },
     { label: "Disagree",          weight: -1.4 },
@@ -1106,10 +1137,6 @@ textarea.input-field { resize: vertical; min-height: 120px; line-height: 1.55; }
   const WEIGHT_OF = {};
   SCALE.forEach(o => { WEIGHT_OF[o.label] = o.weight; });
 
-  // Statements per axis, in display order.
-  //   "+" = agreeing moves you toward the positive pole (the right-hand label)
-  //   "-" = agreeing moves you toward the negative pole (the left-hand label)
-  // Question codes are generated from the axis + position: ETH1, ETH2, ...
   const STATEMENTS = {
     ETH: [
       ["+", "There is a set of moral values that are universally valid"],
@@ -1163,7 +1190,6 @@ textarea.input-field { resize: vertical; min-height: 120px; line-height: 1.55; }
     ]
   };
 
-  // Flat question list used by the engine: { code, axis, dir, text }
   const SURVEY = [];
   Object.keys(STATEMENTS).forEach(axis => {
     STATEMENTS[axis].forEach((row, i) => {
@@ -1176,13 +1202,11 @@ textarea.input-field { resize: vertical; min-height: 120px; line-height: 1.55; }
     });
   });
 
-  // Highest score each axis can reach (used to scale results to -10..+10).
   const MAX_SCORE = {};
   SURVEY.forEach(q => { MAX_SCORE[q.axis] = (MAX_SCORE[q.axis] || 0) + MAX_WEIGHT; });
 
   const AXIS_ORDER = ["ETH", "HN", "TRB", "JST", "RLG"];
 
-  // neg = left pole (negative scores), pos = right pole (positive scores)
   const AXIS_LABELS = {
     ETH: { neg: "Subjectivism",   negKey: "S", pos: "Objectivism",  posKey: "O" },
     HN:  { neg: "Constructivism", negKey: "C", pos: "Realism",      posKey: "R" },
@@ -1191,21 +1215,19 @@ textarea.input-field { resize: vertical; min-height: 120px; line-height: 1.55; }
     RLG: { neg: "Laicity",        negKey: "L", pos: "Spiritualism", posKey: "P" }
   };
 
-  // Result panels. Two-axis panels draw a grid; the single-axis panel draws one bar.
-  // Combo keys are always written vertical-axis letter first, then horizontal.
   const CLUSTERS = [
     {
       id: "PHI",
       name: "Philosophical Cluster",
-      x: "HN",            // horizontal: C <-> R
-      y: "ETH",           // vertical:   S <-> O
+      x: "HN",
+      y: "ETH",
       combos: { OR: "#d69e2e", OC: "#2b6cb0", SC: "#38a169", SR: "#e53e3e" }
     },
     {
       id: "POL",
       name: "Political Cluster",
-      x: "JST",           // horizontal: E <-> J
-      y: "TRB",           // vertical:   U <-> T
+      x: "JST",
+      y: "TRB",
       combos: { TJ: "#dd6b20", UJ: "#805ad5", UE: "#8b4513", TE: "#718096" }
     },
     {
@@ -1215,7 +1237,6 @@ textarea.input-field { resize: vertical; min-height: 120px; line-height: 1.55; }
     }
   ];
 
-  // Named ideology for the first four letters of the profile code.
   const IDEOLOGICAL_CLUSTERS = {
     ORTJ: "Conservative Essentialism",  ORUJ: "Meritocratic Essentialism",
     ORUE: "Universalist Essentialism",  ORTE: "Communitarian Essentialism",
@@ -1225,6 +1246,182 @@ textarea.input-field { resize: vertical; min-height: 120px; line-height: 1.55; }
     SCUE: "Universalist Skepticism",    SCTE: "Communitarian Skepticism",
     SRTJ: "Conservative Naturalism",    SRUJ: "Meritocratic Naturalism",
     SRUE: "Universalist Naturalism",    SRTE: "Communitarian Naturalism"
+  };
+
+  // 10 MODÜLER İKİLİ KÜME AÇIKLAMALARI
+  const SUB_MODULES = {
+    OR: {
+      title: "OR - Essentialism",
+      text: "Essentialism refers to the idea that both ethics as well as human nature have an innate, objective truth and reality which are not - at their core - contingent upon such factors as social influence, environment, or history."
+    },
+    OC: {
+      title: "OC - Idealism",
+      text: "Idealism refers to a belief in an objectively, universally correct set of ethical views, and a belief in the malleability of human nature, as opposed to its rigidity. This cluster is more confident in abstract, ethical ideas than in the uniformity and singularity of the essence of humans."
+    },
+    SC: {
+      title: "SC - Skepticism",
+      text: "Skepticism refers to a lack of belief in objective and universal morals as well as uniform human nature. Concerning both ethics and human nature, this cluster holds that they are subject to change depending on contingent factors like society, environment or historical period."
+    },
+    SR: {
+      title: "SR - Naturalism",
+      text: "Naturalism refers to a lack of belief in an objectively true moral system, and a belief in a common, singular human nature. This cluster sees humans’ essence as a product of nature, and is disinclined from believing in the existence of morality beyond what can be conceived materially."
+    },
+    TJ: {
+      title: "TJ - Conservative",
+      text: "The Conservative type prioritizes preserving in-group identities, and prefers a merit-based and hierarchical social structure over an egalitarian one."
+    },
+    UJ: {
+      title: "UJ - Meritocratic",
+      text: "The Meritocratic type does not limit itself to a particular group, and believes social stratification on account of merit or capability is preferable to universal equality."
+    },
+    UE: {
+      title: "UE - Egalitarian",
+      text: "The Egalitarian type has universalist concerns that are not limited to a particular community, and believes in normative equality across all societies."
+    },
+    TE: {
+      title: "TE - Communitarian",
+      text: "The Communitarian type supports a firmer in-group identity, while preferring equality within that group to merit or identity-based stratification."
+    },
+    L: {
+      title: "L - Secularism",
+      text: "The Secular profile views the world through an empirical, non-spiritual lens; and understands events through natural and worldly explanations."
+    },
+    P: {
+      title: "P - Spiritualism",
+      text: "The Spiritual profile sees the world as being composed of more than just natural and material phenomena, and believes that supernatural occurrences affect the universe."
+    }
+  };
+
+  // 16 ÖZGÜN PROFiL ÜST PARAGRAFLARI (Politik Tip + Felsefi Tip Sırasına Getirildi)
+  const PROFILE_DESCRIPTIONS = {
+    "SCUE-L": {
+      title: "Egalitarian Skepticism",
+      text: "This profile is most closely associated with modern, secular, progressive and leftist worldviews. It is most common in the Western world; especially among young, educated, non-religious women."
+    },
+    "SCUE-P": {
+      title: "Egalitarian Skepticism",
+      text: "Combines a fluid view of ethics and human nature with universal egalitarian values, framed through a spiritual or non-materialist perspective."
+    },
+    "SCUJ-L": {
+      title: "Meritocratic Skepticism",
+      text: "A pragmatic worldview emphasizing empirical reasoning, malleable morality, and universal merit-based social organisation."
+    },
+    "SCUJ-P": {
+      title: "Meritocratic Skepticism",
+      text: "Blends non-dogmatic moral skepticism with universal meritocracy and a recognition of transcendent or spiritual phenomena."
+    },
+    "SCTE-L": {
+      title: "Communitarian Skepticism",
+      text: "Focuses on internal group solidarity and equality without relying on objective moral dogmas or spiritual assumptions."
+    },
+    "SCTE-P": {
+      title: "Communitarian Skepticism",
+      text: "Combines local group cohesion and internal equality with a spiritual understanding of existence and adaptable ethics."
+    },
+    "SCTJ-L": {
+      title: "Conservative Skepticism",
+      text: "Combines skepticism toward universal moral abstractions with a strong preference for local identity, order, and merit."
+    },
+    "SCTJ-P": {
+      title: "Conservative Skepticism",
+      text: "Prioritizes group identity, hierarchy, and spiritual drives while remaining skeptical of universal human nature or morality."
+    },
+    "SRUE-L": {
+      title: "Egalitarian Naturalism",
+      text: "Grounded in material human nature and natural sciences, seeking universal human equality without relying on objective moral truths."
+    },
+    "SRUE-P": {
+      title: "Egalitarian Naturalism",
+      text: "Combines a fixed view of biological human nature with universal egalitarian ethics and a broader spiritual universe."
+    },
+    "SRUJ-L": {
+      title: "Meritocratic Naturalism",
+      text: "Views human nature as rooted in natural order and competition, favoring universal meritocratic structures through an empirical lens."
+    },
+    "SRUJ-P": {
+      title: "Meritocratic Naturalism",
+      text: "Blends natural human essence with spiritual perspectives, supporting universal meritocracy and social stratification."
+    },
+    "SRTE-L": {
+      title: "Communitarian Naturalism",
+      text: "Prioritizes in-group welfare and equality grounded in shared biological human reality and empirical social cohesion."
+    },
+    "SRTE-P": {
+      title: "Communitarian Naturalism",
+      text: "Pairs shared human nature and local group equality with spiritual interconnectivity and cultural preservation."
+    },
+    "SRTJ-L": {
+      title: "Conservative Naturalism",
+      text: "Views social order, hierarchy, and group identity as natural outcomes of immutable human traits, understood secularly."
+    },
+    "SRTJ-P": {
+      title: "Conservative Naturalism",
+      text: "Rooted in human nature, traditional in-group hierarchies, and a belief in transcendent forces shaping the human order."
+    },
+    "OCUE-L": {
+      title: "Egalitarian Idealism",
+      text: "Believes in universal moral truths and human perfectibility, striving for global egalitarianism through secular institutions."
+    },
+    "OCUE-P": {
+      title: "Egalitarian Idealism",
+      text: "Driven by universal moral truths and human potential, expressing global egalitarian ideals through a spiritual framework."
+    },
+    "OCUJ-L": {
+      title: "Meritocratic Idealism",
+      text: "Combines objective moral principles with a belief in human adaptability, advocating for global meritocratic systems."
+    },
+    "OCUJ-P": {
+      title: "Meritocratic Idealism",
+      text: "Holds universal moral axioms and spiritual beliefs, supporting meritocracy and personal growth across societies."
+    },
+    "OCTE-L": {
+      title: "Communitarian Idealism",
+      text: "Applies objective ethical ideals to build strong, internally equal communities through secular and social structures."
+    },
+    "OCTE-P": {
+      title: "Communitarian Idealism",
+      text: "Combines transcendent moral truths with local solidarity, emphasizing community equality under a shared spiritual vision."
+    },
+    "OCTJ-L": {
+      title: "Conservative Idealism",
+      text: "Upholds objective moral principles while maintaining group identities and merit-based order through secular means."
+    },
+    "OCTJ-P": {
+      title: "Conservative Idealism",
+      text: "Combines universal ethical truths, spiritual faith, and traditional group structures with meritocratic organization."
+    },
+    "ORUE-L": {
+      title: "Egalitarian Essentialism",
+      text: "Asserts fixed moral truths and innate human nature, advocating for universal equality through empirical methods."
+    },
+    "ORUE-P": {
+      title: "Egalitarian Essentialism",
+      text: "Rooted in eternal moral laws, spiritual order, and innate human essence, seeking global human equality."
+    },
+    "ORUJ-L": {
+      title: "Meritocratic Essentialism",
+      text: "Believes in fundamental moral laws and fixed human drives, supporting global meritocracy through rational structures."
+    },
+    "ORUJ-P": {
+      title: "Meritocratic Essentialism",
+      text: "Combines eternal ethical truths, spiritual order, and fixed human nature to justify universal merit-based order."
+    },
+    "ORTE-L": {
+      title: "Communitarian Essentialism",
+      text: "Views group identity and internal equality as essential aspects of fixed human nature and objective morality."
+    },
+    "ORTE-P": {
+      title: "Communitarian Essentialism",
+      text: "Binds traditional community equality and identity with transcendent spiritual order and essential human truths."
+    },
+    "ORTJ-L": {
+      title: "Conservative Essentialism",
+      text: "Grounds traditional hierarchy, merit, and in-group preservation in fixed human nature and secular moral laws."
+    },
+    "ORTJ-P": {
+      title: "Conservative Essentialism",
+      text: "A classic traditionalist worldview, linking innate human nature, group preservation, and hierarchy with divine or transcendent order."
+    }
   };
 
   const GENDER_OPTIONS = ["Male", "Female", "Queer"];
@@ -1258,7 +1455,6 @@ textarea.input-field { resize: vertical; min-height: 120px; line-height: 1.55; }
     "ZA","ZM","ZW"
   ];
 
-  // Extra search terms so people can type the name they actually use.
   const COUNTRY_ALIASES = {
     TR: "turkey", PS: "palestine", CD: "democratic republic of the congo drc zaire", CG: "republic of the congo",
     KR: "korea republic of korea", KP: "korea dprk", AE: "uae emirates", VA: "holy see", MM: "burma",
@@ -1273,20 +1469,20 @@ textarea.input-field { resize: vertical; min-height: 120px; line-height: 1.55; }
   };
 
   /* ============================================================
-     3. STATE — everything that changes while the app runs
+     3. STATE
      ============================================================ */
   const state = {
-    index: 0,          // current question
-    answers: [],       // [{ option, weight }] by question index
-    raw: {},           // running score per axis
-    results: [],       // computed axis results, filled on the results page
-    clusters: [],      // [{ cluster, key, hex }] for the two-axis panels
+    index: 0,
+    answers: [],
+    raw: {},
+    results: [],
+    clusters: [],
     demographics: { gender: "", age: "", nationality: "" },
-    sessionId: null,   // the one id this visit uses in BOTH tables
-    userId: null,      // sessionId once the demographics row is confirmed saved
-    saved: false,      // results already sent?
-    startedAt: 0,      // timestamp, used for duration_sec
-    shareBlob: null    // pre-rendered PNG
+    sessionId: null,
+    userId: null,
+    saved: false,
+    startedAt: 0,
+    shareBlob: null
   };
   AXIS_ORDER.forEach(axis => { state.raw[axis] = 0; });
 
@@ -1311,38 +1507,20 @@ textarea.input-field { resize: vertical; min-height: 120px; line-height: 1.55; }
   }
 
   /* ============================================================
-     5. STORAGE — the only place that talks to the backend
+     5. STORAGE
      ============================================================ */
-  // ONE ID PER VISIT.
-  //
-  // The id is generated here, in the browser, before anything is sent,
-  // and the same value is used as the primary key of the demographics
-  // row, the primary key of the results row, and the user_id linking
-  // them. So a person's two rows carry an identical id and line up on
-  // sight in the dashboard — no cross-referencing two different keys.
-  //
-  // Generating ids here rather than letting the database do it also
-  // means an insert never has to ask for the new row back. Reading a
-  // returned row counts as a SELECT, which the insert-only security
-  // policy correctly refuses.
   function newId() {
     const crypto = window.crypto || window.msCrypto;
-
     if (crypto && crypto.randomUUID) return crypto.randomUUID();
-
     if (crypto && crypto.getRandomValues) {
       const bytes = new Uint8Array(16);
       crypto.getRandomValues(bytes);
-      bytes[6] = (bytes[6] & 0x0f) | 0x40;   // version 4
-      bytes[8] = (bytes[8] & 0x3f) | 0x80;   // variant
+      bytes[6] = (bytes[6] & 0x0f) | 0x40;
+      bytes[8] = (bytes[8] & 0x3f) | 0x80;
       const hex = Array.from(bytes, b => b.toString(16).padStart(2, "0")).join("");
       return hex.slice(0, 8) + "-" + hex.slice(8, 12) + "-" + hex.slice(12, 16) +
              "-" + hex.slice(16, 20) + "-" + hex.slice(20);
     }
-
-    // Last resort for very old browsers: Math.random is not a proper
-    // source of unique ids, but a collision needs two visits to draw the
-    // same 122 bits, and a lost row beats a crashed page.
     return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, ch => {
       const r = Math.random() * 16 | 0;
       return (ch === "x" ? r : (r & 0x3 | 0x8)).toString(16);
@@ -1354,7 +1532,6 @@ textarea.input-field { resize: vertical; min-height: 120px; line-height: 1.55; }
     return state.sessionId;
   }
 
-  // One INSERT into one table. Nothing is read back.
   async function insertRow(table, row) {
     if (!STORAGE_READY) return;
 
@@ -1374,8 +1551,6 @@ textarea.input-field { resize: vertical; min-height: 120px; line-height: 1.55; }
     }
   }
 
-  // Held so a second call reuses the first insert instead of duplicating
-  // it. Cleared again if that insert failed, so a later call can retry.
   let demographicsRequest = null;
 
   const Storage = {
@@ -1392,7 +1567,7 @@ textarea.input-field { resize: vertical; min-height: 120px; line-height: 1.55; }
           .then(() => { state.userId = id; })
           .catch(err => {
             state.userId = null;
-            demographicsRequest = null;    // let saveResults try once more
+            demographicsRequest = null;
             console.error("Could not save demographics:", err);
           });
       }
@@ -1403,9 +1578,6 @@ textarea.input-field { resize: vertical; min-height: 120px; line-height: 1.55; }
       if (state.saved) return;
       state.saved = true;
 
-      // Normally already done and instant. If the first attempt failed —
-      // a dropped connection on the demographics page, say — this is the
-      // second chance, taken while the person is reading their results.
       await Storage.saveDemographics();
       if (!state.userId) await Storage.saveDemographics();
 
@@ -1419,9 +1591,6 @@ textarea.input-field { resize: vertical; min-height: 120px; line-height: 1.55; }
 
       const payload = {
         id: ensureSessionId(),
-        // Left null if the demographics row never landed. The foreign key
-        // would reject an id that is not there, and losing the whole test
-        // over three optional questions is the worse outcome.
         user_id: state.userId,
         profile_code: getProfileCode(),
         vector_string: getVectorString(),
@@ -1438,17 +1607,9 @@ textarea.input-field { resize: vertical; min-height: 120px; line-height: 1.55; }
       }
     },
 
-    // Feedback used to be emailed through a third-party form service,
-    // which put a personal address in the page source and let anyone
-    // post to that endpoint. It goes into the database now, through the
-    // same insert-only key as everything else.
     saveComment(nickname, comment) {
       return insertRow(TABLES.comments, {
         id: newId(),
-        // Only set once the demographics row is confirmed saved: the
-        // foreign key rejects an id that is not in that table, and a
-        // comment from someone who never took the test is still worth
-        // keeping, just without a link.
         session_id: state.userId,
         nickname: nickname,
         comment: comment,
@@ -1475,8 +1636,6 @@ textarea.input-field { resize: vertical; min-height: 120px; line-height: 1.55; }
     });
   }
 
-  // Used by the two cards on the intro screen: open the About tab, then
-  // scroll either to the top of it or straight to the methodology heading.
   function goToAbout(anchorId) {
     switchTab("about");
     requestAnimationFrame(() => {
@@ -1521,7 +1680,6 @@ textarea.input-field { resize: vertical; min-height: 120px; line-height: 1.55; }
       chip.innerText = label;
       chip.setAttribute("aria-pressed", "false");
       chip.addEventListener("click", () => {
-        // clicking the selected chip clears the answer
         state.demographics[field] = state.demographics[field] === label ? "" : label;
         paintChips(box, state.demographics[field]);
       });
@@ -1537,20 +1695,13 @@ textarea.input-field { resize: vertical; min-height: 120px; line-height: 1.55; }
     });
   }
 
-  /* --- country combobox --- */
-  const combo = {
-    list: [],       // [{ name, search }]
-    matches: [],
-    active: -1
-  };
+  const combo = { list: [], matches: [], active: -1 };
 
   function buildCountryList() {
     let display;
     try {
       display = new Intl.DisplayNames(["en"], { type: "region" });
-    } catch (err) {
-      return [];
-    }
+    } catch (err) { return []; }
 
     const list = [];
     COUNTRY_CODES.forEach(code => {
@@ -1563,9 +1714,7 @@ textarea.input-field { resize: vertical; min-height: 120px; line-height: 1.55; }
     return list.sort((a, b) => a.name.localeCompare(b.name));
   }
 
-  function setNatHint(message) {
-    $("nat-hint").innerText = message || "";
-  }
+  function setNatHint(message) { $("nat-hint").innerText = message || ""; }
 
   function openCombo() {
     $("nat-list").classList.remove("hidden");
@@ -1598,7 +1747,7 @@ textarea.input-field { resize: vertical; min-height: 120px; line-height: 1.55; }
 
     list.querySelectorAll(".combo-opt").forEach(el => {
       el.addEventListener("mousedown", ev => {
-        ev.preventDefault();          // keep focus so blur does not undo the pick
+        ev.preventDefault();
         const match = combo.matches[Number(el.dataset.index)];
         if (match) pickCountry(match.name);
       });
@@ -1622,7 +1771,6 @@ textarea.input-field { resize: vertical; min-height: 120px; line-height: 1.55; }
     setNatHint("");
   }
 
-  // Accepts an exact name, or a fragment that matches exactly one country.
   function resolveCountry(typed) {
     const term = normalizeText(typed).trim();
     if (!term) return null;
@@ -1638,7 +1786,6 @@ textarea.input-field { resize: vertical; min-height: 120px; line-height: 1.55; }
     const input = $("nat-input");
     combo.list = buildCountryList();
 
-    // Old browser without Intl.DisplayNames: fall back to a plain text field.
     if (!combo.list.length) {
       $("nat-list").remove();
       input.placeholder = "Type your nationality";
@@ -1759,7 +1906,6 @@ textarea.input-field { resize: vertical; min-height: 120px; line-height: 1.55; }
     const question = SURVEY[state.index];
     const previous = state.answers[state.index];
 
-    // changing an earlier answer: take the old weight back out first
     if (previous) state.raw[question.axis] -= previous.weight;
 
     const weight = question.dir * WEIGHT_OF[label];
@@ -1781,7 +1927,6 @@ textarea.input-field { resize: vertical; min-height: 120px; line-height: 1.55; }
      9. RESULTS
      ============================================================ */
 
-  // Turns a raw axis total into a -10..+10 score plus its labels.
   function computeAxis(axis) {
     const labels = AXIS_LABELS[axis];
     const raw = state.raw[axis] || 0;
@@ -1802,7 +1947,6 @@ textarea.input-field { resize: vertical; min-height: 120px; line-height: 1.55; }
     };
   }
 
-  // Colour of a profile letter = colour of the cluster quadrant it belongs to.
   function letterColorFor(axis) {
     const entry = state.clusters.find(c => c.cluster.x === axis || c.cluster.y === axis);
     return entry
@@ -1836,7 +1980,6 @@ textarea.input-field { resize: vertical; min-height: 120px; line-height: 1.55; }
     </div>`;
   }
 
-  // 2x2 quadrant grid with a dot showing the exact position.
   function buildGridSVG(cluster, xr, yr) {
     const activeKey = yr.letter + xr.letter;
     const dotX = 120 + (xr.scaled / 10) * 90;
@@ -1871,7 +2014,6 @@ textarea.input-field { resize: vertical; min-height: 120px; line-height: 1.55; }
     </svg>`;
   }
 
-  // One result panel. Bars are always vertical axis first, horizontal second.
   function buildClusterBlock(cluster, axes) {
     const block = document.createElement("section");
     block.className = "cluster";
@@ -1907,6 +2049,31 @@ textarea.input-field { resize: vertical; min-height: 120px; line-height: 1.55; }
     return block;
   }
 
+  // Dinamik Metinleri Render Eden Fonksiyon
+  function renderProfileDescriptions(code) {
+    const p1 = code.substring(0, 2); // Örn: SC
+    const p2 = code.substring(2, 4); // Örn: UE
+    const p3 = code.split('-')[1];   // Örn: L
+
+    const mainProfile = PROFILE_DESCRIPTIONS[code] || {
+      title: "Philosophical Profile",
+      text: "Your responses reflect a distinct position across moral, political, and spiritual spectrums."
+    };
+
+    $("profile-cluster-title").innerText = mainProfile.title;
+    $("profile-main-desc").innerText = mainProfile.text;
+
+    const subListEl = $("profile-submodules-list");
+    const activeSubModules = [SUB_MODULES[p1], SUB_MODULES[p2], SUB_MODULES[p3]].filter(Boolean);
+
+    subListEl.innerHTML = activeSubModules.map(mod => `
+      <div class="sub-module-card">
+        <h4>${mod.title}</h4>
+        <p>${mod.text}</p>
+      </div>
+    `).join('');
+  }
+
   function showResults() {
     showStep("result");
 
@@ -1918,12 +2085,10 @@ textarea.input-field { resize: vertical; min-height: 120px; line-height: 1.55; }
       return { cluster: c, key: key, hex: c.combos[key] || "#38bdf8" };
     });
 
-    // panels
     const list = $("results-list");
     list.innerHTML = "";
     CLUSTERS.forEach(c => list.appendChild(buildClusterBlock(c, axes)));
 
-    // animate the bars out from the centre once they are in the DOM
     requestAnimationFrame(() => {
       requestAnimationFrame(() => {
         list.querySelectorAll(".axis-fill").forEach(el => {
@@ -1933,18 +2098,22 @@ textarea.input-field { resize: vertical; min-height: 120px; line-height: 1.55; }
       });
     });
 
-    // profile code, ideology name, poles, vector
     const code = state.results.map(r => r.letter).join("");
+    const formattedCode = `${code.slice(0, 4)}-${code.slice(4)}`; // Formats to SCUE-L
+    
     const codeBox = $("vector-code");
-    codeBox.dataset.code = code;
-    codeBox.innerHTML = state.results.map(r => {
+    codeBox.dataset.code = formattedCode;
+    codeBox.innerHTML = state.results.map((r, i) => {
       const color = letterColorFor(r.axis);
-      return `<span class="code-letter" style="color:${color.hex}" title="${color.tip}">${r.letter}</span>`;
+      const dash = i === 4 ? `<span class="code-letter" style="color:#94a3b8">-</span>` : '';
+      return `${dash}<span class="code-letter" style="color:${color.hex}" title="${color.tip}">${r.letter}</span>`;
     }).join("");
 
-    $("profile-cluster-title").innerText = IDEOLOGICAL_CLUSTERS[code.slice(0, 4)] || "Unknown Cluster";
     $("profile-poles").innerText = state.results.map(r => r.pole).join(" \u00b7 ");
     $("vector-text").innerText = "[" + state.results.map(r => r.axis + ":" + r.formatted).join("|") + "]";
+
+    // Dinamik profil ve alt modül metinlerini çağır
+    renderProfileDescriptions(formattedCode);
 
     Storage.saveResults();
     wireShareLinks();
@@ -1997,11 +2166,7 @@ textarea.input-field { resize: vertical; min-height: 120px; line-height: 1.55; }
     setTimeout(() => { btn.innerText = "Copy"; }, 1600);
   }
 
-  /* --- PNG rendering ------------------------------------------------
-     The canvas is a stand-alone copy of the results page. It has to be
-     drawn by hand because the on-screen version is HTML, not an image.
-     Layout constants live next to the code that uses them.
-     ------------------------------------------------------------------ */
+  /* --- PNG rendering --- */
   const SANS = "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif";
   const MONO = "'Courier New', Courier, monospace";
 
@@ -2183,7 +2348,6 @@ textarea.input-field { resize: vertical; min-height: 120px; line-height: 1.55; }
     return panelH;
   }
 
-  // Shrinks the font until the text fits the given width.
   function fitText(ctx, text, maxWidth, startSize, minSize, family) {
     let size = startSize;
     ctx.font = size + "px " + family;
@@ -2202,7 +2366,6 @@ textarea.input-field { resize: vertical; min-height: 120px; line-height: 1.55; }
     canvas.height = H;
     const ctx = canvas.getContext("2d");
 
-    // background + card
     ctx.fillStyle = "#0f172a";
     ctx.fillRect(0, 0, W, H);
     roundRectPath(ctx, 36, 36, W - 72, H - 72, 30);
@@ -2212,7 +2375,6 @@ textarea.input-field { resize: vertical; min-height: 120px; line-height: 1.55; }
     ctx.lineWidth = 2;
     ctx.stroke();
 
-    // header
     ctx.textBaseline = "alphabetic";
     ctx.textAlign = "left";
     ctx.fillStyle = "#38bdf8";
@@ -2222,12 +2384,11 @@ textarea.input-field { resize: vertical; min-height: 120px; line-height: 1.55; }
     ctx.font = "italic 22px " + SANS;
     ctx.fillText("created by Hüseyin Baştuğ & Arda Toby Özdemir", PAD, 160);
 
-    // profile code box
     const letterSize = 78, boxPadX = 40, boxPadY = 24;
     ctx.font = "700 " + letterSize + "px " + MONO;
 
     const letterWidths = state.results.map(r => ctx.measureText(r.letter).width);
-    const codeW = letterWidths.reduce((a, b) => a + b, 0) + boxPadX * 2;
+    const codeW = letterWidths.reduce((a, b) => a + b, 0) + boxPadX * 2 + 20;
     const codeH = letterSize + boxPadY * 2;
     const codeX = (W - codeW) / 2;
     const codeY = 200;
@@ -2242,19 +2403,22 @@ textarea.input-field { resize: vertical; min-height: 120px; line-height: 1.55; }
     ctx.textAlign = "left";
     let letterX = codeX + boxPadX;
     state.results.forEach((r, i) => {
+      if (i === 4) {
+        ctx.fillStyle = "#94a3b8";
+        ctx.fillText("-", letterX, codeY + boxPadY + letterSize * 0.78);
+        letterX += ctx.measureText("-").width;
+      }
       ctx.fillStyle = letterColorFor(r.axis).hex;
       ctx.fillText(r.letter, letterX, codeY + boxPadY + letterSize * 0.78);
       letterX += letterWidths[i];
     });
 
-    // poles line
     const poles = state.results.map(r => r.pole).join("  \u00b7  ");
     ctx.textAlign = "center";
     ctx.fillStyle = "#94a3b8";
     fitText(ctx, poles, CW, 23, 14, SANS);
     ctx.fillText(poles, W / 2, codeY + codeH + 46);
 
-    // panels
     const axes = byAxis(state.results);
     let y = 440;
 
@@ -2267,7 +2431,6 @@ textarea.input-field { resize: vertical; min-height: 120px; line-height: 1.55; }
       y += drawSingleAxisPanel(ctx, single, axes[single.single], PAD, y, CW) + 28;
     }
 
-    // footer
     const footerY = y + 20;
     ctx.strokeStyle = "#334155";
     ctx.lineWidth = 2;
@@ -2347,8 +2510,6 @@ textarea.input-field { resize: vertical; min-height: 120px; line-height: 1.55; }
   async function handleCommentSubmit(event) {
     event.preventDefault();
 
-    // Trimmed to the same ceilings the database enforces, so a long
-    // comment is shortened rather than rejected outright.
     const nickname = $("comment-nickname").value.trim().slice(0, COMMENT_LIMITS.nickname);
     const comment = $("comment-text").value.trim().slice(0, COMMENT_LIMITS.comment);
     if (!nickname || !comment) return;
@@ -2400,7 +2561,6 @@ textarea.input-field { resize: vertical; min-height: 120px; line-height: 1.55; }
     };
     Object.keys(clicks).forEach(id => $(id).addEventListener("click", clicks[id]));
 
-    // "(Methodology)" in the About text jumps to the axis explanations below it.
     const methodologyLink = $("link-methodology");
     if (methodologyLink) {
       methodologyLink.addEventListener("click", ev => {
@@ -2415,7 +2575,7 @@ textarea.input-field { resize: vertical; min-height: 120px; line-height: 1.55; }
     buildChipGroup("age-options", AGE_OPTIONS, "age");
     initNationality();
 
-    ensureSessionId();          // one id for both rows this visit will write
+    ensureSessionId();
     showStep("intro");
   });
 
