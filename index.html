@@ -160,18 +160,20 @@ body {
 }
 .btn-prev:disabled { opacity: 0.3; cursor: not-allowed; }
 
-.btn-copy {
-  background-color: transparent;
+.btn-action-top {
+  background-color: #1e293b;
   border: 1px solid #475569;
-  color: #94a3b8;
-  padding: 6px 14px;
+  color: #cbd5e1;
+  padding: 6px 12px;
   border-radius: 6px;
   font-size: 0.8rem;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.2s ease;
 }
-.btn-copy:hover { border-color: #38bdf8; color: #f8fafc; background-color: #334155; }
+.btn-action-top:hover { border-color: #38bdf8; color: #f8fafc; background-color: #334155; }
+.btn-action-top.highlight { background-color: #38bdf8; color: #0f172a; border-color: #38bdf8; }
+.btn-action-top.highlight:hover { background-color: #0284c7; color: #ffffff; }
 
 .btn-option {
   position: relative;
@@ -416,6 +418,12 @@ body {
   margin-bottom: 14px;
 }
 
+.profile-actions-top {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
 .profile-label {
   color: #94a3b8;
   font-size: 0.85rem;
@@ -452,23 +460,15 @@ body {
 
 /* Modüler Açıklama Kartları Stili */
 .profile-description-box {
-  margin-top: 20px;
-  padding-top: 18px;
+  margin-top: 16px;
+  padding-top: 16px;
   border-top: 1px dashed #334155;
-}
-
-.profile-main-text {
-  font-size: 1rem;
-  line-height: 1.65;
-  color: #f8fafc;
-  font-style: italic;
-  margin-bottom: 20px;
 }
 
 .sub-modules-list {
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: 12px;
 }
 
 .sub-module-card {
@@ -650,32 +650,29 @@ body {
 .grid-label { fill: #94a3b8; font-family: monospace; font-size: 15px; font-weight: 700; }
 
 /* ============================================================
-   7. SHARE BOX
+   7. SHARE & ACTIONS
    ============================================================ */
 .share-box {
   background-color: #0f172a;
   border: 1px solid #334155;
   border-radius: 12px;
-  padding: 20px 22px;
+  padding: 16px 20px;
   margin-top: 20px;
 }
 
-.share-tools,
-.share-links { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 16px; }
-
-.share-links { padding-top: 16px; border-top: 1px dashed #334155; }
+.share-links { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 12px; }
 
 .btn-share {
   flex: 1 1 auto;
-  min-width: 110px;
+  min-width: 100px;
   text-align: center;
   text-decoration: none;
   background-color: #1e293b;
   border: 1px solid #475569;
   color: #cbd5e1;
-  padding: 11px 16px;
+  padding: 9px 14px;
   border-radius: 8px;
-  font-size: 0.9rem;
+  font-size: 0.85rem;
   font-weight: 600;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   cursor: pointer;
@@ -683,18 +680,7 @@ body {
 }
 .btn-share:hover { background-color: #334155; border-color: #38bdf8; color: #f8fafc; }
 
-#btn-share-native { background-color: #38bdf8; border-color: #38bdf8; color: #0f172a; }
-#btn-share-native:hover { background-color: #0284c7; color: #ffffff; }
-
-.share-note {
-  margin: 16px 0 0 0;
-  color: #64748b;
-  font-size: 0.8rem;
-  line-height: 1.55;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-}
-
-.result-actions { display: flex; gap: 12px; margin-top: 28px; flex-wrap: wrap; }
+.result-actions { display: flex; gap: 12px; margin-top: 24px; flex-wrap: wrap; }
 .result-actions .btn-primary,
 .result-actions .btn-secondary { flex: 1 1 200px; margin-top: 0; width: auto; }
 
@@ -799,6 +785,8 @@ textarea.input-field { resize: vertical; min-height: 120px; line-height: 1.55; }
 
 @media (max-width: 480px) {
   .vector-code { font-size: 1.9rem; padding: 12px 18px; }
+  .profile-top { flex-direction: column; align-items: flex-start; gap: 8px; }
+  .profile-actions-top { width: 100%; justify-content: flex-end; }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -817,7 +805,7 @@ textarea.input-field { resize: vertical; min-height: 120px; line-height: 1.55; }
       </div>
       <nav class="nav-links">
         <button id="nav-test" class="nav-btn active">Test</button>
-        <button id="nav-about" class="nav-btn">About Us</button>
+        <button id="nav-about" class="nav-btn">About the Test</button>
         <button id="nav-comment" class="nav-btn">Comment</button>
       </nav>
     </div>
@@ -853,7 +841,7 @@ textarea.input-field { resize: vertical; min-height: 120px; line-height: 1.55; }
             </button>
 
             <button type="button" id="btn-intro-about" class="intro-link">
-              <span class="intro-link-title">About Test</span>
+              <span class="intro-link-title">About the Test</span>
               <span class="intro-link-sub">The principles behind it</span>
             </button>
           </div>
@@ -921,15 +909,17 @@ textarea.input-field { resize: vertical; min-height: 120px; line-height: 1.55; }
         <div class="profile-box">
           <div class="profile-top">
             <span class="profile-label">Your Profile</span>
-            <button type="button" id="btn-copy-code" class="btn-copy">Copy</button>
+            <div class="profile-actions-top">
+              <button type="button" id="btn-copy-code" class="btn-action-top">Copy</button>
+              <button type="button" id="btn-download-top" class="btn-action-top highlight">Download Results</button>
+            </div>
           </div>
           <div id="vector-code" class="vector-code" data-code=""></div>
           <h3 id="profile-cluster-title" class="profile-cluster-title"></h3>
           <p id="profile-poles" class="profile-poles"></p>
 
-          <!-- Modüler Profil Tanım ve Alt Kartları -->
+          <!-- Modüler Alt Küme Tanımları -->
           <div class="profile-description-box">
-            <p id="profile-main-desc" class="profile-main-text"></p>
             <div id="profile-submodules-list" class="sub-modules-list"></div>
           </div>
         </div>
@@ -942,21 +932,14 @@ textarea.input-field { resize: vertical; min-height: 120px; line-height: 1.55; }
         </div>
 
         <div class="share-box">
-          <span class="profile-label">Share your result</span>
-
-          <div class="share-tools">
-            <button type="button" id="btn-share-native" class="btn-share hidden">Share image</button>
-            <button type="button" id="btn-download-img" class="btn-share">Download image</button>
-          </div>
-
+          <span class="profile-label">Share vector</span>
           <div class="share-links">
+            <button type="button" id="btn-share-native" class="btn-share hidden">Share Image</button>
             <a id="share-wa" class="btn-share" target="_blank" rel="noopener noreferrer" href="#">WhatsApp</a>
             <a id="share-x" class="btn-share" target="_blank" rel="noopener noreferrer" href="#">X</a>
             <a id="share-tg" class="btn-share" target="_blank" rel="noopener noreferrer" href="#">Telegram</a>
             <a id="share-mail" class="btn-share" target="_blank" rel="noopener noreferrer" href="#">Gmail</a>
           </div>
-
-          <p class="share-note">Link buttons send your code and vector as text, not the image.</p>
         </div>
 
         <div class="result-actions">
@@ -967,10 +950,10 @@ textarea.input-field { resize: vertical; min-height: 120px; line-height: 1.55; }
 
     </section>
 
-    <!-- ========== PAGE 2: ABOUT ========== -->
+    <!-- ========== PAGE 2: ABOUT THE TEST ========== -->
     <section id="page-about" class="page-section hidden">
       <div class="card">
-        <h2>About Us</h2>
+        <h2>About the Test</h2>
 
         <p class="about-lede">
           It is a truth universally acknowledged, that a political test in want of accuracy and
@@ -1036,9 +1019,9 @@ textarea.input-field { resize: vertical; min-height: 120px; line-height: 1.55; }
         </div>
 
         <div class="axis-explanation">
-          <h4>4. Justice (JST): Equality (E) vs. Justice (J)</h4>
+          <h4>4. Justice (JST): Equality (E) vs. Equity (J)</h4>
           <p>
-            <strong>Equality (E)</strong> prioritizes reduction of socioeconomic disparities. <strong>Justice (J)</strong> favors meritocracy and proportional reward based on contribution.
+            <strong>Equality (E)</strong> prioritizes reduction of socioeconomic disparities. <strong>Equity (J)</strong> favors meritocracy, fairness, and proportional reward based on contribution.
           </p>
         </div>
 
@@ -1085,19 +1068,7 @@ textarea.input-field { resize: vertical; min-height: 120px; line-height: 1.55; }
   <script>
 /* ============================================================
    5-AXIS COMPASS
-   Single-file app. Sections:
-     1. Config
-     2. Survey data & Dynamic Descriptions
-     3. State
-     4. Small helpers
-     5. Storage (backend calls)
-     6. Navigation & step flow
-     7. Demographics page (chips + country combobox)
-     8. Survey engine
-     9. Results (scores, bars, cluster grids, modular text)
-    10. Share (links + PNG canvas)
-    11. Comment form
-    12. Startup
+   Single-file app.
    ============================================================ */
 (function () {
   "use strict";
@@ -1105,7 +1076,7 @@ textarea.input-field { resize: vertical; min-height: 120px; line-height: 1.55; }
   /* ============================================================
      1. CONFIG
      ============================================================ */
-  const BUILD = 37;
+  const BUILD = 38;
 
   const SUPABASE = {
     url: "https://byvykwggnsyvkfvrkiyc.supabase.co",
@@ -1211,7 +1182,7 @@ textarea.input-field { resize: vertical; min-height: 120px; line-height: 1.55; }
     ETH: { neg: "Subjectivism",   negKey: "S", pos: "Objectivism",  posKey: "O" },
     HN:  { neg: "Constructivism", negKey: "C", pos: "Realism",      posKey: "R" },
     TRB: { neg: "Universalism",   negKey: "U", pos: "Tribalism",    posKey: "T" },
-    JST: { neg: "Equality",       negKey: "E", pos: "Justice",      posKey: "J" },
+    JST: { neg: "Equality",       negKey: "E", pos: "Equity",       posKey: "J" },
     RLG: { neg: "Laicity",        negKey: "L", pos: "Spiritualism", posKey: "P" }
   };
 
@@ -1268,11 +1239,11 @@ textarea.input-field { resize: vertical; min-height: 120px; line-height: 1.55; }
     },
     TJ: {
       title: "TJ - Conservative",
-      text: "The Conservative type prioritizes preserving in-group identities, and prefers a merit-based and hierarchical social structure over an egalitarian one."
+      text: "The Conservative type prioritizes preserving in-group identities, and prefers an equity, merit-based and structured social order over strict equality of outcome."
     },
     UJ: {
       title: "UJ - Meritocratic",
-      text: "The Meritocratic type does not limit itself to a particular group, and believes social stratification on account of merit or capability is preferable to universal equality."
+      text: "The Meritocratic type does not limit itself to a particular group, and believes social stratification based on capability and equity is preferable to universal flat equality."
     },
     UE: {
       title: "UE - Egalitarian",
@@ -1292,136 +1263,23 @@ textarea.input-field { resize: vertical; min-height: 120px; line-height: 1.55; }
     }
   };
 
-  // 16 ÖZGÜN PROFiL ÜST PARAGRAFLARI (Politik Tip + Felsefi Tip Sırasına Getirildi)
-  const PROFILE_DESCRIPTIONS = {
-    "SCUE-L": {
-      title: "Egalitarian Skepticism",
-      text: "This profile is most closely associated with modern, secular, progressive and leftist worldviews. It is most common in the Western world; especially among young, educated, non-religious women."
-    },
-    "SCUE-P": {
-      title: "Egalitarian Skepticism",
-      text: "Combines a fluid view of ethics and human nature with universal egalitarian values, framed through a spiritual or non-materialist perspective."
-    },
-    "SCUJ-L": {
-      title: "Meritocratic Skepticism",
-      text: "A pragmatic worldview emphasizing empirical reasoning, malleable morality, and universal merit-based social organisation."
-    },
-    "SCUJ-P": {
-      title: "Meritocratic Skepticism",
-      text: "Blends non-dogmatic moral skepticism with universal meritocracy and a recognition of transcendent or spiritual phenomena."
-    },
-    "SCTE-L": {
-      title: "Communitarian Skepticism",
-      text: "Focuses on internal group solidarity and equality without relying on objective moral dogmas or spiritual assumptions."
-    },
-    "SCTE-P": {
-      title: "Communitarian Skepticism",
-      text: "Combines local group cohesion and internal equality with a spiritual understanding of existence and adaptable ethics."
-    },
-    "SCTJ-L": {
-      title: "Conservative Skepticism",
-      text: "Combines skepticism toward universal moral abstractions with a strong preference for local identity, order, and merit."
-    },
-    "SCTJ-P": {
-      title: "Conservative Skepticism",
-      text: "Prioritizes group identity, hierarchy, and spiritual drives while remaining skeptical of universal human nature or morality."
-    },
-    "SRUE-L": {
-      title: "Egalitarian Naturalism",
-      text: "Grounded in material human nature and natural sciences, seeking universal human equality without relying on objective moral truths."
-    },
-    "SRUE-P": {
-      title: "Egalitarian Naturalism",
-      text: "Combines a fixed view of biological human nature with universal egalitarian ethics and a broader spiritual universe."
-    },
-    "SRUJ-L": {
-      title: "Meritocratic Naturalism",
-      text: "Views human nature as rooted in natural order and competition, favoring universal meritocratic structures through an empirical lens."
-    },
-    "SRUJ-P": {
-      title: "Meritocratic Naturalism",
-      text: "Blends natural human essence with spiritual perspectives, supporting universal meritocracy and social stratification."
-    },
-    "SRTE-L": {
-      title: "Communitarian Naturalism",
-      text: "Prioritizes in-group welfare and equality grounded in shared biological human reality and empirical social cohesion."
-    },
-    "SRTE-P": {
-      title: "Communitarian Naturalism",
-      text: "Pairs shared human nature and local group equality with spiritual interconnectivity and cultural preservation."
-    },
-    "SRTJ-L": {
-      title: "Conservative Naturalism",
-      text: "Views social order, hierarchy, and group identity as natural outcomes of immutable human traits, understood secularly."
-    },
-    "SRTJ-P": {
-      title: "Conservative Naturalism",
-      text: "Rooted in human nature, traditional in-group hierarchies, and a belief in transcendent forces shaping the human order."
-    },
-    "OCUE-L": {
-      title: "Egalitarian Idealism",
-      text: "Believes in universal moral truths and human perfectibility, striving for global egalitarianism through secular institutions."
-    },
-    "OCUE-P": {
-      title: "Egalitarian Idealism",
-      text: "Driven by universal moral truths and human potential, expressing global egalitarian ideals through a spiritual framework."
-    },
-    "OCUJ-L": {
-      title: "Meritocratic Idealism",
-      text: "Combines objective moral principles with a belief in human adaptability, advocating for global meritocratic systems."
-    },
-    "OCUJ-P": {
-      title: "Meritocratic Idealism",
-      text: "Holds universal moral axioms and spiritual beliefs, supporting meritocracy and personal growth across societies."
-    },
-    "OCTE-L": {
-      title: "Communitarian Idealism",
-      text: "Applies objective ethical ideals to build strong, internally equal communities through secular and social structures."
-    },
-    "OCTE-P": {
-      title: "Communitarian Idealism",
-      text: "Combines transcendent moral truths with local solidarity, emphasizing community equality under a shared spiritual vision."
-    },
-    "OCTJ-L": {
-      title: "Conservative Idealism",
-      text: "Upholds objective moral principles while maintaining group identities and merit-based order through secular means."
-    },
-    "OCTJ-P": {
-      title: "Conservative Idealism",
-      text: "Combines universal ethical truths, spiritual faith, and traditional group structures with meritocratic organization."
-    },
-    "ORUE-L": {
-      title: "Egalitarian Essentialism",
-      text: "Asserts fixed moral truths and innate human nature, advocating for universal equality through empirical methods."
-    },
-    "ORUE-P": {
-      title: "Egalitarian Essentialism",
-      text: "Rooted in eternal moral laws, spiritual order, and innate human essence, seeking global human equality."
-    },
-    "ORUJ-L": {
-      title: "Meritocratic Essentialism",
-      text: "Believes in fundamental moral laws and fixed human drives, supporting global meritocracy through rational structures."
-    },
-    "ORUJ-P": {
-      title: "Meritocratic Essentialism",
-      text: "Combines eternal ethical truths, spiritual order, and fixed human nature to justify universal merit-based order."
-    },
-    "ORTE-L": {
-      title: "Communitarian Essentialism",
-      text: "Views group identity and internal equality as essential aspects of fixed human nature and objective morality."
-    },
-    "ORTE-P": {
-      title: "Communitarian Essentialism",
-      text: "Binds traditional community equality and identity with transcendent spiritual order and essential human truths."
-    },
-    "ORTJ-L": {
-      title: "Conservative Essentialism",
-      text: "Grounds traditional hierarchy, merit, and in-group preservation in fixed human nature and secular moral laws."
-    },
-    "ORTJ-P": {
-      title: "Conservative Essentialism",
-      text: "A classic traditionalist worldview, linking innate human nature, group preservation, and hierarchy with divine or transcendent order."
-    }
+  const PROFILE_TITLES = {
+    "SCUE-L": "Egalitarian Skepticism", "SCUE-P": "Egalitarian Skepticism",
+    "SCUJ-L": "Meritocratic Skepticism", "SCUJ-P": "Meritocratic Skepticism",
+    "SCTE-L": "Communitarian Skepticism", "SCTE-P": "Communitarian Skepticism",
+    "SCTJ-L": "Conservative Skepticism", "SCTJ-P": "Conservative Skepticism",
+    "SRUE-L": "Egalitarian Naturalism", "SRUE-P": "Egalitarian Naturalism",
+    "SRUJ-L": "Meritocratic Naturalism", "SRUJ-P": "Meritocratic Naturalism",
+    "SRTE-L": "Communitarian Naturalism", "SRTE-P": "Communitarian Naturalism",
+    "SRTJ-L": "Conservative Naturalism", "SRTJ-P": "Conservative Naturalism",
+    "OCUE-L": "Egalitarian Idealism", "OCUE-P": "Egalitarian Idealism",
+    "OCUJ-L": "Meritocratic Idealism", "OCUJ-P": "Meritocratic Idealism",
+    "OCTE-L": "Communitarian Idealism", "OCTE-P": "Communitarian Idealism",
+    "OCTJ-L": "Conservative Idealism", "OCTJ-P": "Conservative Idealism",
+    "ORUE-L": "Egalitarian Essentialism", "ORUE-P": "Egalitarian Essentialism",
+    "ORUJ-L": "Meritocratic Essentialism", "ORUJ-P": "Meritocratic Essentialism",
+    "ORTE-L": "Communitarian Essentialism", "ORTE-P": "Communitarian Essentialism",
+    "ORTJ-L": "Conservative Essentialism", "ORTJ-P": "Conservative Essentialism"
   };
 
   const GENDER_OPTIONS = ["Male", "Female", "Queer"];
@@ -2049,19 +1907,13 @@ textarea.input-field { resize: vertical; min-height: 120px; line-height: 1.55; }
     return block;
   }
 
-  // Dinamik Metinleri Render Eden Fonksiyon
   function renderProfileDescriptions(code) {
-    const p1 = code.substring(0, 2); // Örn: SC
-    const p2 = code.substring(2, 4); // Örn: UE
-    const p3 = code.split('-')[1];   // Örn: L
+    const p1 = code.substring(0, 2);
+    const p2 = code.substring(2, 4);
+    const p3 = code.split('-')[1];
 
-    const mainProfile = PROFILE_DESCRIPTIONS[code] || {
-      title: "Philosophical Profile",
-      text: "Your responses reflect a distinct position across moral, political, and spiritual spectrums."
-    };
-
-    $("profile-cluster-title").innerText = mainProfile.title;
-    $("profile-main-desc").innerText = mainProfile.text;
+    const title = PROFILE_TITLES[code] || "Philosophical Profile";
+    $("profile-cluster-title").innerText = title;
 
     const subListEl = $("profile-submodules-list");
     const activeSubModules = [SUB_MODULES[p1], SUB_MODULES[p2], SUB_MODULES[p3]].filter(Boolean);
@@ -2099,7 +1951,7 @@ textarea.input-field { resize: vertical; min-height: 120px; line-height: 1.55; }
     });
 
     const code = state.results.map(r => r.letter).join("");
-    const formattedCode = `${code.slice(0, 4)}-${code.slice(4)}`; // Formats to SCUE-L
+    const formattedCode = `${code.slice(0, 4)}-${code.slice(4)}`;
     
     const codeBox = $("vector-code");
     codeBox.dataset.code = formattedCode;
@@ -2112,7 +1964,6 @@ textarea.input-field { resize: vertical; min-height: 120px; line-height: 1.55; }
     $("profile-poles").innerText = state.results.map(r => r.pole).join(" \u00b7 ");
     $("vector-text").innerText = "[" + state.results.map(r => r.axis + ":" + r.formatted).join("|") + "]";
 
-    // Dinamik profil ve alt modül metinlerini çağır
     renderProfileDescriptions(formattedCode);
 
     Storage.saveResults();
@@ -2149,7 +2000,10 @@ textarea.input-field { resize: vertical; min-height: 120px; line-height: 1.55; }
       "share-mail": "https://mail.google.com/mail/?view=cm&fs=1&su=" + subject + "&body=" + both
     };
 
-    Object.keys(links).forEach(id => { $(id).href = links[id]; });
+    Object.keys(links).forEach(id => { 
+      const el = $(id);
+      if (el) el.href = links[id]; 
+    });
   }
 
   async function handleCopyCode() {
@@ -2544,22 +2398,25 @@ textarea.input-field { resize: vertical; min-height: 120px; line-height: 1.55; }
      ============================================================ */
   document.addEventListener("DOMContentLoaded", () => {
     const clicks = {
-      "nav-test":        () => switchTab("test"),
-      "nav-about":       () => switchTab("about"),
-      "nav-comment":     () => switchTab("comment"),
-      "btn-start":       () => showStep("demo"),
+      "nav-test":         () => switchTab("test"),
+      "nav-about":        () => switchTab("about"),
+      "nav-comment":      () => switchTab("comment"),
+      "btn-start":        () => showStep("demo"),
       "btn-intro-method": () => goToAbout("methodology"),
       "btn-intro-about":  () => goToAbout(),
-      "btn-demo-next":   handleDemoNext,
-      "btn-demo-skip":   handleDemoSkip,
-      "btn-prev":        handlePrevious,
-      "btn-copy-code":   handleCopyCode,
-      "btn-download-img": downloadShareImage,
+      "btn-demo-next":    handleDemoNext,
+      "btn-demo-skip":    handleDemoSkip,
+      "btn-prev":         handlePrevious,
+      "btn-copy-code":    handleCopyCode,
+      "btn-download-top": downloadShareImage,
       "btn-share-native": shareImageNative,
-      "btn-retake":      () => location.reload(),
+      "btn-retake":       () => location.reload(),
       "btn-goto-comment": () => switchTab("comment")
     };
-    Object.keys(clicks).forEach(id => $(id).addEventListener("click", clicks[id]));
+    Object.keys(clicks).forEach(id => {
+      const el = $(id);
+      if (el) el.addEventListener("click", clicks[id]);
+    });
 
     const methodologyLink = $("link-methodology");
     if (methodologyLink) {
