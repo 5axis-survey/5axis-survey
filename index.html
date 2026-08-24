@@ -689,33 +689,19 @@ body {
    ============================================================ */
 .about-intro { line-height: 1.6; color: #cbd5e1; font-size: 1rem; margin-bottom: 12px; }
 
-.about-lede {
-  line-height: 1.75;
-  color: #f8fafc;
-  font-size: 1.06rem;
-  margin-bottom: 20px;
-  border-left: 3px solid #38bdf8;
-  padding-left: 16px;
+.about-text {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
 }
 
-.about-principles { display: flex; flex-direction: column; gap: 18px; }
-
-.about-principles p {
+.about-text p {
   line-height: 1.75;
   color: #cbd5e1;
   font-size: 1rem;
 }
 
-.about-principles strong { color: #f8fafc; }
-
-.about-closing {
-  line-height: 1.75;
-  color: #cbd5e1;
-  font-size: 1rem;
-  margin-top: 20px;
-  padding-top: 18px;
-  border-top: 1px dashed #334155;
-}
+.about-text strong { color: #f8fafc; }
 
 .about-link {
   color: #38bdf8;
@@ -955,29 +941,38 @@ textarea.input-field { resize: vertical; min-height: 120px; line-height: 1.55; }
       <div class="card">
         <h2>About the Test</h2>
 
-        <p class="about-lede">
-          It is a truth universally acknowledged, that a political test in want of accuracy and
-          precision must be in possession of certain general principles: to ask questions that
-          distinguish between what is and what ought to be; are comprehensive in scope and
-          applicability; and provide results that are real, relevant, and revelatory.
-        </p>
+        <div class="about-text">
+          <p>
+            It is a truth universally acknowledged, that a political test in want of accuracy and
+            precision must be in possession of certain general principles: to ask questions that
+            distinguish between what is and what ought to be; are comprehensive in scope and
+            applicability; and provide results that are real, relevant, and revelatory.
+          </p>
 
-        <div class="about-principles">
           <p>
             As such, our <strong>first principle</strong> in the creation of this website is to ask
             questions that can only be interpreted in a single way: either descriptively or
-            normatively, leaving as little room for ambiguity as possible. Our
-            <strong>second principle</strong> is to create a set of questions that can be answered
+            normatively, leaving as little room for ambiguity as possible.
+          </p>
+
+          <p>
+            Our <strong>second principle</strong> is to create a set of questions that can be answered
             by anyone, anywhere, in any period of time. We have tried to avoid questions whose answers
             would depend on the respondent’s own contingent situation, which may be shaped by their
             place in the world, and their time in history. This has necessitated certain modifications
-            to traditional political questionnaires, explained in our third principle. Our
-            <strong>third principle</strong> is to design such categories as are relevant to a
+            to traditional political questionnaires, explained in our third principle.
+          </p>
+
+          <p>
+            Our <strong>third principle</strong> is to design such categories as are relevant to a
             person’s entire worldview. For this, we have created axes that are normally ignored in
             political tests, but that underpin not only our political views, but our entire outlook on
             life; namely Ethics and Human Nature. All five of our categories are explained in detail in
-            (<a href="#" id="link-methodology" class="about-link">Methodology</a>). Our
-            <strong>final principle</strong> is to display each respondent’s results in a way that
+            (<a href="#" id="link-methodology" class="about-link">Methodology</a>).
+          </p>
+
+          <p>
+            Our <strong>final principle</strong> is to display each respondent’s results in a way that
             identifies their political-philosophical views most accurately. For this, we use 4+1 letter
             method, where each letter corresponds to the respondent’s results in the relevant axis. In
             doing so, we are able to cluster people with similar political views in 32 distinct groups,
@@ -985,13 +980,13 @@ textarea.input-field { resize: vertical; min-height: 120px; line-height: 1.55; }
             regularized method of denominating each identity, which we believe approximately describes
             what the 4+1 letter result represents.
           </p>
-        </div>
 
-        <p class="about-closing">
-          Our main aim in designing this test has been to look beyond political opinion, and to see the
-          underlying philosophical core of ideology as well. We hope this will allow us to measure views
-          across time and place, with questions that are and have been relevant throughout history.
-        </p>
+          <p>
+            Our main aim in designing this test has been to look beyond political opinion, and to see the
+            underlying philosophical core of ideology as well. We hope this will allow us to measure views
+            across time and place, with questions that are and have been relevant throughout history.
+          </p>
+        </div>
 
         <hr class="divider">
 
@@ -1029,6 +1024,56 @@ textarea.input-field { resize: vertical; min-height: 120px; line-height: 1.55; }
           <h4>5. Religion &amp; Transcendence (RLG): Laicity (L) vs. Spiritualism (P)</h4>
           <p>
             <strong>Laicity (L)</strong> maintains a strictly materialist framework. <strong>Spiritualism (P)</strong> acknowledges innate purpose, faith, or spiritual reality.
+          </p>
+        </div>
+
+        <h3 id="clusters">The Clusters and Types Explained</h3>
+
+        <div class="about-text">
+          <p>
+            All identifiers are divided into four main clusters based on the philosophical axes. These
+            are the essentialist, idealist, skepticist, and naturalist clusters. Each of the definitions
+            below are within the context of the questionnaire.
+            <strong>Essentialism (OR)</strong> refers to the idea that both ethics as well as human
+            nature have an innate, objective truth and reality which are not - at their core -
+            contingent upon such factors as social influence, environment, or history.
+            <strong>Idealism (OC)</strong> refers to a belief in an objectively, universally correct set
+            of ethical views, and a belief in the malleability of human nature, as opposed to its
+            rigidity. This cluster is more confident in abstract, ethical ideas than in the uniformity
+            and singularity of the essence of humans.
+            <strong>Skepticism (SC)</strong> refers to a lack of belief in objective and universal
+            morals as well as uniform human nature. Concerning both ethics and human nature, this
+            cluster holds that they are subject to change depending on contingent factors like society,
+            environment or historical period.
+            <strong>Naturalism (SR)</strong> refers to a lack of belief in an objectively true moral
+            system, and a belief in a common, singular human nature. This cluster sees humans’ essence
+            as a product of nature, and is disinclined from believing in the existence of morality
+            beyond what can be conceived materially.
+          </p>
+
+          <p>
+            There are also four different political types determined by the political axes; tribalism
+            and justice. These are the conservative, meritocratic, egalitarian, and communitarian types.
+            The <strong>Conservative (TJ)</strong> type prioritizes preserving in-group identities, and
+            prefers a merit-based and hierarchical social structure over an egalitarian one.
+            The <strong>Meritocratic (UJ)</strong> type does not limit itself to a particular group, and
+            believes social stratification on account of merit or capability is preferable to universal
+            equality.
+            The <strong>Egalitarian (UE)</strong> type has universalist concerns that are not limited to
+            a particular community, and believes in normative equality across all societies.
+            The <strong>Communitarian (TE)</strong> type supports a firmer in-group identity, while
+            preferring equality within that group to merit or identity-based stratification.
+          </p>
+
+          <p>
+            Finally, the religious axis determines whether the person has a worldview that is mainly
+            secular and/or materialistic, or if they believe supernatural, non-material forces influence
+            the world. This category is supplementary, and refines our philosophical clusters.
+            The <strong>Secular (L)</strong> profile views the world through an empirical, non-spiritual
+            lens; and understands events through natural and worldly explanations.
+            The <strong>Spiritual (P)</strong> profile sees the world as being composed of more than just
+            natural and material phenomena, and believes that supernatural occurrences affect the
+            universe.
           </p>
         </div>
       </div>
@@ -1952,7 +1997,7 @@ textarea.input-field { resize: vertical; min-height: 120px; line-height: 1.55; }
 
     const code = state.results.map(r => r.letter).join("");
     const formattedCode = `${code.slice(0, 4)}-${code.slice(4)}`;
-    
+
     const codeBox = $("vector-code");
     codeBox.dataset.code = formattedCode;
     codeBox.innerHTML = state.results.map((r, i) => {
@@ -2000,9 +2045,9 @@ textarea.input-field { resize: vertical; min-height: 120px; line-height: 1.55; }
       "share-mail": "https://mail.google.com/mail/?view=cm&fs=1&su=" + subject + "&body=" + both
     };
 
-    Object.keys(links).forEach(id => { 
+    Object.keys(links).forEach(id => {
       const el = $(id);
-      if (el) el.href = links[id]; 
+      if (el) el.href = links[id];
     });
   }
 
